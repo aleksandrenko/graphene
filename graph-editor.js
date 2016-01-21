@@ -16,7 +16,16 @@ d3.graph.editor = function() {
     console.log('%cInit', 'background: gray; color: #fff; padding: 2px 5px;');
 
     rootDom = dom;
-    rootGroup = d3.select(dom).append('g').classed('rootGroup', true);
+    var root = d3.select(dom);
+    rootGroup = root.append('g').classed('rootGroup', true);
+
+    var background = root.append('rect').classed('background', true).attr({
+      width: 500,
+      height: 500,
+      x: 0,
+      y: 0,
+      fill: 'white'
+    });
 
     graphEditor.render();
   };
@@ -36,6 +45,9 @@ d3.graph.editor = function() {
         x: function(data, index) { return 20 + (index * 100) },
         y: 20
       });
+
+    //clean the items when they are removed from the data
+    items.exit().remove();
   };
 
   /**
