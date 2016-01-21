@@ -6,44 +6,42 @@ if (!d3.graph) {
   d3.graph = {};
 }
 
-d3.graph.editor = function() {
-  console.log('%cCreate editor', 'background: blue; color: #fff; padding: 2px 5px;');
-  var rootDom;
-  var rootGroup;
+var graphEditor = d3.graph.editor = function(dom) {
+  console.log('%cInit', 'background: gray; color: #fff; padding: 2px 5px;');
+
   var data = [];
+  var root = d3.select(dom).classed('graphEditor', true);
+  _createBackgroundLayer(root);
+  var rootGroup = root.append('g').classed('rootGroup', true);
 
-  var graphEditor = function(dom) {
-    console.log('%cInit', 'background: gray; color: #fff; padding: 2px 5px;');
+  function _createBackgroundLayer(parent) {
+    var background = parent.append('rect').classed('background', true);
 
-    rootDom = dom;
-    var root = d3.select(dom);
-    rootGroup = root.append('g').classed('rootGroup', true);
+    background.on('click', function() {
+      console.log();
 
-    var background = root.append('rect').classed('background', true).attr({
-      width: 500,
-      height: 500,
-      x: 0,
-      y: 0,
-      fill: 'white'
+      var x = d3.mouse(this);
+      graphEditor.data().push({
+        x: x[0],
+        y: x[1]
+      });
+
+      graphEditor.render();
     });
-
-    graphEditor.render();
-  };
+  }
 
   /**
    * Render and rerender the editor
    */
   graphEditor.render = function() {
     console.log('%cRender', 'background: green; color: #fff; padding: 2px 5px;');
-    var items = rootGroup.selectAll('.item').data(data);
+    var items = rootGroup.selectAll('.node').data(data);
 
-    items.enter().append('rect')
-      .classed('item', true)
+    items.enter().append('circle')
+      .classed('node', true)
       .attr({
-        width: 50,
-        height: 50,
-        x: function(data, index) { return 20 + (index * 100) },
-        y: 20
+        cx: function(data) { return data.x; },
+        cy: function(data) { return data.y; }
       });
 
     //clean the items when they are removed from the data
@@ -58,10 +56,15 @@ d3.graph.editor = function() {
   graphEditor.data = function(_data) {
     if (!arguments.length) { return data; }
 
+    console.log('data', data);
+
     data = _data;
     graphEditor.render();
     return graphEditor;
   };
+
+  // initial render
+  graphEditor.render();
 
   return graphEditor;
 };
