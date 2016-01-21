@@ -5,66 +5,71 @@
 if (!d3.graph) {
   d3.graph = {};
 }
-
-var graphEditor = d3.graph.editor = function(dom) {
+/**
+ *
+ * @param {string} dom
+ * @param {Array} data
+ * @returns {d3.graph.Editor}
+ * @constructor
+ */
+d3.graph.Editor = function(dom, data) {
   console.log('%cInit', 'background: gray; color: #fff; padding: 2px 5px;');
 
-  var data = [];
-  var root = d3.select(dom).classed('graphEditor', true);
-  _createBackgroundLayer(root);
-  var rootGroup = root.append('g').classed('rootGroup', true);
+  this.data = data || [];
+  this.root = d3.select(dom).classed('graphEditor', true);
+  _createBackgroundLayer(this);
+  this.rootGroup = this.root.append('g').classed('rootGroup', true);
 
-  function _createBackgroundLayer(parent) {
-    var background = parent.append('rect').classed('background', true);
+  function _createBackgroundLayer(editor) {
+    var background = editor.root.append('rect').classed('background', true);
 
     background.on('click', function() {
-      console.log();
-
       var x = d3.mouse(this);
-      graphEditor.data().push({
+      var node = new Node({
         x: x[0],
         y: x[1]
       });
 
-      graphEditor.render();
+      var newData = editor.getData().concat([node]);
+      editor.setData(newData);
     });
   }
 
-  /**
-   * Render and rerender the editor
-   */
-  graphEditor.render = function() {
-    console.log('%cRender', 'background: green; color: #fff; padding: 2px 5px;');
-    var items = rootGroup.selectAll('.node').data(data);
-
-    items.enter().append('circle')
-      .classed('node', true)
-      .attr({
-        cx: function(data) { return data.x; },
-        cy: function(data) { return data.y; }
-      });
-
-    //clean the items when they are removed from the data
-    items.exit().remove();
-  };
-
-  /**
-   *
-   * @param {Array} _data
-   * @returns {*}
-   */
-  graphEditor.data = function(_data) {
-    if (!arguments.length) { return data; }
-
-    console.log('data', data);
-
-    data = _data;
-    graphEditor.render();
-    return graphEditor;
-  };
-
   // initial render
-  graphEditor.render();
-
-  return graphEditor;
+  this.render();
+  return this;
 };
+
+/**
+ * Render and rerender the editor
+ */
+d3.graph.Editor.prototype.render = function() {
+  console.log('%cRender', 'background: green; color: #fff; padding: 2px 5px;');
+  var items = this.rootGroup
+    .selectAll('.node')
+    .data(this.data);
+
+  items.enter().append('circle')
+    .classed('node', true)
+    .attr({
+      cx: function(data) { return data.x; },
+      cy: function(data) { return data.y; }
+    });
+
+  //clean the items when they are removed from the data
+  items.exit().remove();
+
+  return this;
+};
+
+d3.graph.Editor.prototype.setData = function(_data) {
+  this.data = _data;
+  this.render();
+  return this;
+};
+
+d3.graph.Editor.prototype.getData = function() {
+  return this.data;
+};
+
+

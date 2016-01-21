@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>d3 Graph editor</title>
   <script src="libs/d3.js"></script>
+  <script src="js/node.js"></script>
   <script src="js/graph-editor.js"></script>
   <link rel="stylesheet" href="styles/styles.css"/>
 </head>
@@ -16,7 +17,12 @@
 </svg>
 
 <script>
-  var graphEditor = d3.graph.editor('#rootSvg');
+  var initData = [
+    {x: 100, y: 20},
+    {x: 50, y: 200}
+  ];
+
+  var graphEditor = new d3.graph.Editor('#rootSvg', initData);
 </script>
 
 </body>
