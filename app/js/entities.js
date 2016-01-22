@@ -1,14 +1,6 @@
-var entity = {
-  properties: {},
-  addProperty: function(key, value) {
-    this.properties[key] = value;
-    return this;
-  },
-  removeProperty: function(key) {
-    delete this.properties[key];
-    return this;
-  }
-}
+"use strict";
+
+import color from './colors.js';
 
 /**
  * @param {Object} options -
@@ -20,12 +12,11 @@ function Node(options) {
   this.graph = {
     x: options.x,
     y: options.y,
-    color: options.color
-  }
+    color: options.color || color()
+  };
   this.label = options.label;
   this.id = getUID();
 }
-Node.prototype = entity;
 
 /**
  * @param {Object} options -
@@ -39,22 +30,17 @@ function Edge(options) {
     startNodeID: options.startNodeID,
     endNodeID: options.endNodeID,
     middlePoint: options.middlePoint
-  }
+  };
   this.label = options.label;
   this.id = getUID();
 }
-Edge.prototype = entity;
-
 
 /**
  * Generate unique ID
- * @return {string} The unique ID is a timestamp, so it can be used for checking when the entity is created
+ * @return {number} The unique ID is a timestamp, so it can be used for checking when the entity is created
  */
 function getUID() {
   return Date.now();
 }
 
-export default {
-  Node: Node,
-  Edge: Edge
-}
+export default { Node, Edge };
