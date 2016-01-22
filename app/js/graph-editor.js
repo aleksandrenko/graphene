@@ -7,7 +7,6 @@ import entities from './entities.js';
 var Node = entities.Node;
 var Edge = entities.Edge;
 
-
 if (!d3.graph) {
   d3.graph = {};
 }
@@ -30,19 +29,15 @@ d3.graph.Editor = function(dom, data) {
     var background = editor.root.append('rect').classed('background', true);
 
     background.on('click', function() {
+      /*eslint-disable */
       var x = d3.mouse(this);
+      /*eslint-enable */
       var node = new Node({
         x: x[0],
         y: x[1]
       });
 
-      node.addProperty('title', 1);
-      node.addProperty('required', true);
-
-      console.log(node);
-
-      var newData = editor.getData().concat([node]);
-      editor.setData(newData);
+      editor.setData(editor.getData().concat([node]));
     });
   }
 
@@ -55,14 +50,13 @@ d3.graph.Editor = function(dom, data) {
  * Render and rerender the editor
  */
 d3.graph.Editor.prototype.render = function() {
-  console.log('%cRender', 'background: green; color: #fff; padding: 2px 5px;');
-  var items = this.rootGroup
-    .selectAll('.node')
-    .data(this.data);
+  var items = this.rootGroup.
+    selectAll('.node').
+    data(this.data);
 
-  items.enter().append('circle')
-    .classed('node', true)
-    .attr({
+  items.enter().append('circle').
+    classed('node', true).
+    attr({
       cx: function(data) { return data.graph.x; },
       cy: function(data) { return data.graph.y; }
     });
@@ -70,6 +64,7 @@ d3.graph.Editor.prototype.render = function() {
   //clean the items when they are removed from the data
   items.exit().remove();
 
+  console.log('%cRender', 'background: green; color: #fff; padding: 2px 5px;');
   return this;
 };
 
