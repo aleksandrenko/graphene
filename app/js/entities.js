@@ -2,20 +2,17 @@ function getUID() {
   return Date.now();
 }
 
-function Entity() {
-  this.properties = {};
-
-  this.addProperty = function(key, value) {
+var entity = {
+  properties: {},
+  addProperty: function(key, value) {
     this.properties[key] = value;
     return this;
-  }
-
-  this.removeProperty = function(key) {
+  },
+  removeProperty: function(key) {
     delete this.properties[key];
     return this;
   }
 }
-var entityPrototype = new Entity();
 
 function Node(options) {
   this.graph = {
@@ -26,7 +23,7 @@ function Node(options) {
   this.label = options.label;
   this.id = getUID();
 }
-Node.prototype = entityPrototype;
+Node.prototype = entity;
 
 
 function Edge(options) {
@@ -38,4 +35,9 @@ function Edge(options) {
   this.label = middlePoint.label;
   this.id = getUID();
 }
-Node.prototype = entityPrototype;
+Node.prototype = entity;
+
+export default {
+  Node: Node,
+  Edge: Edge
+}

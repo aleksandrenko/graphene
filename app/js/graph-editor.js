@@ -2,6 +2,12 @@
  * Created by nikolaialeksandrenko on 1/21/16.
  */
 
+import entities from './entities.js';
+
+var Node = entities.Node;
+var Edge = entities.Edge;
+
+
 if (!d3.graph) {
   d3.graph = {};
 }
@@ -76,3 +82,5 @@ d3.graph.Editor.prototype.setData = function(_data) {
 d3.graph.Editor.prototype.getData = function() {
   return this.data;
 };
+
+export default d3.graph.Editor;
