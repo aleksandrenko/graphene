@@ -11,20 +11,10 @@ var entity = {
 }
 
 /**
-  @typedef NodeOptions
-  @type {object}
-  @property {number} x
-  @property {number} y
-  @property {string} color
-  @property {string} label
-  @property {object} properties
-  @property {function} getProperties
-  @property {function} setProperties
- /
-
-/**
- *
- * @param {NodeOptions} options
+ * @param {Object} options -
+ * @param {number} options.x -
+ * @param {number} options.y -
+ * @param {string} options.label -
  */
 function Node(options) {
   this.graph = {
@@ -38,20 +28,11 @@ function Node(options) {
 Node.prototype = entity;
 
 /**
-  @typedef EdgeOptions
-  @type {object}
-  @property {number} startNodeID
-  @property {number} endNodeID
-  @property {string} middlePoint
-  @property {string} label
-  @property {object} properties
-  @property {function} getProperties
-  @property {function} setProperties
- /
-
-/**
- *
- * @param {EdgeOptions} options
+ * @param {Object} options -
+ * @param {number} options.startNodeID -
+ * @param {number} options.endNodeID -
+ * @param {string} options.middlePoint -
+ * @param {string} options.label -
  */
 function Edge(options) {
   this.graph = {
@@ -59,10 +40,11 @@ function Edge(options) {
     endNodeID: options.endNodeID,
     middlePoint: options.middlePoint
   }
-  this.label = middlePoint.label;
+  this.label = options.label;
   this.id = getUID();
 }
-Node.prototype = entity;
+Edge.prototype = entity;
+
 
 /**
  * Generate unique ID
