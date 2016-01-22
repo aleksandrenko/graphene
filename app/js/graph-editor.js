@@ -2,8 +2,6 @@
  * Created by nikolaialeksandrenko on 1/21/16.
  */
 
-import Node from './node.js';
-
 if (!d3.graph) {
   d3.graph = {};
 }
@@ -32,6 +30,11 @@ d3.graph.Editor = function(dom, data) {
         y: x[1]
       });
 
+      node.addProperty('title', 1);
+      node.addProperty('required', true);
+
+      console.log(node);
+
       var newData = editor.getData().concat([node]);
       editor.setData(newData);
     });
@@ -54,8 +57,8 @@ d3.graph.Editor.prototype.render = function() {
   items.enter().append('circle')
     .classed('node', true)
     .attr({
-      cx: function(data) { return data.x; },
-      cy: function(data) { return data.y; }
+      cx: function(data) { return data.graph.x; },
+      cy: function(data) { return data.graph.y; }
     });
 
   //clean the items when they are removed from the data
