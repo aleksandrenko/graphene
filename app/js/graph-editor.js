@@ -2,6 +2,8 @@
  * Created by nikolaialeksandrenko on 1/21/16.
  */
 
+import Node from './node.js';
+
 if (!d3.graph) {
   d3.graph = {};
 }
@@ -71,5 +73,3 @@ d3.graph.Editor.prototype.setData = function(_data) {
 d3.graph.Editor.prototype.getData = function() {
   return this.data;
 };
-
-
