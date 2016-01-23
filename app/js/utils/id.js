@@ -2,11 +2,18 @@
 
 /**
  * Generate unique ID
- * @return {number} The unique ID is a timestamp, so it can be used for checking when the entity is created
+ * @return {number} UID
  */
 
 function getID() {
-  return Date.now();
+  var date = performance.now(); //use high-precision timer if available
+  var uid = 'xyxxxyxx'.replace(/[xy]/g, function(charToReplace) {
+    var rand = (date + Math.random() * 16) % 16 | 0;
+    date = Math.floor(date / 16);
+    return (charToReplace == 'x' ? rand : (rand & 0x3 | 0x8)).toString(16);
+  });
+
+  return uid;
 }
 
 export default getID;
