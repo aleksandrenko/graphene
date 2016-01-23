@@ -1,9 +1,7 @@
 "use strict";
 
-import entities from './entities.js';
-
-const Node = entities.Node;
-const Edge = entities.Edge;
+import Node from './dataobjects/Node.js';
+import Edge from './dataobjects/Edge.js';
 
 if (!d3.graph) {
   d3.graph = {};

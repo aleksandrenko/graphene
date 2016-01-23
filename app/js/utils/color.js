@@ -1,6 +1,11 @@
 "use strict";
 
-export default function color() {
+/**
+ * Returns hex color
+ * @returns {string}
+ */
+
+function color() {
   const allColors = [
     '0048BA',
     'B0BF1A',
@@ -43,3 +48,5 @@ export default function color() {
 
   return '#' + allColors[color.index];
 }
+
+export default color;
