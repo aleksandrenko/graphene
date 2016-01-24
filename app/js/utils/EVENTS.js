@@ -1,0 +1,8 @@
+"use strict";
+
+export default {
+  ADD_NODE: 'ADD_NODE',
+  SHOW_CONTEXT_MENU: 'SHOW_CONTENXT_MENU',
+  SELECT_NODE: 'SELECT_NODE',
+  SELECT_EDGE: 'SELECT_EDGE'
+};
