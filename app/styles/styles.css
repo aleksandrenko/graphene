@@ -34,3 +34,10 @@ html, body {
   fill-opacity: 1;
   white-space: nowrap;
 }
+
+
+.graphEditor .propertyMenu {
+  padding: 10px;
+  background: #fff;
+  border: solid 1px #666;
+}

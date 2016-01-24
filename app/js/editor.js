@@ -1,7 +1,10 @@
 "use strict";
 
+import createSVG from './utils/svg.js';
+
 import Node from './dataobjects/Node.js';
 import Edge from './dataobjects/Edge.js';
+import PropertyManager from './PropertiesManager.js';
 
 if (!d3.graph) {
   d3.graph = {};
@@ -9,14 +12,24 @@ if (!d3.graph) {
 
 const ENUM = {
   EDITOR_CLASS: 'graphEditor',
+  EDITOR_ID: 'graphEditor',
   ROOT_GROUP_CLASS: 'rootGroup'
 };
 
-function Editor(domId, data) {
+function Editor(containerSelector, data) {
+  if (containerSelector === undefined) {
+    throw new Error('Editor must be created with provided "Container Id"!');
+  }
+
+  //TODO: remove this
   const editor = this;
 
+  PropertyManager();
+
+  //get a d3 reference for further use
+  this.svg = d3.select(createSVG(this._containerSelector, ENUM));
+
   this.data = data || [];
-  this.svg = d3.select(domId).classed(ENUM.EDITOR_CLASS, true);
   this.svgGroup = this.svg.append('g').classed(ENUM.ROOT_GROUP_CLASS, true);
 
   // user event handling

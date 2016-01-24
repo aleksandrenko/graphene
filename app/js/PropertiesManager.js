@@ -1,7 +1,9 @@
 "use strict";
 
-/**
- * Handling Properties for all DOs
- */
+import propertyMenu from './ui/propertyMenu.js';
 
-export default {};
+function PropertiesManager(containerSelector) {
+
+}
+
+export default PropertiesManager;
