@@ -35,9 +35,28 @@ html, body {
   white-space: nowrap;
 }
 
-
-.graphEditor .propertyMenu {
-  padding: 10px;
+/*  */
+.properties-menu {
   background: #fff;
-  border: solid 1px #666;
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 1px;
 }
+
+.properties-menu .header {
+  background: #aaa;
+  height: 20px;
+}
+
+.properties-menu .main {
+  display: block;
+  min-height: 40px;
+  background: #ffffff;
+}
+
+.properties-menu .footer {
+  height: 20px;
+  background: #ddd;
+}
+

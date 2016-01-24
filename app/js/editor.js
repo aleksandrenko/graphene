@@ -1,6 +1,7 @@
 "use strict";
 
-import createSVG from './utils/svg.js';
+import createSVGInContainer from './utils/svg.js';
+import createGroupInSVG from './utils/svgGroup.js';
 
 import Node from './dataobjects/Node.js';
 import Edge from './dataobjects/Edge.js';
@@ -13,6 +14,12 @@ if (!d3.graph) {
 const ENUM = {
   EDITOR_CLASS: 'graphEditor',
   EDITOR_ID: 'graphEditor',
+  PROPERTY_MANAGER_ID: 'propertyManager',
+  PROPERTY_MANAGER_CLASS: 'propertyManagerContainer',
+  ENTITIES_GROUP_ID: 'entitiesGroup',
+  ENTITIES_GROUP_CLASS: 'entitiesGroup',
+  PROPERTIES_GROUP_ID: 'propertiesGroup',
+  PROPERTIES_GROUP_CLASS: 'propertiesGroup',
   ROOT_GROUP_CLASS: 'rootGroup'
 };
 
@@ -24,53 +31,20 @@ function Editor(containerSelector, data) {
   //TODO: remove this
   const editor = this;
 
-  PropertyManager();
-
   //get a d3 reference for further use
-  this.svg = d3.select(createSVG(this._containerSelector, ENUM));
+  var svgElement = createSVGInContainer(containerSelector, ENUM.EDITOR_ID, ENUM.EDITOR_CLASS);
+  var entitiesGroupElement = createGroupInSVG('#' + svgElement.id, ENUM.ENTITIES_GROUP_ID, ENUM.ENTITIES_GROUP_CLASS);
+
+  //var propertiesGroupElement = createGroupInSVG('#' + svgElement.id, ENUM.PROPERTIES_GROUP_ID, ENUM.PROPERTIES_GROUP_CLASS);
+  //this.propertyManager = new PropertyManager('#' + propertiesGroupElement.id);
+
+  this.svg = d3.select(svgElement);
+  this.entitiesGroup = d3.select(entitiesGroupElement);
 
   this.data = data || [];
-  this.svgGroup = this.svg.append('g').classed(ENUM.ROOT_GROUP_CLASS, true);
 
   // user event handling
   this.svg.on("click", svgClickHandler);
-  this.svg.on("dblclick", svgDbClickHandler);
-  this.svg.on("mousedown", svgMouseDownHandler);
-  this.svg.on("mouseup", svgMouseUpHandler);
-  this.svg.on("contextmenu", contextClickHandler);
-
-  function contextClickHandler() {
-    const target = d3.event.target;
-    //var position = d3.mouse(this);
-    console.log('contextClickHandler');
-    d3.event.preventDefault();
-  }
-
-  function svgMouseDownHandler() {
-    const target = d3.event.target;
-    console.log('svgMouseDownHandler');
-    editor.svg.on("mousemove", svgMouseMoveHandler);
-    d3.event.preventDefault();
-  }
-
-  function svgMouseMoveHandler() {
-    const target = d3.event.target;
-    console.log('svgMouseMoveHandler');
-    d3.event.preventDefault();
-  }
-
-  function svgMouseUpHandler() {
-    const target = d3.event.target;
-    console.log('svgMouseUpHandler');
-    editor.svg.on("mousemove", null);
-    d3.event.preventDefault();
-  }
-
-  function svgDbClickHandler() {
-    const target = d3.event.target;
-    console.log('svgDbClickHandler');
-    d3.event.preventDefault();
-  }
 
   function svgClickHandler() {
     console.log('svgClickHandler');
@@ -104,7 +78,7 @@ function Editor(containerSelector, data) {
  * Render and rerender the editor
  */
 Editor.prototype.render = function() {
-  var nodes = this.svgGroup.selectAll('.node').data(this.data).enter().append('g').classed('node', true);
+  var nodes = this.entitiesGroup.selectAll('.node').data(this.data).enter().append('g').classed('node', true);
 
   nodes.attr({
     id: function(data) { return data.id; }
