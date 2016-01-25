@@ -15,6 +15,24 @@ import RenderManager from './RenderManager';
 
 /**
  *
+ * @type {Array}
+ * @private
+ */
+var _dataChangeCallbackHandlers = [];
+
+/**
+ *
+ * @param data
+ * @private
+ */
+function _dispatchDataChange(data) {
+  _dataChangeCallbackHandlers.forEach(function(callbackHandler) {
+    callbackHandler(data);
+  });
+}
+
+/**
+ *
  * @param containerSelector
  * @returns {GraphEditor}
  * @constructor
@@ -39,8 +57,9 @@ function GraphEditor(containerSelector) {
   /**
    * On update re-render the content
    */
-  DataManager.onUpdate(function(data) {
-    RenderManager.render(this.entitiesGroup, data);
+  DataManager.onUpdate(function(updateEvent) {
+    RenderManager.render(this.entitiesGroup, updateEvent.data);
+    _dispatchDataChange(updateEvent);
   }.bind(this));
 
   /**
@@ -49,6 +68,14 @@ function GraphEditor(containerSelector) {
   this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
     DataManager.addNode(node);
   });
+
+  /**
+   *
+   * @param fn
+   */
+  this.onDataChange = function(fn) {
+    _dataChangeCallbackHandlers.push(fn);
+  };
 
   return this;
 }
