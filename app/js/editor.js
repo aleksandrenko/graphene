@@ -40,6 +40,7 @@ function Editor(containerSelector) {
   return this;
 }
 
+
 Editor.prototype.addNode = function(node) {
   this.data.nodes.push(node);
   return this;
