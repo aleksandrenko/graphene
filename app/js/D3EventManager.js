@@ -3,13 +3,18 @@
 import CONST from './enums/CONST';
 import EVENTS from './enums/EVENTS';
 
-import Node from './dataobjects/Node';
-import Edge from './dataobjects/Edge';
+import Node from './do/Node';
+import Edge from './do/Edge';
 
 /**
  * Handling events like: click, mousemove, dblclick ...
  */
 
+/**
+ *
+ * @param d3Element
+ * @constructor
+ */
 function D3EventManager(d3Element) {
   if(d3Element === undefined) {
     throw new Error('The EventManager needs a "container" to attach and listen for events.');

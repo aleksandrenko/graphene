@@ -4,10 +4,6 @@ var _nodes = [];
 var _edges = [];
 var _onUpdateCallbackHandlers = [];
 
-function _getNodeById(id) {
-  return _nodes.filter(function(node) { return node.id === id })[0];
-};
-
 function _dispatchUpdate() {
   _onUpdateCallbackHandlers.forEach(function(callbackHandler) {
     callbackHandler({
@@ -101,10 +97,13 @@ const DataManager = {
     return DataManager;
   },
 
+  /**
+   *
+   * @param {function} fn
+   */
   onUpdate: function(fn) {
     _onUpdateCallbackHandlers.push(fn);
   }
-
-}
+};
 
 export default DataManager;

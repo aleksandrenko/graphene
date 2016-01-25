@@ -12,10 +12,13 @@ import DataManager from './DataManager';
 
 import RenderManager from './RenderManager';
 
-if(!d3.graph) {
-  d3.graph = {};
-}
 
+/**
+ *
+ * @param containerSelector
+ * @returns {GraphEditor}
+ * @constructor
+ */
 function GraphEditor(containerSelector) {
   if(containerSelector === undefined) {
     throw new Error('Editor must be created with provided "Container Id"!');
@@ -33,10 +36,16 @@ function GraphEditor(containerSelector) {
 
   this.d3EventManager = new D3EventManager(this.svg);
 
-DataManager.onUpdate(function(data) {
-  RenderManager.render(this.entitiesGroup, DataManager.getAllNodes());
-}.bind(this));
+  /**
+   * On update re-render the content
+   */
+  DataManager.onUpdate(function(data) {
+    RenderManager.render(this.entitiesGroup, data);
+  }.bind(this));
 
+  /**
+   * Handle the user interaction and do actions
+   */
   this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
     DataManager.addNode(node);
   });
