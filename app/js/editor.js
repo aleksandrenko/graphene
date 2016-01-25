@@ -8,6 +8,7 @@ import createGroupInSVG from './utils/svgGroup';
 
 import PropertyManager from './PropertiesManager';
 import D3EventManager from './D3EventManager';
+import DataManager from './DataManager';
 
 import render from './render';
 
@@ -26,29 +27,21 @@ function Editor(containerSelector) {
 
   //var propertiesGroupElement = createGroupInSVG('#' + svgElement.id, CONST.PROPERTIES_GROUP_ID, CONST.PROPERTIES_GROUP_CLASS);
   //this.propertyManager = new PropertyManager('#' + propertiesGroupElement.id);
-
-  this.data = { nodes: [], edges: [] };
+  //
   this.svg = d3.select(svgElement);
   this.entitiesGroup = d3.select(entitiesGroupElement);
 
   this.d3EventManager = new D3EventManager(this.svg);
 
+DataManager.onUpdate(function(data) {
+  render(this.entitiesGroup, DataManager.getAllNodes());
+}.bind(this));
+
   this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
-    this.addNode(node);
-    render(this.entitiesGroup, this.getNodes());
-  }.bind(this));
+    DataManager.addNode(node);
+  });
 
   return this;
 }
-
-
-Editor.prototype.addNode = function(node) {
-  this.data.nodes.push(node);
-  return this;
-};
-
-Editor.prototype.getNodes = function() {
-  return this.data.nodes;
-};
 
 export default Editor;

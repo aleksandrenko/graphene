@@ -9,8 +9,11 @@ function _getNodeById(id) {
 };
 
 function _dispatchUpdate() {
-  _onUpdateCallbackHandlers,forEach(function(callbackHandler) {
-    callbackHandler();
+  _onUpdateCallbackHandlers.forEach(function(callbackHandler) {
+    callbackHandler({
+      nodes: _nodes,
+      edges: _edges
+    });
   });
 }
 
@@ -50,7 +53,7 @@ const DataManager = {
     return _nodes.filter(function(node) { return node.id === id })[0];
   },
 
-  getAllNode: function() {
+  getAllNodes: function() {
     return _nodes;
   },
 
@@ -104,4 +107,4 @@ const DataManager = {
 
 }
 
-expord default DataManager;
+export default DataManager;
