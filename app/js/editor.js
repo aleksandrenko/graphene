@@ -9,6 +9,8 @@ import createGroupInSVG from './utils/svgGroup';
 import PropertyManager from './PropertiesManager';
 import D3EventManager from './D3EventManager';
 
+import render from './render';
+
 if(!d3.graph) {
   d3.graph = {};
 }
@@ -33,10 +35,9 @@ function Editor(containerSelector) {
 
   this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
     this.addNode(node);
-    this.render();
+    render(this.entitiesGroup, this.getNodes());
   }.bind(this));
 
-  this.render();
   return this;
 }
 
@@ -48,36 +49,6 @@ Editor.prototype.addNode = function(node) {
 
 Editor.prototype.getNodes = function() {
   return this.data.nodes;
-};
-
-/**
- * Render and rerender the editor
- */
-Editor.prototype.render = function() {
-  var nodes = this.entitiesGroup.selectAll('.node').data(this.getNodes()).enter().append('g').classed('node', true);
-
-  nodes.attr({
-    id: function(data) { return data.id; }
-  });
-
-  nodes.append('circle').attr({
-    cx: function(data) { return data.x; },
-    cy: function(data) { return data.y; },
-    stroke: function(data) { return data.color; },
-    fill: '#ebebeb'
-  });
-
-  nodes.append('text').text('static label').attr({
-    x: function(data) { return data.x + 20; },
-    y: function(data) { return data.y + 5; },
-    fill: function(data) { return data.color; }
-  });
-
-  //TODO: add remove
-  //clean the items when they are removed from the data
-  //nodes.exit().remove();
-
-  return this;
 };
 
 export default Editor;
