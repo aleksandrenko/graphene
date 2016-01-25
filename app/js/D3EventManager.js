@@ -1,7 +1,7 @@
 "use strict";
 
-import CONST from './utils/CONST';
-import EVENTS from './utils/EVENTS';
+import CONST from './enums/CONST';
+import EVENTS from './enums/EVENTS';
 
 import Node from './dataobjects/Node';
 import Edge from './dataobjects/Edge';

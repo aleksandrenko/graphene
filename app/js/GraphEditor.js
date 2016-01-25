@@ -1,7 +1,7 @@
 "use strict";
 
-import CONST from './utils/CONST';
-import EVENTS from './utils/EVENTS';
+import CONST from './enums/CONST';
+import EVENTS from './enums/EVENTS';
 
 import createSVGInContainer from './utils/svg';
 import createGroupInSVG from './utils/svgGroup';
@@ -10,13 +10,13 @@ import PropertyManager from './PropertiesManager';
 import D3EventManager from './D3EventManager';
 import DataManager from './DataManager';
 
-import render from './render';
+import RenderManager from './RenderManager';
 
 if(!d3.graph) {
   d3.graph = {};
 }
 
-function Editor(containerSelector) {
+function GraphEditor(containerSelector) {
   if(containerSelector === undefined) {
     throw new Error('Editor must be created with provided "Container Id"!');
   }
@@ -34,7 +34,7 @@ function Editor(containerSelector) {
   this.d3EventManager = new D3EventManager(this.svg);
 
 DataManager.onUpdate(function(data) {
-  render(this.entitiesGroup, DataManager.getAllNodes());
+  RenderManager.render(this.entitiesGroup, DataManager.getAllNodes());
 }.bind(this));
 
   this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
@@ -44,4 +44,4 @@ DataManager.onUpdate(function(data) {
   return this;
 }
 
-export default Editor;
+export default GraphEditor;
