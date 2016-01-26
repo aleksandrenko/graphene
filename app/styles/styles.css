@@ -60,3 +60,53 @@ html, body {
   background: #ddd;
 }
 
+.contextMenuLayer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.ContextMenu {
+  background: #fff;
+  border-radius: 5px;
+  width: 200px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  pointer-events: all;
+  transition: opacity 0.2s;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.ContextMenu::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: solid 3px #666;
+  position: absolute;
+  left: -18px;
+  top: -13px;
+}
+
+.ContextMenu .menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ContextMenu .menu li {
+  padding: 10px 15px;
+  border-bottom: solid 1px #fafafa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ContextMenu .menu li:hover {
+  background-color: #fafafa;
+}

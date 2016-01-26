@@ -3,6 +3,8 @@
 export default {
   EDITOR_CLASS: 'graphEditor',
   EDITOR_ID: 'graphEditor',
+  SVGROOT_ID: 'rootSVG',
+  SVGROOT_CLASS: 'rootSVG',
   PROPERTY_MANAGER_ID: 'propertyManager',
   PROPERTY_MANAGER_CLASS: 'propertyManagerContainer',
   ENTITIES_GROUP_ID: 'entitiesGroup',

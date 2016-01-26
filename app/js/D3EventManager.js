@@ -39,8 +39,10 @@ function D3EventManager(d3Element) {
   function _svgClickHandler() {
     const target = d3.event.target;
 
+    dispatch(EVENTS.CLICK, target);
+
     //click on the root svg element
-    if(target.classList.contains(CONST.EDITOR_CLASS)) {
+    if(target.classList.contains(CONST.SVGROOT_CLASS)) {
       /* eslint-disable */
       const node = new Node({
         x: d3.mouse(this)[0],
@@ -49,7 +51,6 @@ function D3EventManager(d3Element) {
       /* eslint-enable */
 
       d3.event.preventDefault();
-
       dispatch(EVENTS.ADD_NODE, node);
     }
 
@@ -63,13 +64,12 @@ function D3EventManager(d3Element) {
    *
    */
   function _contextClickHandler() {
-    const target = d3.event.target;
-    var position = d3.mouse(this);
-
-    console.log('contextClickHandler');
     d3.event.preventDefault();
 
-    dispatch(EVENTS.SHOW_CONTEXT_MENU, {});
+    dispatch(EVENTS.SHOW_CONTEXT_MENU, {
+      position: d3.mouse(this),
+      target: d3.event.target
+    });
   }
 
   /**
