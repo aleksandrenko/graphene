@@ -14,7 +14,7 @@ import ContextMenu from './ContextMenu';
 
 /**
  *
- * @param {d3Element} d3Element
+ * @param d3Element
  * @param {node} RootDivElement
  * @constructor
  */
@@ -37,6 +37,28 @@ function D3EventManager(d3Element, RootDivElement) {
   this._container.on("contextmenu", _contextClickHandler);
 
   const contextMenu = new ContextMenu('#' + RootDivElement.id);
+
+  /**
+   *
+   * @param node
+   * @private
+   */
+  function _getTargetType(node) {
+    const type = node.nodeName;
+    var target = {};
+
+    if(type === 'circle' && node.parentNode.getAttribute('class')) {
+      target.type = CONST.ENTITY_NODE;
+      target.id = node.parentNode.id;
+    }
+
+    if(type === 'svg' && node.id === CONST.SVGROOT_ID) {
+      target.type = CONST.ENTITY_ROOT_SVG;
+      target.id = node.id;
+    }
+
+    return target;
+  }
 
   /**
    *
@@ -71,7 +93,7 @@ function D3EventManager(d3Element, RootDivElement) {
    */
   function _contextClickHandler() {
     d3.event.preventDefault();
-    contextMenu.open(d3.mouse(this), d3.event.target);
+    contextMenu.open(d3.mouse(this), _getTargetType(d3.event.target));
   }
 
   /**

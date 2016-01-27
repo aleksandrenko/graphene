@@ -1,5 +1,7 @@
 "use strict";
 
+import CONST from './enums/CONST';
+
 /**
  *
  * @param containerSelector
@@ -35,10 +37,20 @@ ContextMenu.prototype.close = function() {
 };
 
 ContextMenu.prototype._getContextMenuHTML = function(options) {
-  console.log('_renderContextMenu: ', options);
   var html = '<ul class="menu">';
-    html += '<li>Node Node</li>';
+
+  console.log(options);
+
+  if(options.type === CONST.ENTITY_NODE) {
+    console.log(CONST.ENTITY_NODE);
+    html += '<li>Create Edge</li>';
     html += '<li>Delete Node</li>';
+  }
+
+  if(options.type === CONST.ENTITY_ROOT_SVG) {
+    html += '<li>New Node</li>';
+  }
+
   html += '</ul>';
 
   return html;
