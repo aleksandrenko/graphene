@@ -30,6 +30,46 @@ function _dispatchUpdate(eventType, target, data) {
  * @type {Object}
  */
 const DataManager = {
+  selectNode: function(id) {
+    DataManager.deselectAllEntities();
+    var node = DataManager.getNode(id);
+
+    if(!node.isSelected) {
+      node.isSelected = true;
+      _dispatchUpdate('update', 'node', node);
+    }
+
+    return DataManager;
+  },
+
+  selectEdge: function(id) {
+    DataManager.deselectAllEntities();
+    var edge = DataManager.getEdge(id);
+
+    if(!edge.isSelected) {
+      edge.isSelected = true;
+      _dispatchUpdate('update', 'edge', edge);
+    }
+
+    return DataManager;
+  },
+
+  deselectAllEntities: function() {
+    _nodes.forEach(function(_node) {
+      if(_node.isSelected) {
+        _node.isSelected = false;
+      }
+    });
+
+    _edges.forEach(function(_edge) {
+      if(_edge.isSelected) {
+        _edge.isSelected = false;
+      }
+    });
+
+    return DataManager;
+  },
+
   /**
    *
    * @param node
@@ -60,8 +100,10 @@ const DataManager = {
    * @returns {Object}
    */
   updateNode: function(node) {
-    //TODO implement
-    //
+    _nodes = _nodes.map(function(_node) {
+      return _node.id === node.id ? node : _node;
+    });
+
     _dispatchUpdate('update', 'node', node);
     return DataManager;
   },

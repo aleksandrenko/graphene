@@ -16,7 +16,7 @@ function ContextMenu(containerSelector) {
   document.querySelector(containerSelector).appendChild(contextMenuLayer);
 
   //create the menu
-  const contextMenuElement = document.createElement('div');
+  const contextMenuElement = document.createElement('ul');
   contextMenuElement.setAttribute('id', 'ContextMenu');
   contextMenuElement.setAttribute('class', 'ContextMenu');
 
@@ -37,12 +37,9 @@ ContextMenu.prototype.close = function() {
 };
 
 ContextMenu.prototype._getContextMenuHTML = function(options) {
-  var html = '<ul class="menu">';
-
-  console.log(options);
+  var html = '';
 
   if(options.type === CONST.ENTITY_NODE) {
-    console.log(CONST.ENTITY_NODE);
     html += '<li>Create Edge</li>';
     html += '<li>Delete Node</li>';
   }
@@ -50,8 +47,6 @@ ContextMenu.prototype._getContextMenuHTML = function(options) {
   if(options.type === CONST.ENTITY_ROOT_SVG) {
     html += '<li>New Node</li>';
   }
-
-  html += '</ul>';
 
   return html;
 };

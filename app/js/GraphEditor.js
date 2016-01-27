@@ -71,10 +71,15 @@ function GraphEditor(containerSelector) {
   }.bind(this));
 
   this.InteractionManager.on(EVENTS.ADD_NODE, function(node) {
+    DataManager.deselectAllEntities();
     DataManager.addNode(node);
   });
 
-   /**
+  this.InteractionManager.on(EVENTS.SELECT_NODE, function(nodeId) {
+    DataManager.selectNode(nodeId);
+  });
+
+  /**
    * @param fn
    */
   this.onDataChange = function(fn) {

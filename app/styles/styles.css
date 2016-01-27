@@ -73,13 +73,15 @@ html, body {
   background: #fff;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  margin-left: 10px;
-  margin-top: 5px;
   opacity: 0;
   pointer-events: none;
   position: absolute;
   transition: opacity 0.2s;
   width: 200px;
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
 }
 
 .ContextMenu.opened {
@@ -87,33 +89,13 @@ html, body {
   opacity: 1;
 }
 
-.ContextMenu::before {
-  border: solid 3px #666;
-  border-radius: 50%;
-  content: '';
-  height: 8px;
-  left: -18px;
-  position: absolute;
-  top: -13px;
-  width: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.ContextMenu .menu {
-  border-radius: 5px;
-  list-style: none;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-}
-
-.ContextMenu .menu li {
+.ContextMenu li {
   border-bottom: solid 1px #fafafa;
   cursor: pointer;
   padding: 10px 15px;
   transition: background-color 0.2s;
 }
 
-.ContextMenu .menu li:hover {
+.ContextMenu li:hover {
   background-color: #fafafa;
 }

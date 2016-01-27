@@ -18,6 +18,7 @@ function Edge(options) {
   this.middlePoint = options.middlePoint;
   this.label = options.label;
   this.id = getID();
+  this.isSelected = false;
 }
 
 export default Edge;

@@ -64,13 +64,13 @@ function D3EventManager(d3Element, RootDivElement) {
    *
    */
   function _svgClickHandler() {
-    const target = d3.event.target;
+    const target = _getTargetType(event.target);
 
     //close the context menu
     contextMenu.close();
 
     //click on the root svg element
-    if(target.classList.contains(CONST.SVGROOT_CLASS)) {
+    if(target.type === CONST.ENTITY_ROOT_SVG) {
       /* eslint-disable */
       const node = new Node({
         x: d3.mouse(this)[0],
@@ -83,8 +83,8 @@ function D3EventManager(d3Element, RootDivElement) {
     }
 
     //click on node
-    if(target.parentElement.classList.contains('node')) {
-      console.log('select node');
+    if(target.type === CONST.ENTITY_NODE) {
+      dispatch(EVENTS.SELECT_NODE, target.id);
     }
   }
 

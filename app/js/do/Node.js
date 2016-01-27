@@ -18,6 +18,7 @@ function Node(options) {
   this.color = options.color || color();
   this.label = options.label;
   this.id = getID();
-};
+  this.isSelected = false;
+}
 
 export default Node;
