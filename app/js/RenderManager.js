@@ -26,7 +26,6 @@ function _renderNodes(d3Element, nodesData) {
       return data.color;
     },
     fill: function(data) {
-      console.log(data);
       return data.isSelected ? data.color : '#ebebeb';
     }
   });

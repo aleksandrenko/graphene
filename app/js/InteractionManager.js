@@ -83,7 +83,7 @@ function D3EventManager(d3Element, RootDivElement) {
     }
 
     //click on node
-    if(target.type === CONST.ENTITY_NODE) {
+    if(target.id && target.type === CONST.ENTITY_NODE) {
       dispatch(EVENTS.SELECT_NODE, target.id);
     }
   }

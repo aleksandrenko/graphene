@@ -31,10 +31,10 @@ function _dispatchUpdate(eventType, target, data) {
  */
 const DataManager = {
   selectNode: function(id) {
-    DataManager.deselectAllEntities();
     var node = DataManager.getNode(id);
 
-    if(!node.isSelected) {
+    if(node && !node.isSelected) {
+      DataManager.deselectAllEntities();
       node.isSelected = true;
       _dispatchUpdate('update', 'node', node);
     }
@@ -42,17 +42,17 @@ const DataManager = {
     return DataManager;
   },
 
-  selectEdge: function(id) {
-    DataManager.deselectAllEntities();
-    var edge = DataManager.getEdge(id);
-
-    if(!edge.isSelected) {
-      edge.isSelected = true;
-      _dispatchUpdate('update', 'edge', edge);
-    }
-
-    return DataManager;
-  },
+  //selectEdge: function(id) {
+  //  var edge = DataManager.getEdge(id);
+  //
+  //  if(edge && !edge.isSelected) {
+  //    DataManager.deselectAllEntities();
+  //    edge.isSelected = true;
+  //    _dispatchUpdate('update', 'edge', edge);
+  //  }
+  //
+  //  return DataManager;
+  //},
 
   deselectAllEntities: function() {
     _nodes.forEach(function(_node) {
@@ -125,7 +125,7 @@ const DataManager = {
    * @returns {Object}
    */
   getNode: function(id) {
-    return _nodes.filter(function(node) { return node.id === id })[0];
+    return _nodes.filter(function(_node) { return _node.id === id })[0];
   },
 
   /**
