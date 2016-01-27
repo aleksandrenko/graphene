@@ -25,17 +25,13 @@ function ContextMenu(containerSelector) {
 ContextMenu.prototype.open = function(position, options) {
   this.contextMenuElement.innerHTML = this._getContextMenuHTML(options);
 
-  this.contextMenuElement.style.opacity = 1;
   this.contextMenuElement.style.left = position[0] + 'px';
   this.contextMenuElement.style.top = position[1] + 'px';
+  this.contextMenuElement.classList.add('opened');
 };
 
 ContextMenu.prototype.close = function() {
-  this.contextMenuElement.style.opacity = 0;
-
-  setTimeout(function() {
-    this.contextMenuElement.innerHTML = '';
-  }.bind(this), 250);
+  this.contextMenuElement.classList.remove('opened');
 };
 
 ContextMenu.prototype._getContextMenuHTML = function(options) {

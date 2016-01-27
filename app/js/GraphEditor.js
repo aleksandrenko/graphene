@@ -7,10 +7,9 @@ import createSVGInContainer from './utils/svg';
 import createGroupInSVG from './utils/svgGroup';
 
 import PropertyManager from './PropertiesManager';
-import D3EventManager from './D3EventManager';
+import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
 
-import ContextMenu from './ContextMenu';
 import RenderManager from './RenderManager';
 
 
@@ -61,8 +60,7 @@ function GraphEditor(containerSelector) {
   this.svg = d3.select(svgElement);
   this.entitiesGroup = d3.select(entitiesGroupElement);
 
-  this.d3EventManager = new D3EventManager(this.svg);
-  this.contextMenu = new ContextMenu(parentDomSelector);
+  this.InteractionManager = new InteractionManager(this.svg, parentDomContainer);
 
   /**
    * On update re-render the content
@@ -72,17 +70,9 @@ function GraphEditor(containerSelector) {
     _dispatchDataChange(updateEvent);
   }.bind(this));
 
-  this.d3EventManager.on(EVENTS.ADD_NODE, function(node) {
+  this.InteractionManager.on(EVENTS.ADD_NODE, function(node) {
     DataManager.addNode(node);
   });
-
-   this.d3EventManager.on(EVENTS.CLICK, function(target) {
-     this.contextMenu.close();
-   }.bind(this));
-
-  this.d3EventManager.on(EVENTS.SHOW_CONTEXT_MENU, function(data) {
-    this.contextMenu.open(data.position, data.target);
-  }.bind(this));
 
    /**
    * @param fn

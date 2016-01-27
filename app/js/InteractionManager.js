@@ -6,16 +6,19 @@ import EVENTS from './enums/EVENTS';
 import Node from './do/Node';
 import Edge from './do/Edge';
 
+import ContextMenu from './ContextMenu';
+
 /**
  * Handling events like: click, mousemove, dblclick ...
  */
 
 /**
  *
- * @param d3Element
+ * @param {d3Element} d3Element
+ * @param {node} RootDivElement
  * @constructor
  */
-function D3EventManager(d3Element) {
+function D3EventManager(d3Element, RootDivElement) {
   if(d3Element === undefined) {
     throw new Error('The EventManager needs a "container" to attach and listen for events.');
   }
@@ -33,13 +36,16 @@ function D3EventManager(d3Element) {
   this._container.on("mouseup", _svgMouseUpHandler);
   this._container.on("contextmenu", _contextClickHandler);
 
+  const contextMenu = new ContextMenu('#' + RootDivElement.id);
+
   /**
    *
    */
   function _svgClickHandler() {
     const target = d3.event.target;
 
-    dispatch(EVENTS.CLICK, target);
+    //close the context menu
+    contextMenu.close();
 
     //click on the root svg element
     if(target.classList.contains(CONST.SVGROOT_CLASS)) {
@@ -65,11 +71,7 @@ function D3EventManager(d3Element) {
    */
   function _contextClickHandler() {
     d3.event.preventDefault();
-
-    dispatch(EVENTS.SHOW_CONTEXT_MENU, {
-      position: d3.mouse(this),
-      target: d3.event.target
-    });
+    contextMenu.open(d3.mouse(this), d3.event.target);
   }
 
   /**
