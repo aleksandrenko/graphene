@@ -25,20 +25,28 @@ function _renderNodes(d3Element, nodesData) {
     stroke: function(data) {
       return data.color;
     },
-    fill: '#ebebeb'
-  });
-
-  nodes.append('text').text('static label').attr({
-    x: function(data) {
-      return data.x + 20;
-    },
-    y: function(data) {
-      return data.y + 5;
-    },
     fill: function(data) {
-      return data.color;
+      console.log(data);
+      return data.isSelected ? data.color : '#ebebeb';
     }
   });
+
+  nodes.append('text')
+    .text(function(data) {
+      return data.label || '...'
+    })
+    .attr({
+      x: function(data) {
+        return data.x + 20;
+      },
+      y: function(data) {
+        return data.y + 5;
+      },
+      fill: function(data) {
+        return data.color;
+      }
+    }
+  );
 }
 
 function _renderEdges(d3Element, edgesData) {
@@ -51,6 +59,10 @@ function _renderEdges(d3Element, edgesData) {
  */
 const RenderManager = {
   render: function(d3Element, data) {
+    //TODO: re-render without clearing all elements
+    d3.selectAll('.node').remove();
+    d3.selectAll('.edge').remove();
+
     _renderNodes(d3Element, data.nodes);
     _renderEdges(d3Element, data.edges);
   }
