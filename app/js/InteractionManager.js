@@ -7,6 +7,7 @@ import Node from './do/Node';
 import Edge from './do/Edge';
 
 import ContextMenu from './ContextMenu';
+import PropertiesManager from './PropertiesManager';
 
 /**
  * Handling events like: click, mousemove, dblclick ...
@@ -18,7 +19,7 @@ import ContextMenu from './ContextMenu';
  * @param {node} RootDivElement
  * @constructor
  */
-function D3EventManager(d3Element, RootDivElement) {
+function InteractionManager(d3Element, RootDivElement) {
   if(d3Element === undefined) {
     throw new Error('The EventManager needs a "container" to attach and listen for events.');
   }
@@ -37,6 +38,9 @@ function D3EventManager(d3Element, RootDivElement) {
   this._container.on("contextmenu", _contextClickHandler);
 
   const contextMenu = new ContextMenu('#' + RootDivElement.id);
+  const propertiesManager = new PropertiesManager('#' + RootDivElement.id);
+
+  console.log(propertiesManager);
 
   /**
    *
@@ -84,7 +88,11 @@ function D3EventManager(d3Element, RootDivElement) {
 
     //click on node
     if(target.id && target.type === CONST.ENTITY_NODE) {
+      propertiesManager.open(d3.mouse(this), target);
+
       dispatch(EVENTS.SELECT_NODE, target.id);
+    } else {
+      propertiesManager.close();
     }
   }
 
@@ -133,8 +141,8 @@ function D3EventManager(d3Element, RootDivElement) {
     //console.log('svgDbClickHandler');
     d3.event.preventDefault();
 
-    dispatch(EVENTS.SELECT_NODE, {});
-    dispatch(EVENTS.SELECT_EDGE, {});
+    //dispatch(EVENTS.SELECT_NODE, {});
+    //dispatch(EVENTS.SELECT_EDGE, {});
   }
 }
 
@@ -143,7 +151,7 @@ function D3EventManager(d3Element, RootDivElement) {
  * @param {string} eventType
  * @param {object} eventData
  */
-D3EventManager.prototype.dispatch = function(eventType, eventData) {
+InteractionManager.prototype.dispatch = function(eventType, eventData) {
   if(!this._eventCallbackHandlers[eventType]) {
     return;
   }
@@ -158,7 +166,7 @@ D3EventManager.prototype.dispatch = function(eventType, eventData) {
  * @param {string} eventType
  * @param {function} callbackHandler
  */
-D3EventManager.prototype.on = function(eventType, callbackHandler) {
+InteractionManager.prototype.on = function(eventType, callbackHandler) {
   var eventCallbackHandlers = this._eventCallbackHandlers[eventType];
 
   if(!eventCallbackHandlers) {
@@ -173,7 +181,7 @@ D3EventManager.prototype.on = function(eventType, callbackHandler) {
  * @param {string} eventType
  * @param {function} callbackHandler
  */
-D3EventManager.prototype.off = function(eventType, callbackHandler) {
+InteractionManager.prototype.off = function(eventType, callbackHandler) {
   this._eventCallbackHandlers[eventType].forEach(function(callback, i) {
     if(callback === callbackHandler) {
       delete this._eventCallbackHandlers[eventType][i];
@@ -181,4 +189,4 @@ D3EventManager.prototype.off = function(eventType, callbackHandler) {
   }.bind(this));
 };
 
-export default D3EventManager;
+export default InteractionManager;
