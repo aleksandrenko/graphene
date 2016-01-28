@@ -29,7 +29,7 @@
     // encourages use of dot notation whenever possible
     "dot-notation": [2, { "allowKeywords": true }],
     // enforces consistent newlines before or after dots
-    "dot-location": 2,
+    "dot-location": 0,
     // require the use of === and !==
     "eqeqeq": 2,
     // make sure for-in loops have an if statement

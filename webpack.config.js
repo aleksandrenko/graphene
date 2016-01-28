@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  devtool: 'source-map',
   entry: [
     './app/main.js'
   ],
@@ -26,11 +27,11 @@ module.exports = {
       }
     ],
     preLoaders: [
-      //{
-      //  test: /\.js$/,
-      //  loader: "eslint-loader",
-      //  exclude: /node_modules/
-      //}
+      {
+        test: /\.js$/,
+        loader: "eslint-loader",
+        exclude: /node_modules/
+      }
     ]
   }
 };

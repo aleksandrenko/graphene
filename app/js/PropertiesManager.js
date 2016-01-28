@@ -10,7 +10,7 @@ import CONST from './enums/CONST';
 function PropertiesManager(containerSelector) {
   var parentContainer = document.querySelector(containerSelector);
 
-  var propertiesLayer  = document.createElement('div');
+  var propertiesLayer = document.createElement('div');
   propertiesLayer.setAttribute('id', CONST.PROPERTIES_MENU_LAYER_ID);
   propertiesLayer.setAttribute('class', CONST.PROPERTIES_MENU_LAYER_CLASS);
 
@@ -37,6 +37,5 @@ PropertiesManager.prototype.open = function(position, target) {
 PropertiesManager.prototype.close = function() {
   this.propertiesMenu.classList.remove('opened');
 };
-
 
 export default PropertiesManager;

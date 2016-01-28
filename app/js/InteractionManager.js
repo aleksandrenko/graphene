@@ -20,15 +20,18 @@ import PropertiesManager from './PropertiesManager';
  * @constructor
  */
 function InteractionManager(d3Element, RootDivElement) {
+
   if(d3Element === undefined) {
     throw new Error('The EventManager needs a "container" to attach and listen for events.');
   }
 
-  this._container = d3Element;
-  this._eventCallbackHandlers = {};
-
+  /* eslint-disable */
   //need to attach 'this' because the function will be called in different context
   var dispatch = this.dispatch.bind(this);
+  /* eslint-enable */
+
+  this._container = d3Element;
+  this._eventCallbackHandlers = {};
 
   // user event handling
   this._container.on("click", _svgClickHandler);
