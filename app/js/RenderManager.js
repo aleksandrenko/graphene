@@ -37,7 +37,7 @@ function _renderNodes(d3Element, nodesData) {
 
   nodes.append('text')
     .text(function(data) {
-      return data.label || '...'
+      return data.label || '...';
     })
     .attr({
       x: function(data) {
@@ -53,6 +53,12 @@ function _renderNodes(d3Element, nodesData) {
   );
 }
 
+/**
+ *
+ * @param {object} d3Element
+ * @param {array} edgesData
+ * @private
+ */
 function _renderEdges(d3Element, edgesData) {
   //TODO render edges
 }

@@ -10,14 +10,14 @@ import createDomElementInContainer from './utils/dom';
  */
 function ContextMenu(containerSelector) {
   //create and attach a contextMenuLayer
-  const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', 'contextMenuLayer', contextMenuLayer);
+  const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', 'contextMenuLayer', 'contextMenuLayer');
 
   //create a context menu
-  this.contextMenuElement = createDomElementInContainer('#' + contextMenuLayer.id, 'ul', 'ContextMenu', 'ContextMenu');
+  this.contextMenuElement = createDomElementInContainer('#' + contextMenuLayer.id, 'ul', 'contextMenu', 'contextMenu');
 }
 
 ContextMenu.prototype.open = function(position, options) {
-  this.contextMenuElement.innerHTML = this._getContextMenuHTML(options);
+  this.contextMenuElement.innerHTML = _getContextMenuHTML(options);
 
   this.contextMenuElement.style.left = position[0] + 'px';
   this.contextMenuElement.style.top = position[1] + 'px';
@@ -28,7 +28,7 @@ ContextMenu.prototype.close = function() {
   this.contextMenuElement.classList.remove('opened');
 };
 
-ContextMenu.prototype._getContextMenuHTML = function(options) {
+_getContextMenuHTML = function(options) {
   var html = '';
 
   if(options.type === CONST.ENTITY_NODE) {

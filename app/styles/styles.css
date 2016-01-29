@@ -26,10 +26,6 @@ html, body {
   stroke-opacity: 1;
 }
 
-.graphEditor .node circle.selected {
-
-}
-
 .graphEditor .node text {
   white-space: nowrap;
   fill-opacity: 1;
@@ -69,7 +65,7 @@ html, body {
   top: 0;
 }
 
-.ContextMenu {
+.contextMenu {
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -84,12 +80,12 @@ html, body {
   padding: 0;
 }
 
-.ContextMenu.opened {
+.contextMenu.opened {
   pointer-events: all;
   opacity: 1;
 }
 
-.ContextMenu li {
+.contextMenu li {
   border-bottom: solid 1px #fafafa;
   cursor: pointer;
   padding: 10px 15px;

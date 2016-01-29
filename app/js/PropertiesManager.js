@@ -26,6 +26,11 @@ PropertiesManager.prototype._getMenuHTML = function(target) {
   return '<div class="header"></div><div class="main"></div><div class="footer"></div>';
 };
 
+/**
+ *
+ * @param position
+ * @param target
+ */
 PropertiesManager.prototype.open = function(position, target) {
   this.propertiesMenu.classList.add('opened');
   this.propertiesMenu.style.left = position[0] + 'px';
@@ -34,6 +39,9 @@ PropertiesManager.prototype.open = function(position, target) {
   this.propertiesMenu.innerHTML = this._getMenuHTML(target);
 };
 
+/**
+ *
+ */
 PropertiesManager.prototype.close = function() {
   this.propertiesMenu.classList.remove('opened');
 };

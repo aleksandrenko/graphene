@@ -125,7 +125,9 @@ const DataManager = {
    * @returns {Object}
    */
   getNode: function(id) {
-    return _nodes.filter(function(_node) { return _node.id === id })[0];
+    return _nodes.filter(function(_node) {
+      return _node.id === id;
+    })[0];
   },
 
   /**

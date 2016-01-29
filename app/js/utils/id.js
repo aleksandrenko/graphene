@@ -5,7 +5,7 @@
  * @return {number} UID
  */
 function getID() {
-  var date = performance.now(); //use high-precision timer if available
+  var date = window.performance.now(); //use high-precision timer if available
   return 'xyxxxyxx'.replace(/[xy]/g, function(charToReplace) {
     var rand = (date + Math.random() * 16) % 16 | 0;
     date = Math.floor(date / 16);

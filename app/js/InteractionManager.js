@@ -16,7 +16,7 @@ import PropertiesManager from './PropertiesManager';
 /**
  *
  * @param d3Element
- * @param {node} RootDivElement
+ * @param {Element} RootDivElement
  * @constructor
  */
 function InteractionManager(d3Element, RootDivElement) {
