@@ -42,15 +42,22 @@ function _renderEdges(d3Element, edgesData) {
   // TODO render edges
 }
 
-/**
- *
- * @type {{render: Function}}
- */
-const RenderManager = {
-  render: (d3Element, data) => {
+
+let instance = null;
+
+class RenderManager {
+  constructor() {
+    if (!instance) {
+      instance = this;
+    }
+
+    return instance;
+  }
+
+  static render(d3Element, data) {
     _renderNodes(d3Element, data.nodes);
     _renderEdges(d3Element, data.edges);
   }
-};
+}
 
 export default RenderManager;

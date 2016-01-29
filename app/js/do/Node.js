@@ -3,22 +3,24 @@
 import getID from '../utils/id.js';
 import color from '../utils/color.js';
 
-/**
- *
- * @param {object} options
- * @param {number} options.x
- * @param {number} options.y
- * @param {string} options.color
- * @param {string} options.label
- * @constructor
- */
-function Node(options) {
-  this.x = options.x;
-  this.y = options.y;
-  this.color = options.color || color();
-  this.label = options.label;
-  this.id = getID();
-  this.isSelected = false;
+class Node {
+  /**
+   *
+   * @param {object} options
+   * @param {number} options.x
+   * @param {number} options.y
+   * @param {string} options.color
+   * @param {string} options.label
+   * @constructor
+   */
+  constructor(options) {
+    this.x = options.x;
+    this.y = options.y;
+    this.color = options.color || color();
+    this.label = options.label;
+    this.id = getID();
+    this.isSelected = false;
+  }
 }
 
 export default Node;
