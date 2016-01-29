@@ -1,8 +1,4 @@
 import GraphEditor from './js/GraphEditor';
 
-var initData = [];
-var graphEditor = new GraphEditor('body', initData);
-
-graphEditor.onDataChange(function(updateEvent) {
-  console.log('graph editor data change: ' + updateEvent);
-});
+const graphEditor = new GraphEditor('body');
+graphEditor.onDataChange(updateEvent => console.log('graph editor data change ${updateEvent}'));

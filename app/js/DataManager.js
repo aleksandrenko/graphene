@@ -1,8 +1,10 @@
 'use strict';
 
-var _nodes = [];
-var _edges = [];
-var _onUpdateCallbackHandlers = [];
+let _nodes = [];
+let _edges = [];
+/* eslint-disable */
+let _onUpdateCallbackHandlers = [];
+/* eslint-enable */
 
 /**
  *
@@ -12,10 +14,10 @@ var _onUpdateCallbackHandlers = [];
  * @private
  */
 function _dispatchUpdate(eventType, target, data) {
-  _onUpdateCallbackHandlers.forEach(function (callbackHandler) {
+  _onUpdateCallbackHandlers.forEach(callbackHandler => {
     callbackHandler({
       event: eventType,
-      target: target,
+      target,
       change: data,
       data: {
         nodes: _nodes,
@@ -30,8 +32,8 @@ function _dispatchUpdate(eventType, target, data) {
  * @type {Object}
  */
 const DataManager = {
-  selectNode: function (id) {
-    var node = DataManager.getNode(id);
+  selectNode: (id) => {
+    const node = DataManager.getNode(id);
 
     if (node && !node.isSelected) {
       DataManager.deselectAllEntities();
@@ -42,7 +44,7 @@ const DataManager = {
     return DataManager;
   },
 
-  //selectEdge: function(id) {
+  // selectEdge: function(id) {
   //  var edge = DataManager.getEdge(id);
   //
   //  if(edge && !edge.isSelected) {
@@ -52,18 +54,22 @@ const DataManager = {
   //  }
   //
   //  return DataManager;
-  //},
+  // },
 
-  deselectAllEntities: function () {
-    _nodes.forEach(function (_node) {
-      if (_node.isSelected) {
-        _node.isSelected = false;
+  deselectAllEntities: () => {
+    _nodes.forEach(node => {
+      if (node.isSelected) {
+        /* eslint-disable */
+        node.isSelected = false;
+        /* eslint-enable */
       }
     });
 
-    _edges.forEach(function (_edge) {
+    _edges.forEach(_edge => {
       if (_edge.isSelected) {
+        /* eslint-disable */
         _edge.isSelected = false;
+        /* eslint-enable */
       }
     });
 
@@ -75,7 +81,7 @@ const DataManager = {
    * @param node
    * @returns {Object}
    */
-  addNode: function (node) {
+  addNode: node => {
     _nodes.push(node);
 
     _dispatchUpdate('add', 'node', node);
@@ -87,7 +93,7 @@ const DataManager = {
    * @param nodes
    * @returns {Object}
    */
-  addNodes: function (nodes) {
+  addNodes: nodes => {
     _nodes.concat(nodes);
 
     _dispatchUpdate('add', 'node', nodes);
@@ -99,10 +105,8 @@ const DataManager = {
    * @param node
    * @returns {Object}
    */
-  updateNode: function (node) {
-    _nodes = _nodes.map(function (_node) {
-      return _node.id === node.id ? node : _node;
-    });
+  updateNode: node => {
+    _nodes = _nodes.map(_node => _node.id === node.id ? node : _node);
 
     _dispatchUpdate('update', 'node', node);
     return DataManager;
@@ -113,8 +117,8 @@ const DataManager = {
    * @param node
    * @returns {Object}
    */
-  deleteNode: function (node) {
-    //TODO implement
+  deleteNode: node => {
+    // TODO implement
     _dispatchUpdate('delete', 'node', node);
     return DataManager;
   },
@@ -124,26 +128,20 @@ const DataManager = {
    * @param id
    * @returns {Object}
    */
-  getNode: function (id) {
-    return _nodes.filter(function (_node) {
-      return _node.id === id;
-    })[0];
-  },
+  getNode: id => _nodes.filter(_node => _node.id === id)[0],
 
   /**
    *
    * @returns {Array}
    */
-  getAllNodes: function () {
-    return _nodes;
-  },
+  getAllNodes: () => _nodes,
 
   /**
    *
    * @param nodes
    * @returns {Object}
    */
-  deleteAllNodes: function (nodes) {
+  deleteAllNodes: nodes => {
     _nodes = [];
     _dispatchUpdate('delete', 'node', nodes);
     return DataManager;
@@ -154,7 +152,7 @@ const DataManager = {
    * @param edge
    * @returns {Object}
    */
-  addEdge: function (edge) {
+  addEdge: edge => {
     _edges.push(edge);
     _dispatchUpdate('add', 'edge', edge);
     return DataManager;
@@ -165,7 +163,7 @@ const DataManager = {
    * @param edges
    * @returns {Object}
    */
-  addEdges: function (edges) {
+  addEdges: edges => {
     _edges.concat(edges);
     _dispatchUpdate('add', 'edge', edges);
     return DataManager;
@@ -176,8 +174,8 @@ const DataManager = {
    * @param edge
    * @returns {Object}
    */
-  updateEdge: function (edge) {
-    //TODO implement
+  updateEdge: edge => {
+    // TODO implement
     _dispatchUpdate('update', 'edge', edge);
     return DataManager;
   },
@@ -187,8 +185,8 @@ const DataManager = {
    * @param edge
    * @returns {Object}
    */
-  deleteEdge: function (edge) {
-    //TODO implement
+  deleteEdge: edge => {
+    // TODO implement
     _dispatchUpdate('delete', 'edge', edge);
     return DataManager;
   },
@@ -198,26 +196,20 @@ const DataManager = {
    * @param id
    * @returns {T}
    */
-  getEdge: function (id) {
-    return _edges.filter(function (edge) {
-      return edge.id === id;
-    })[0];
-  },
+  getEdge: id => _edges.filter(edge => edge.id === id)[0],
 
   /**
    *
    * @returns {Array}
    */
-  getAllEdges: function () {
-    return _edges;
-  },
+  getAllEdges: () => _edges,
 
   /**
    *
    * @param edge
    * @returns {Object}
    */
-  deleteAllEdges: function (edge) {
+  deleteAllEdges: edge => {
     _edges = [];
     _dispatchUpdate('delete', 'edge', edge);
     return DataManager;
@@ -227,7 +219,7 @@ const DataManager = {
    *
    * @param {function} fn
    */
-  onUpdate: function (fn) {
+  onUpdate: fn => {
     _onUpdateCallbackHandlers.push(fn);
   }
 };

@@ -9,27 +9,27 @@ import createDomElementInContainer from './utils/dom';
  * @constructor
  */
 function ContextMenu(containerSelector) {
-  //create and attach a contextMenuLayer
+  // create and attach a contextMenuLayer
   const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', 'contextMenuLayer', 'contextMenuLayer');
 
-  //create a context menu
-  this.contextMenuElement = createDomElementInContainer('#' + contextMenuLayer.id, 'ul', 'contextMenu', 'contextMenu');
+  // create a context menu
+  this.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', 'contextMenu', 'contextMenu');
 }
 
-ContextMenu.prototype.open = function (position, options) {
+ContextMenu.prototype.open = function _openC(position, options) {
   this.contextMenuElement.innerHTML = this._getContextMenuHTML(options);
 
-  this.contextMenuElement.style.left = position[0] + 'px';
-  this.contextMenuElement.style.top = position[1] + 'px';
+  this.contextMenuElement.style.left = `${position[0]}px`;
+  this.contextMenuElement.style.top = `${position[1]}px`;
   this.contextMenuElement.classList.add('opened');
 };
 
-ContextMenu.prototype.close = function () {
+ContextMenu.prototype.close = function _closeC() {
   this.contextMenuElement.classList.remove('opened');
 };
 
-ContextMenu.prototype._getContextMenuHTML = function (options) {
-  var html = '';
+ContextMenu.prototype._getContextMenuHTML = (options) => {
+  let html = '';
 
   if (options.type === CONST.ENTITY_NODE) {
     html += '<li>Create Edge</li>';

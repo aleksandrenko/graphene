@@ -9,7 +9,7 @@
  */
 function createGroupInSvg(svgSelector, id, className) {
   const NS = 'http://www.w3.org/2000/svg';
-  var g = document.createElementNS(NS, 'g');
+  const g = document.createElementNS(NS, 'g');
   g.setAttribute('id', id);
   g.setAttribute('class', className);
 

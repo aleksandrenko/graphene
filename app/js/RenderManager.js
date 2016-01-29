@@ -7,13 +7,13 @@
  * @private
  */
 function _renderNodes(d3Element, nodesData) {
-  var nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
-  //create svg element on item enter
+  const nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
+  // create svg element on item enter
   nodes.enter().append('g').classed('node', true);
-  //remove svg element on data change/remove
+  // remove svg element on data change/remove
   nodes.exit().remove();
 
-  //update node groups
+  // update node groups
   nodes.attr({ id: data => data.id });
 
   nodes.append('circle').attr({
@@ -39,7 +39,7 @@ function _renderNodes(d3Element, nodesData) {
  * @private
  */
 function _renderEdges(d3Element, edgesData) {
-  //TODO render edges
+  // TODO render edges
 }
 
 /**
@@ -47,7 +47,7 @@ function _renderEdges(d3Element, edgesData) {
  * @type {{render: Function}}
  */
 const RenderManager = {
-  render: function(d3Element, data) {
+  render: (d3Element, data) => {
     _renderNodes(d3Element, data.nodes);
     _renderEdges(d3Element, data.edges);
   }

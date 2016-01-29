@@ -17,6 +17,3 @@ export default {
   ENTITY_ROOT_SVG: 'entityTypeRootSVG',
   ENTITY_NODE: 'entityTypeNODE'
 };
-
-
-
