@@ -32,8 +32,8 @@ html, body {
 }
 
 .graphEditor path {
-  stroke: #666;
   stroke-width: 2px;
+
 }
 
   /*  */
@@ -97,8 +97,8 @@ html, body {
   transition: background-color 0.2s;
 }
 
-.ContextMenu li:hover {
-  background-color: #fafafa;
+.contextMenu li:hover {
+  background-color: #617170;
 }
 
 .propertiesMenuLayer {

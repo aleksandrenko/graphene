@@ -50,13 +50,16 @@ function _renderEdges(d3Element, edgesData) {
 
   edges.append('path')
     .attr({
-      d: function(data) {
+      d: (data) => {
         const startNode = DataManager.getNode(data.startNodeID);
         const endNode = DataManager.getNode(data.endNodeID);
-
         return `M${startNode.x},${startNode.y}L${endNode.x},${endNode.y}`;
-      }
-
+      },
+      stroke: (data) => {
+        const startNode = DataManager.getNode(data.startNodeID);
+        return startNode.color;
+      },
+      'stroke-opacity': 1
     })
     .style('marker-end', 'url(#mark-end-arrow)');
 }
@@ -76,8 +79,8 @@ class RenderManager {
   }
 
   render(data) {
-    //delay the render if somewhere some edges are set before the nodes
-    setTimeout( ()=> {
+    // delay the render if somewhere some edges are set before the nodes
+    setTimeout(() => {
       _renderEdges(this.d3Element, data.edges);
       _renderNodes(this.d3Element, data.nodes);
     }, 0);
