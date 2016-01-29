@@ -1,6 +1,7 @@
 'use strict';
 
 import CONST from './enums/CONST';
+import createDomElementInContainer from './utils/dom';
 
 /**
  *
@@ -8,20 +9,19 @@ import CONST from './enums/CONST';
  * @constructor
  */
 function PropertiesManager(containerSelector) {
-  var parentContainer = document.querySelector(containerSelector);
+  //create e dom element layer for the properties menu
+  const propertiesLayer = createDomElementInContainer(containerSelector, 'div', CONST.PROPERTIES_MENU_LAYER_ID, CONST.PROPERTIES_MENU_LAYER_CLASS);
 
-  var propertiesLayer = document.createElement('div');
-  propertiesLayer.setAttribute('id', CONST.PROPERTIES_MENU_LAYER_ID);
-  propertiesLayer.setAttribute('class', CONST.PROPERTIES_MENU_LAYER_CLASS);
-
-  this.propertiesMenu = document.createElement('div');
-  this.propertiesMenu.setAttribute('id', CONST.PROPERTY_MENU_ID);
-  this.propertiesMenu.setAttribute('class', CONST.PROPERTY_MENU_CLASS);
-
-  propertiesLayer.appendChild(this.propertiesMenu);
-  parentContainer.appendChild(propertiesLayer);
+  //create a properties menu dom element
+  this.propertiesMenu = createDomElementInContainer('#' + propertiesLayer.id , 'div', CONST.PROPERTY_MENU_ID, CONST.PROPERTY_MENU_CLASS);
 }
 
+/**
+ *
+ * @param {Object} target
+ * @returns {string}
+ * @private
+ */
 PropertiesManager.prototype._getMenuHTML = function(target) {
   return '<div class="header"></div><div class="main"></div><div class="footer"></div>';
 };

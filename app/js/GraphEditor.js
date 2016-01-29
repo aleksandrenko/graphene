@@ -3,6 +3,7 @@
 import CONST from './enums/CONST';
 import EVENTS from './enums/EVENTS';
 
+import createDomElementInContainer from './utils/dom';
 import createSVGInContainer from './utils/svg';
 import createGroupInSVG from './utils/svgGroup';
 
@@ -42,16 +43,11 @@ function GraphEditor(containerSelector) {
     throw new Error('Editor must be created with provided "Container Id"!');
   }
 
-  const parentDiv = document.createElement('div');
-  parentDiv.setAttribute('id', CONST.EDITOR_ID);
-  parentDiv.setAttribute('class', CONST.EDITOR_CLASS);
-
-  const parentDomContainer = document.querySelector(containerSelector).appendChild(parentDiv);
-  const parentDomSelector = '#' + parentDomContainer.id;
-
+  //create a div container for the whole editor
+  const parentDomContainer = createDomElementInContainer(containerSelector, 'div', CONST.EDITOR_ID, CONST.EDITOR_CLASS);
 
   //get a d3 reference for further use
-  const svgElement = createSVGInContainer(parentDomSelector, CONST.SVGROOT_ID, CONST.SVGROOT_CLASS);
+  const svgElement = createSVGInContainer('#' + parentDomContainer.id, CONST.SVGROOT_ID, CONST.SVGROOT_CLASS);
   const entitiesGroupElement = createGroupInSVG('#' + svgElement.id, CONST.ENTITIES_GROUP_ID, CONST.ENTITIES_GROUP_CLASS);
 
   //var propertiesGroupElement = createGroupInSVG('#' + svgElement.id, CONST.PROPERTIES_GROUP_ID, CONST.PROPERTIES_GROUP_CLASS);

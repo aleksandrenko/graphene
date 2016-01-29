@@ -1,6 +1,7 @@
 'use strict';
 
 import CONST from './enums/CONST';
+import createDomElementInContainer from './utils/dom';
 
 /**
  *
@@ -8,20 +9,11 @@ import CONST from './enums/CONST';
  * @constructor
  */
 function ContextMenu(containerSelector) {
-  const contextMenuLayer = document.createElement('div');
-  contextMenuLayer.setAttribute('id', 'contextMenuLayer');
-  contextMenuLayer.setAttribute('class', 'contextMenuLayer');
+  //create and attach a contextMenuLayer
+  const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', 'contextMenuLayer', contextMenuLayer);
 
-  //attach the contextMenuLayer
-  document.querySelector(containerSelector).appendChild(contextMenuLayer);
-
-  //create the menu
-  const contextMenuElement = document.createElement('ul');
-  contextMenuElement.setAttribute('id', 'ContextMenu');
-  contextMenuElement.setAttribute('class', 'ContextMenu');
-
-  //attach the menu
-  this.contextMenuElement = contextMenuLayer.appendChild(contextMenuElement);
+  //create a context menu
+  this.contextMenuElement = createDomElementInContainer('#' + contextMenuLayer.id, 'ul', 'ContextMenu', 'ContextMenu');
 }
 
 ContextMenu.prototype.open = function(position, options) {

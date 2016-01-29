@@ -71,7 +71,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgClickHandler() {
-    //const target = _getTargetType(event.target);
+    const target = _getTargetType(event.target);
 
     //close the context menu
     contextMenu.close();

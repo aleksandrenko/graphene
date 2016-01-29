@@ -1,7 +1,7 @@
 'use strict';
 
 import getID from '../utils/id.js';
-import color from '../utils/color.js'
+import color from '../utils/color.js';
 
 /**
  *
