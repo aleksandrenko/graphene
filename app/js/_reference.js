@@ -9,9 +9,9 @@ define([
   'graphModelerApp',
   'jquery',
   'd3'
-], function(angular, app, $, d3) {
+], function (angular, app, $, d3) {
 
-  app.controller('SVGCtrl', function($scope, dataService) {
+  app.controller('SVGCtrl', function ($scope, dataService) {
 
     //is set to true when the mouse buttoangular.module('app')n is down on the clean svg
     $scope.readyToDrag = false;
@@ -39,13 +39,13 @@ define([
     var backgroundColor = '#ebebeb'
     var opacityForNotSelectedEdgesAndNodes = 0.1;
 
-    $scope.init = function() {
+    $scope.init = function () {
       initSvgElements();
 
       //it's used for moving the global 'g' around
       var zoom = d3.behavior.zoom()
-        .on("zoom", function() {
-          if($scope.readyToDrag) {
+        .on("zoom", function () {
+          if ($scope.readyToDrag) {
             $scope.graphTranslate = d3.event.translate;
             setZoomAndTranslation();
 
@@ -61,12 +61,12 @@ define([
     }
 
     //the event is fired by the propertiesController
-    $scope.$on('labelChanged', function(event, item) {
+    $scope.$on('labelChanged', function (event, item) {
       updateSvgItemLabel(item);
     });
 
     //the event is fired by the propertiesController
-    $scope.$on('colorChanged', function(event, item) {
+    $scope.$on('colorChanged', function (event, item) {
       updateSvgEdges();
       updateSvgNodes();
     });
@@ -86,14 +86,14 @@ define([
 
     //it is used for setting che correct opacity on an edge when a node is selected
     function isRelatedNodSelected(node) {
-      if(node.isSelected) {
+      if (node.isSelected) {
         return false;
       }
 
       //loop through all edges and check if the current edge start of finish to the selected node
-      for(var i=0; i < $scope.edges.length; i++) {
-        if($scope.edges[i].startNode._uid === node._uid || $scope.edges[i].endNode._uid === node._uid) {
-          if($scope.edges[i].startNode.isSelected || $scope.edges[i].endNode.isSelected ) {
+      for (var i = 0; i < $scope.edges.length; i++) {
+        if ($scope.edges[i].startNode._uid === node._uid || $scope.edges[i].endNode._uid === node._uid) {
+          if ($scope.edges[i].startNode.isSelected || $scope.edges[i].endNode.isSelected) {
             return true;
           }
         }
@@ -103,8 +103,8 @@ define([
     }
 
     function getNodeAndIndexByUID(_uid) {
-      for(var i = 0; $scope.nodes.length; i++) {
-        if($scope.nodes[i]._uid === _uid) {
+      for (var i = 0; $scope.nodes.length; i++) {
+        if ($scope.nodes[i]._uid === _uid) {
           return {
             index: i,
             node: $scope.nodes[i]
@@ -114,8 +114,8 @@ define([
     }
 
     function getEdgeAndIndexByUID(_uid) {
-      for(var i = 0; $scope.edges.length; i++) {
-        if($scope.edges[i]._uid === _uid) {
+      for (var i = 0; $scope.edges.length; i++) {
+        if ($scope.edges[i]._uid === _uid) {
           return {
             index: i,
             edge: $scope.edges[i]
@@ -140,11 +140,11 @@ define([
       var uid = getTargetGroupUID();
       var label = undefined;
 
-      if(type) {
-        if(type === 'node') {
+      if (type) {
+        if (type === 'node') {
           label = getNodeAndIndexByUID(uid).node.label;
         }
-        else if(type === 'edge') {
+        else if (type === 'edge') {
           label = getEdgeAndIndexByUID(uid).edge.label;
         }
       }
@@ -167,7 +167,7 @@ define([
     }
 
     // it's fired by views/index.html ng-click
-    $scope.contextMenuAddNodeClickHandler = function() {
+    $scope.contextMenuAddNodeClickHandler = function () {
       $('.contextMenu').hide();
       //correcting the x and y according the translation
       var x = $scope.rightClick.x - $scope.graphTranslate[0];
@@ -180,33 +180,33 @@ define([
     }
 
     // it's fired by views/index.html ng-click
-    $scope.contextMenuDeleteNodeClickHandler = function() {
+    $scope.contextMenuDeleteNodeClickHandler = function () {
       $('.contextMenu').hide();
 
       var uid = $scope.rightClick.target._uid;
       var type = $scope.rightClick.target._type;
 
-      if(type == 'node') {
+      if (type == 'node') {
         removeNode(uid);
       }
-      else if(type == 'edge') {
+      else if (type == 'edge') {
         removeEdge(uid);
       }
     }
 
     // it's fired by views/index.html ng-click
-    $scope.contextMenuAddEdgeClickHandler = function() {
+    $scope.contextMenuAddEdgeClickHandler = function () {
 
-      if($scope.rightClick.target._type == 'node') {
+      if ($scope.rightClick.target._type == 'node') {
         var startNode = getNodeAndIndexByUID($scope.rightClick.target._uid).node;
 
         d3.select('svg path.dragline').classed('hidden', false);
         //add cursor hiding class to the body
         d3.select('body').classed('hidecursor', true);
 
-        svg.on("mousemove", function(d) {
+        svg.on("mousemove", function (d) {
           d3.select('svg .dragline').attr({
-            d: function() {
+            d: function () {
               var endX = d3.event.x - 5;
               var endY = d3.event.y - 5;
               //start x and y with translate compensation
@@ -217,11 +217,11 @@ define([
           });
         });
 
-        d3.select('body').on("mousedown", function(d) {
+        d3.select('body').on("mousedown", function (d) {
           var endNodeUid = getTargetGroupUID();
           var targetType = getTargetGroupType();
 
-          if(endNodeUid && targetType == 'node') {
+          if (endNodeUid && targetType == 'node') {
             var endNode = getNodeAndIndexByUID(endNodeUid).node;
             addEdge(startNode, endNode);
 
@@ -267,12 +267,12 @@ define([
 
     // set the context to - drag the graph around
     function svgMouseDownHandler() {
-      if(isEventTargetTheSvg()) {
+      if (isEventTargetTheSvg()) {
         //mark graph ready to be moved by the zoom event
         svg.classed('dragCursor', true);
         $scope.readyToDrag = true;
 
-        svg.on("mouseup", function() {
+        svg.on("mouseup", function () {
           svg.on("mouseup", null);
           $scope.readyToDrag = false;
           svg.classed('dragCursor', false);
@@ -310,7 +310,7 @@ define([
 
     // svg clicked handler
     function svgClickHandler() {
-      if(isEventTargetTheSvg()) {
+      if (isEventTargetTheSvg()) {
         hideContextMenuUnselectItemAndStopCreatingEdge();
       }
     }
@@ -323,7 +323,7 @@ define([
       var type = $(d3.event.target).parent('g').attr('class');
 
       //clean class name from selectedSVG style if target is selected svg
-      if(type) {
+      if (type) {
         type = type.replace("selectedSvg", "").replace(" ", "");
       }
 
@@ -337,8 +337,8 @@ define([
     }
 
     function getSelectedNode() {
-      for(var i=0; i < $scope.nodes.length; i++) {
-        if($scope.nodes[i].isSelected) {
+      for (var i = 0; i < $scope.nodes.length; i++) {
+        if ($scope.nodes[i].isSelected) {
           return $scope.nodes[i];
         }
       }
@@ -348,8 +348,8 @@ define([
 
     function getSelectedEdge() {
       //deselect selected edge;
-      for(var i=0; i < $scope.edges.length; i++) {
-        if($scope.edges[i].isSelected) {
+      for (var i = 0; i < $scope.edges.length; i++) {
+        if ($scope.edges[i].isSelected) {
           return $scope.edges[i];
         }
       }
@@ -359,14 +359,14 @@ define([
 
     function deselectSelectedNodeSVG() {
       var selectedNode = getSelectedNode();
-      if(selectedNode) {
+      if (selectedNode) {
         selectedNode.isSelected = undefined;
       }
     }
 
     function deselectSelectedEdgeSVG() {
       var selectedEdge = getSelectedEdge();
-      if(selectedEdge) {
+      if (selectedEdge) {
         selectedEdge.isSelected = undefined;
       }
     }
@@ -417,8 +417,8 @@ define([
       $scope.nodes.splice(nodeAndIndex.index, 1);
 
       // remove edges connected to this node
-      for(var i = 0; i < $scope.edges.length; i++) {
-        if($scope.edges[i].startNode._uid == uid || $scope.edges[i].endNode._uid == uid) {
+      for (var i = 0; i < $scope.edges.length; i++) {
+        if ($scope.edges[i].startNode._uid == uid || $scope.edges[i].endNode._uid == uid) {
           removeEdge($scope.edges[i]._uid);
           i--;
         }
@@ -453,7 +453,7 @@ define([
         _uid: createUid()
       };
 
-      if(startNode === endNode) {
+      if (startNode === endNode) {
         newEdge.middlePoint.y += 60;
         newEdge.middlePoint.x -= 80;
       }
@@ -464,7 +464,7 @@ define([
     var utils = {
 
       // function for creating darken hex color
-      darkenColor: function(color, percent) {
+      darkenColor: function (color, percent) {
         percent = -percent;
         color = color.replace('#', '');
 
@@ -473,16 +473,16 @@ define([
           R = (num >> 16) + amt,
           G = (num >> 8 & 0x00FF) + amt,
           B = (num & 0x0000FF) + amt;
-        return '#' + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+        return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
       },
 
       // calculating the vector length
-      vectorSize: function(vec) {
+      vectorSize: function (vec) {
         return Math.sqrt(Math.pow(vec.x, 2) + Math.pow(vec.y, 2));
       },
 
       // generates the svg path for the edge depending on the middle point
-      getEdgePath: function(edge) {
+      getEdgePath: function (edge) {
         var path = '';
 
         var startX = edge.startNode._location.x;
@@ -490,7 +490,7 @@ define([
         var startY = edge.startNode._location.y;
         var endY = edge.endNode._location.y;
 
-        if(edge.startNode === edge.endNode) {
+        if (edge.startNode === edge.endNode) {
 
           //calculating right and left point to curve the path
           var dist = 30;
@@ -537,7 +537,7 @@ define([
 
         } else {
 
-          if(edge._snappedToMiddle) {
+          if (edge._snappedToMiddle) {
             path = "M " + startX + ' ' + startY + ' ' + endX + ' ' + endY;
           }
 
@@ -571,7 +571,7 @@ define([
         y: (edge.startNode._location.y + edge.endNode._location.y) / 2
       };
 
-      if(edge.startNode === edge.endNode) {
+      if (edge.startNode === edge.endNode) {
         middlePoint.x = edge.middlePoint.x;
         middlePoint.y = edge.middlePoint.y;
       }
@@ -583,7 +583,7 @@ define([
     // so you can set different colors and opacities when selecting nodes and the edge itself
     function createSvgMarkerForEdge(edge) {
 
-      if(getArrowById(edge._uid).empty() === false) {
+      if (getArrowById(edge._uid).empty() === false) {
         return;
       }
 
@@ -655,7 +655,7 @@ define([
 
       var svgEdges = edge.enter().append("g").attr({
         class: "edge",
-        _uid: function(edge) {
+        _uid: function (edge) {
           //create end arrow for the edge
           createSvgMarkerForEdge(edge);
           return edge._uid;
@@ -665,19 +665,19 @@ define([
       svgEdges.append('path')
         .attr({
           stroke: 'black',
-          style: function(edge) {
+          style: function (edge) {
             return 'marker-end: url(#end-arrow-' + edge._uid + ')'
           }
         });
 
       svgEdges.append('text')
-        .text(function(edge) {
+        .text(function (edge) {
           return edge.label
         })
         .attr({
           fontSize: '15'
         }).on("click", selectSVG)
-        .call(d3.behavior.drag().on("drag", function(edge) {
+        .call(d3.behavior.drag().on("drag", function (edge) {
           var proximity = 15;
           var x = d3.event.x;
           var y = d3.event.y;
@@ -702,7 +702,7 @@ define([
       var node = getGlobalSvgGroup().selectAll("g.node").data($scope.nodes);
       var svgNodes = node.enter().append("g").attr({
         class: 'node',
-        _uid: function(node) {
+        _uid: function (node) {
           return node._uid;
         }
       });
@@ -712,11 +712,11 @@ define([
           r: 12
         })
         .on('click', selectSVG)
-        .call(d3.behavior.drag().on("drag", function(node) {
+        .call(d3.behavior.drag().on("drag", function (node) {
 
           //get all edges that start and ends with this node and move them with the node (recalculate the middle point)
-          for(var r = 0; r < $scope.edges.length; r++) {
-            if($scope.edges[r].startNode === node && $scope.edges[r].endNode === node) {
+          for (var r = 0; r < $scope.edges.length; r++) {
+            if ($scope.edges[r].startNode === node && $scope.edges[r].endNode === node) {
 
               var distanceX = $scope.edges[r].middlePoint.x - node._location.x;
               var distanceY = $scope.edges[r].middlePoint.y - node._location.y;
@@ -737,7 +737,7 @@ define([
         }));
 
       svgNodes.append('text')
-        .text(function(node) {
+        .text(function (node) {
           return node.label
         });
     }
@@ -746,11 +746,11 @@ define([
       var svgEdges = getGlobalSvgGroup().selectAll("g.edge");
 
       svgEdges.select('path').attr({
-        'stroke-opacity': function(edge) {
+        'stroke-opacity': function (edge) {
           var edgeArrow = getArrowById(edge._uid);
 
-          if(getSelectedNode()) {
-            if(edge.startNode.isSelected || edge.endNode.isSelected) {
+          if (getSelectedNode()) {
+            if (edge.startNode.isSelected || edge.endNode.isSelected) {
               edgeArrow.style('fill-opacity', 1);
             } else {
               edgeArrow.style('fill-opacity', opacityForNotSelectedEdgesAndNodes);
@@ -763,54 +763,54 @@ define([
           }
           return '1';
         },
-        stroke: function(edge) {
+        stroke: function (edge) {
           //change edge's arrow color
           getArrowById(edge._uid).style('fill', edge.startNode._color);
 
-          if(edge.isSelected) {
+          if (edge.isSelected) {
             return utils.darkenColor(edge.startNode._color, 20);
           }
 
           return edge.startNode._color || defaultColor;
         },
-        'stroke-width': function(edge) {
+        'stroke-width': function (edge) {
           return 2;
         },
-        d: function(edge) {
+        d: function (edge) {
           return utils.getEdgePath(edge);
         }
       });
 
       svgEdges.select('text').attr({
-        'fill-opacity': function(edge) {
-          if(getSelectedNode()) {
+        'fill-opacity': function (edge) {
+          if (getSelectedNode()) {
             return (edge.startNode.isSelected || edge.endNode.isSelected) ? 1 : opacityForNotSelectedEdgesAndNodes;
           }
 
           return '1';
         },
-        fill: function(edge) {
-          if(edge.isSelected) {
+        fill: function (edge) {
+          if (edge.isSelected) {
             return utils.darkenColor(edge.startNode._color, 20);
           }
 
           return edge.startNode._color || defaultColor;
         },
-        stroke: function(edge) {
-          if(edge.isSelected) {
+        stroke: function (edge) {
+          if (edge.isSelected) {
             return utils.darkenColor(edge.startNode._color, 20);
           }
 
           return 0;
         },
-        x: function(edge) {
-          if(edge._snappedToMiddle) {
+        x: function (edge) {
+          if (edge._snappedToMiddle) {
             edge.middlePoint = getEdgeMiddlePoint(edge);
           }
           return edge.middlePoint.x + 9;
         },
-        y: function(edge) {
-          if(edge._snappedToMiddle) {
+        y: function (edge) {
+          if (edge._snappedToMiddle) {
             edge.middlePoint = getEdgeMiddlePoint(edge)
           }
 
@@ -824,10 +824,10 @@ define([
 
       svgNodes.select('circle')
         .attr({
-          'stroke-opacity': function(node) {
-            if(getSelectedNode()) {
+          'stroke-opacity': function (node) {
+            if (getSelectedNode()) {
 
-              if(isRelatedNodSelected(node)) {
+              if (isRelatedNodSelected(node)) {
                 return 1;
               }
 
@@ -836,29 +836,29 @@ define([
 
             return '1';
           },
-          stroke: function(node) {
+          stroke: function (node) {
             return node._color || defaultColor;
           },
-          fill: function(node) {
+          fill: function (node) {
             return node.isSelected ? node._color : backgroundColor;
           },
-          cx: function(node) {
+          cx: function (node) {
             return node._location.x
           },
-          cy: function(node) {
+          cy: function (node) {
             return node._location.y
           }
         });
 
       svgNodes.select('text')
-        .text(function(node) {
+        .text(function (node) {
           return node.label
         })
         .attr({
-          'fill-opacity': function(node) {
-            if(getSelectedNode()) {
+          'fill-opacity': function (node) {
+            if (getSelectedNode()) {
 
-              if(isRelatedNodSelected(node)) {
+              if (isRelatedNodSelected(node)) {
                 return 1;
               }
 
@@ -867,13 +867,13 @@ define([
 
             return '1';
           },
-          fill: function(node) {
+          fill: function (node) {
             return node._color || defaultColor;
           },
-          x: function(node) {
+          x: function (node) {
             return node._location.x + 20
           },
-          y: function(node) {
+          y: function (node) {
             return node._location.y + 5
           }
         });

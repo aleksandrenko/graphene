@@ -21,7 +21,7 @@ import PropertiesManager from './PropertiesManager';
  */
 function InteractionManager(d3Element, RootDivElement) {
 
-  if(d3Element === undefined) {
+  if (d3Element === undefined) {
     throw new Error('The EventManager needs a "container" to attach and listen for events.');
   }
 
@@ -54,12 +54,12 @@ function InteractionManager(d3Element, RootDivElement) {
     const type = node.nodeName;
     var target = {};
 
-    if(type === 'circle' && node.parentNode.getAttribute('class')) {
+    if (type === 'circle' && node.parentNode.getAttribute('class')) {
       target.type = CONST.ENTITY_NODE;
       target.id = node.parentNode.id;
     }
 
-    if(type === 'svg' && node.id === CONST.SVGROOT_ID) {
+    if (type === 'svg' && node.id === CONST.SVGROOT_ID) {
       target.type = CONST.ENTITY_ROOT_SVG;
       target.id = node.id;
     }
@@ -77,7 +77,7 @@ function InteractionManager(d3Element, RootDivElement) {
     contextMenu.close();
 
     //click on the root svg element
-    if(target.type === CONST.ENTITY_ROOT_SVG) {
+    if (target.type === CONST.ENTITY_ROOT_SVG) {
       /* eslint-disable */
       const node = new Node({
         x: d3.mouse(this)[0],
@@ -90,7 +90,7 @@ function InteractionManager(d3Element, RootDivElement) {
     }
 
     //click on node
-    if(target.id && target.type === CONST.ENTITY_NODE) {
+    if (target.id && target.type === CONST.ENTITY_NODE) {
       propertiesManager.open(d3.mouse(this), target);
 
       dispatch(EVENTS.SELECT_NODE, target.id);
@@ -154,12 +154,12 @@ function InteractionManager(d3Element, RootDivElement) {
  * @param {string} eventType
  * @param {object} eventData
  */
-InteractionManager.prototype.dispatch = function(eventType, eventData) {
-  if(!this._eventCallbackHandlers[eventType]) {
+InteractionManager.prototype.dispatch = function (eventType, eventData) {
+  if (!this._eventCallbackHandlers[eventType]) {
     return;
   }
 
-  this._eventCallbackHandlers[eventType].forEach(function(callbackHandler) {
+  this._eventCallbackHandlers[eventType].forEach(function (callbackHandler) {
     callbackHandler(eventData);
   });
 };
@@ -169,10 +169,10 @@ InteractionManager.prototype.dispatch = function(eventType, eventData) {
  * @param {string} eventType
  * @param {function} callbackHandler
  */
-InteractionManager.prototype.on = function(eventType, callbackHandler) {
+InteractionManager.prototype.on = function (eventType, callbackHandler) {
   var eventCallbackHandlers = this._eventCallbackHandlers[eventType];
 
-  if(!eventCallbackHandlers) {
+  if (!eventCallbackHandlers) {
     this._eventCallbackHandlers[eventType] = [];
   }
 
@@ -184,9 +184,9 @@ InteractionManager.prototype.on = function(eventType, callbackHandler) {
  * @param {string} eventType
  * @param {function} callbackHandler
  */
-InteractionManager.prototype.off = function(eventType, callbackHandler) {
-  this._eventCallbackHandlers[eventType].forEach(function(callback, i) {
-    if(callback === callbackHandler) {
+InteractionManager.prototype.off = function (eventType, callbackHandler) {
+  this._eventCallbackHandlers[eventType].forEach(function (callback, i) {
+    if (callback === callbackHandler) {
       delete this._eventCallbackHandlers[eventType][i];
     }
   }.bind(this));

@@ -7,50 +7,29 @@
  * @private
  */
 function _renderNodes(d3Element, nodesData) {
-  var nodes = d3Element.selectAll('.node').data(nodesData, function(node) { return node.id; });
+  var nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
   //create svg element on item enter
   nodes.enter().append('g').classed('node', true);
   //remove svg element on data change/remove
   nodes.exit().remove();
 
-  //upadte node groups
-  nodes.attr({
-    id: function(data) {
-      return data.id;
-    }
-  });
+  //update node groups
+  nodes.attr({ id: data => data.id });
 
   nodes.append('circle').attr({
-    cx: function(data) {
-      return data.x;
-    },
-    cy: function(data) {
-      return data.y;
-    },
-    stroke: function(data) {
-      return data.color;
-    },
-    fill: function(data) {
-      return data.isSelected ? data.color : '#ebebeb';
-    }
+    cx: data => data.x,
+    cy: data => return data.y,
+    stroke: data => data.color,
+    fill: data => data.isSelected ? data.color : '#ebebeb'
   });
 
   nodes.append('text')
-    .text(function(data) {
-      return data.label || '...';
-    })
+    .text(data = > data.label || '...')
     .attr({
-      x: function(data) {
-        return data.x + 20;
-      },
-      y: function(data) {
-        return data.y + 5;
-      },
-      fill: function(data) {
-        return data.color;
-      }
-    }
-  );
+      x: data => data.x + 20,
+      y: data => data.y + 5,
+      fill: data => data.color
+    });
 }
 
 /**

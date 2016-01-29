@@ -9,7 +9,7 @@
  */
 function createSVGInContainer(containerSelector, id, className) {
   const NS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(NS,"svg");
+  const svg = document.createElementNS(NS, "svg");
 
   svg.setAttribute('width', '100%');
   svg.setAttribute('height', '100%');

@@ -27,7 +27,7 @@ var _dataChangeCallbackHandlers = [];
  * @private
  */
 function _dispatchDataChange(data) {
-  _dataChangeCallbackHandlers.forEach(function(callbackHandler) {
+  _dataChangeCallbackHandlers.forEach(function (callbackHandler) {
     callbackHandler(data);
   });
 }
@@ -39,7 +39,7 @@ function _dispatchDataChange(data) {
  * @constructor
  */
 function GraphEditor(containerSelector) {
-  if(containerSelector === undefined) {
+  if (containerSelector === undefined) {
     throw new Error('Editor must be created with provided "Container Id"!');
   }
 
@@ -61,24 +61,24 @@ function GraphEditor(containerSelector) {
   /**
    * On update re-render the content
    */
-  DataManager.onUpdate(function(updateEvent) {
+  DataManager.onUpdate(function (updateEvent) {
     RenderManager.render(this.entitiesGroup, updateEvent.data);
     _dispatchDataChange(updateEvent);
   }.bind(this));
 
-  this.InteractionManager.on(EVENTS.ADD_NODE, function(node) {
+  this.InteractionManager.on(EVENTS.ADD_NODE, function (node) {
     DataManager.deselectAllEntities();
     DataManager.addNode(node);
   });
 
-  this.InteractionManager.on(EVENTS.SELECT_NODE, function(nodeId) {
+  this.InteractionManager.on(EVENTS.SELECT_NODE, function (nodeId) {
     DataManager.selectNode(nodeId);
   });
 
   /**
    * @param fn
    */
-  this.onDataChange = function(fn) {
+  this.onDataChange = function (fn) {
     _dataChangeCallbackHandlers.push(fn);
   };
 

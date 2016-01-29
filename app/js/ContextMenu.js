@@ -16,27 +16,27 @@ function ContextMenu(containerSelector) {
   this.contextMenuElement = createDomElementInContainer('#' + contextMenuLayer.id, 'ul', 'contextMenu', 'contextMenu');
 }
 
-ContextMenu.prototype.open = function(position, options) {
-  this.contextMenuElement.innerHTML = _getContextMenuHTML(options);
+ContextMenu.prototype.open = function (position, options) {
+  this.contextMenuElement.innerHTML = this._getContextMenuHTML(options);
 
   this.contextMenuElement.style.left = position[0] + 'px';
   this.contextMenuElement.style.top = position[1] + 'px';
   this.contextMenuElement.classList.add('opened');
 };
 
-ContextMenu.prototype.close = function() {
+ContextMenu.prototype.close = function () {
   this.contextMenuElement.classList.remove('opened');
 };
 
-_getContextMenuHTML = function(options) {
+ContextMenu.prototype._getContextMenuHTML = function (options) {
   var html = '';
 
-  if(options.type === CONST.ENTITY_NODE) {
+  if (options.type === CONST.ENTITY_NODE) {
     html += '<li>Create Edge</li>';
     html += '<li>Delete Node</li>';
   }
 
-  if(options.type === CONST.ENTITY_ROOT_SVG) {
+  if (options.type === CONST.ENTITY_ROOT_SVG) {
     html += '<li>New Node</li>';
   }
 

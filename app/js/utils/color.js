@@ -14,7 +14,7 @@ function color() {
 
   if (color.index === undefined) {
     color.index = parseInt(Math.random() * allColors.length, 10);
-  } else if(color.index === allColors.length - 1) {
+  } else if (color.index === allColors.length - 1) {
     color.index = 0;
   } else {
     color.index += 1;

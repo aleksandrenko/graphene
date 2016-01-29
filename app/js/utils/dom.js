@@ -9,12 +9,12 @@
  * @returns {Element}
  */
 function createDomElementInContainer(containerSelector, DomType, id, className) {
-    const comElement = document.createElement(DomType);
-    comElement.setAttribute('id', id);
-    comElement.setAttribute('class', className);
+  const comElement = document.createElement(DomType);
+  comElement.setAttribute('id', id);
+  comElement.setAttribute('class', className);
 
-    document.querySelector(containerSelector).appendChild(comElement);
-    return comElement;
+  document.querySelector(containerSelector).appendChild(comElement);
+  return comElement;
 }
 
 export default createDomElementInContainer;
