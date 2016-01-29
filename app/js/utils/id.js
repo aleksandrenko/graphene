@@ -1,10 +1,9 @@
-"use strict";
+'use strict';
 
 /**
  * Generate unique ID
  * @return {number} UID
  */
-
 function getID() {
   var date = performance.now(); //use high-precision timer if available
   return 'xyxxxyxx'.replace(/[xy]/g, function(charToReplace) {

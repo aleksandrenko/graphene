@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import getID from '../utils/id.js';
 import color from '../utils/color.js'

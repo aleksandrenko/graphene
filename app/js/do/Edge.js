@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import getID from '../utils/id.js';
 
@@ -11,7 +11,6 @@ import getID from '../utils/id.js';
  * @param {string} options.label
  * @constructor
  */
-
 function Edge(options) {
   this.startNodeID = options.startNodeID;
   this.endNodeID = options.endNodeID;

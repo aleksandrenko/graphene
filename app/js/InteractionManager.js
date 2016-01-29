@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import CONST from './enums/CONST';
 import EVENTS from './enums/EVENTS';
@@ -71,7 +71,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgClickHandler() {
-    const target = _getTargetType(event.target);
+    //const target = _getTargetType(event.target);
 
     //close the context menu
     contextMenu.close();
@@ -111,7 +111,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgMouseDownHandler() {
-    const target = d3.event.target;
+    //const target = d3.event.target;
     //console.log('svgMouseDownHandler');
     //editor.svg.on("mousemove", svgMouseMoveHandler);
     d3.event.preventDefault();
@@ -121,7 +121,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgMouseMoveHandler() {
-    const target = d3.event.target;
+    //const target = d3.event.target;
     //console.log('svgMouseMoveHandler');
     d3.event.preventDefault();
   }
@@ -130,7 +130,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgMouseUpHandler() {
-    const target = d3.event.target;
+    //const target = d3.event.target;
     //console.log('svgMouseUpHandler');
     //editor.svg.on("mousemove", null);
     d3.event.preventDefault();
@@ -140,7 +140,7 @@ function InteractionManager(d3Element, RootDivElement) {
    *
    */
   function _svgDbClickHandler() {
-    const target = d3.event.target;
+    //const target = d3.event.target;
     //console.log('svgDbClickHandler');
     d3.event.preventDefault();
 

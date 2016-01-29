@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 export default {
   ADD_NODE: 'ADD_NODE',

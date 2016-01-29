@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 export default {
   EDITOR_CLASS: 'graphEditor',
