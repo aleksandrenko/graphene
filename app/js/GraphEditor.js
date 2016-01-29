@@ -39,6 +39,9 @@ class GraphEditor {
     //
     this.svg = d3.select(svgElement);
     this.entitiesGroup = d3.select(entitiesGroupElement);
+    this.renderManager = new RenderManager(this.entitiesGroup);
+
+    console.log(this.renderManager);
 
     const interactionManager = new InteractionManager(this.svg, parentDomContainer);
 
@@ -46,7 +49,8 @@ class GraphEditor {
      * On update re-render the content
      */
     DataManager.onChange(updateEvent => {
-      RenderManager.render(this.entitiesGroup, updateEvent.data);
+      console.log(updateEvent);
+      this.renderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
     });
 
@@ -60,6 +64,11 @@ class GraphEditor {
 
   onChange(fn) {
     _onUpdateCallbackHandler = fn;
+  }
+
+  insertData(data) {
+    DataManager.addEdges(data.edges);
+    DataManager.addNodes(data.nodes);
   }
 }
 

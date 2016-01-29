@@ -86,7 +86,7 @@ class DataManager {
    * @returns {Object}
    */
   static addNodes(nodes) {
-    _nodes.concat(nodes);
+    _nodes = _nodes.concat(nodes);
 
     _dispatchUpdate('add', 'node', nodes);
     return DataManager;
@@ -153,7 +153,7 @@ class DataManager {
    * @returns {Object}
    */
   static addEdges(edges) {
-    _edges.concat(edges);
+    _edges = _edges.concat(edges);
     _dispatchUpdate('add', 'edge', edges);
     return DataManager;
   }
@@ -180,7 +180,7 @@ class DataManager {
 
   /**
    * @param id
-   * @returns {T}
+   * @returns {Array}
    */
   static getEdge(id) {
     return _edges.filter(edge => edge.id === id)[0];

@@ -31,7 +31,12 @@ html, body {
   fill-opacity: 1;
 }
 
-/*  */
+.graphEditor path {
+  stroke: #666;
+  stroke-width: 2px;
+}
+
+  /*  */
 .properties-menu {
   background: #fff;
   display: block;

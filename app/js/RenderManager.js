@@ -1,5 +1,7 @@
 'use strict';
 
+import DataManager from './DataManager';
+
 /**
  *
  * @param {object} d3Element
@@ -39,24 +41,46 @@ function _renderNodes(d3Element, nodesData) {
  * @private
  */
 function _renderEdges(d3Element, edgesData) {
-  // TODO render edges
+  const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
+
+  edges.enter().append('g').classed('edge', true);
+  edges.exit().remove();
+
+  edges.attr({ id: data => data.id });
+
+  edges.append('path')
+    .attr({
+      d: function(data) {
+        const startNode = DataManager.getNode(data.startNodeID);
+        const endNode = DataManager.getNode(data.endNodeID);
+
+        return `M${startNode.x},${startNode.y}L${endNode.x},${endNode.y}`;
+      }
+
+    })
+    .style('marker-end', 'url(#mark-end-arrow)');
 }
 
 
 let instance = null;
 
 class RenderManager {
-  constructor() {
+  constructor(d3Element) {
     if (!instance) {
       instance = this;
     }
 
+    this.d3Element = d3Element;
+
     return instance;
   }
 
-  static render(d3Element, data) {
-    _renderNodes(d3Element, data.nodes);
-    _renderEdges(d3Element, data.edges);
+  render(data) {
+    //delay the render if somewhere some edges are set before the nodes
+    setTimeout( ()=> {
+      _renderEdges(this.d3Element, data.edges);
+      _renderNodes(this.d3Element, data.nodes);
+    }, 0);
   }
 }
 
