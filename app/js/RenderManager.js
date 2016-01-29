@@ -18,13 +18,13 @@ function _renderNodes(d3Element, nodesData) {
 
   nodes.append('circle').attr({
     cx: data => data.x,
-    cy: data => return data.y,
+    cy: data => data.y,
     stroke: data => data.color,
     fill: data => data.isSelected ? data.color : '#ebebeb'
   });
 
   nodes.append('text')
-    .text(data = > data.label || '...')
+    .text(data => data.label || '...')
     .attr({
       x: data => data.x + 20,
       y: data => data.y + 5,

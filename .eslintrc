@@ -7,7 +7,6 @@
     "classes": true,
     "defaultParams": true,
     "destructuring": true,
-    "forOf": true,
     "modules": true,
     "spread": true,
     "templateStrings": true,
