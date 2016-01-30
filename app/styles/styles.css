@@ -22,7 +22,6 @@ html, body {
 .graphEditor .node circle {
   cursor: pointer;
   stroke-width: 5px;
-  r: 12px;
 }
 
 .graphEditor .node text {

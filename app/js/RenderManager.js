@@ -2,12 +2,19 @@
 
 import DataManager from './DataManager';
 
+/**
+ * Private variables/consts
+ */
+const TRANSITION_DURATION = 100;
+let instance = null;
+
+
 function getOpacityForEntity(entity) {
-  if (!DataManager.isNodeSelected()) {
+  if(!DataManager.isNodeSelected()) {
     return 1;
   }
 
-  if (DataManager.isNodeSelected() && entity.isSelected) {
+  if(DataManager.isNodeSelected() && entity.isSelected) {
     return 1;
   }
 
@@ -54,29 +61,46 @@ function _renderNodes(d3Element, nodesData) {
 
   // create svg element on item enter
   const nodesGroups = nodes.enter().append('g').classed('node', true);
-  nodesGroups.append('circle');
-  nodesGroups.append('text');
+  const initialNodeAttr = {
+    fill: '#ebebeb',
+    stroke: '#ebebeb',
+    r: 5
+  };
+
+  // initial attributes are needed because of animation
+  nodesGroups.append('circle').attr(initialNodeAttr);
+  nodesGroups.append('text').attr('fill', '#ebebeb');
 
   // remove svg element on data change/remove
-  nodes.exit().remove();
+  nodes.exit()
+    .transition()
+    .duration(TRANSITION_DURATION)
+    .attr(initialNodeAttr).remove();
 
   // update node groups
   nodes.attr({id: node => node.id});
 
-  nodes.select('circle').attr({
-    cx: node => node.x,
-    cy: node => node.y,
-    stroke: node => node.color,
-    fill: node => node.isSelected ? node.color : '#ebebeb',
-    'stroke-opacity': (node) => getOpacityForEntity(node)
-  });
+  nodes.select('circle')
+    .transition()
+    .duration(TRANSITION_DURATION)
+    .attr({
+      cx: node => node.x,
+      cy: node => node.y,
+      r: 12,
+      stroke: node => node.color,
+      fill: node => node.isSelected ? node.color : '#ebebeb',
+      'stroke-opacity': (node) => getOpacityForEntity(node)
+    });
 
   nodes.select('text')
+    .transition()
+    .duration(TRANSITION_DURATION)
     .text(node => node.label || '...')
     .attr({
       x: node => node.x + 20,
       y: node => node.y + 5,
-      fill: node => node.color
+      fill: node => node.color,
+      opacity: (node) => getOpacityForEntity(node)
     });
 }
 
@@ -90,13 +114,22 @@ function _renderEdges(d3Element, edgesData) {
   const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
-  edgesGroups.append('path');
+  const initialEdgesAttr = {stroke: '#ebebeb'};
 
-  edges.exit().remove();
+  edgesGroups.append('path').attr(initialEdgesAttr);
 
+  edges.exit()
+    .transition()
+    .duration(TRANSITION_DURATION)
+    .attr(initialEdgesAttr)
+    .remove();
+
+  // set edges id
   edges.attr({id: data => data.id});
 
   edges.select('path')
+    .transition()
+    .duration(TRANSITION_DURATION)
     .attr({
       d: (edge) => {
         const startNode = DataManager.getNode(edge.startNodeID);
@@ -114,9 +147,9 @@ function _renderEdges(d3Element, edgesData) {
     })
 }
 
-
-let instance = null;
-
+/**
+ * Render Manager Class
+ */
 class RenderManager {
   constructor(d3Element) {
     if(!instance) {
@@ -130,8 +163,6 @@ class RenderManager {
   }
 
   render(data) {
-    console.log(data.edges);
-
     // delay the render if somewhere some edges are set before the nodes
     setTimeout(() => {
       _renderEdges(this.d3Element, data.edges);
