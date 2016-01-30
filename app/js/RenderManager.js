@@ -163,11 +163,8 @@ class RenderManager {
   }
 
   render(data) {
-    // delay the render if somewhere some edges are set before the nodes
-    setTimeout(() => {
-      _renderEdges(this.d3Element, data.edges);
-      _renderNodes(this.d3Element, data.nodes);
-    }, 0);
+    _renderEdges(this.d3Element, data.edges);
+    _renderNodes(this.d3Element, data.nodes);
   }
 }
 

@@ -49,7 +49,6 @@ class GraphEditor {
      * On update re-render the content
      */
     DataManager.onChange(updateEvent => {
-      console.log(updateEvent);
       this.renderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
     });
@@ -67,8 +66,7 @@ class GraphEditor {
   }
 
   insertData(data) {
-    DataManager.addEdges(data.edges);
-    DataManager.addNodes(data.nodes);
+    DataManager.addData(data);
   }
 }
 

@@ -97,6 +97,17 @@ class DataManager {
   }
 
   /**
+   * @param data
+   */
+  static addData(data) {
+    _nodes = _nodes.concat(data.nodes);
+    _edges = _edges.concat(data.edges);
+
+    _dispatchUpdate('add', 'nodes', data);
+    return DataManager;
+  }
+
+  /**
    * @param node
    * @returns {Object}
    */
