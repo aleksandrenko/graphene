@@ -2,26 +2,45 @@
 
 import DataManager from './DataManager';
 
+function getOpacityForEntity(entity) {
+  if (!DataManager.isNodeSelected()) {
+    return 1;
+  }
+
+  if (DataManager.isNodeSelected() && entity.isSelected) {
+    return 1;
+  }
+
+  return 0.2;
+}
+
 // each edge need to have it's own arrow for pointing,
 // so you can set different colors and opacity when selecting nodes and the edge itself
 function createOrUpdateArrowForEdge(edge) {
   const edgeColor = DataManager.getNode(edge.startNodeID).color;
   const arrowId = `end-arrow-${edge.id}`;
 
+  //create an arrow
   if(document.querySelector(`#${arrowId}`) === null) {
-    d3.select('defs').append('marker').attr({
-      fill: edgeColor,
-      id: arrowId,
-      viewBox: '0 -5 10 10',
-      refX: 21,
-      markerWidth: 6,
-      markerHeight: 6,
-      orient: 'auto',
-      opacity: 1
-    }).append('svg:path').attr({
-      d: `M0,-5L10,0L0,5`
-    });
+    d3.select('defs')
+      .append('marker').attr({
+        id: arrowId
+      })
+      .append('svg:path').attr({
+        d: `M0,-5L10,0L0,5`
+      });
   }
+
+  //update an arrow
+  d3.select(`#${arrowId}`).attr({
+    fill: edgeColor,
+    viewBox: '0 -5 10 10',
+    refX: 20,
+    markerWidth: 6,
+    markerHeight: 6,
+    orient: 'auto',
+    opacity: getOpacityForEntity(DataManager.getNode(edge.startNodeID))
+  });
 }
 
 /**
@@ -42,21 +61,22 @@ function _renderNodes(d3Element, nodesData) {
   nodes.exit().remove();
 
   // update node groups
-  nodes.attr({id: data => data.id});
+  nodes.attr({id: node => node.id});
 
   nodes.select('circle').attr({
-    cx: data => data.x,
-    cy: data => data.y,
-    stroke: data => data.color,
-    fill: data => data.isSelected ? data.color : '#ebebeb'
+    cx: node => node.x,
+    cy: node => node.y,
+    stroke: node => node.color,
+    fill: node => node.isSelected ? node.color : '#ebebeb',
+    'stroke-opacity': (node) => getOpacityForEntity(node)
   });
 
   nodes.select('text')
-    .text(data => data.label || '...')
+    .text(node => node.label || '...')
     .attr({
-      x: data => data.x + 20,
-      y: data => data.y + 5,
-      fill: data => data.color
+      x: node => node.x + 20,
+      y: node => node.y + 5,
+      fill: node => node.color
     });
 }
 
@@ -89,7 +109,7 @@ function _renderEdges(d3Element, edgesData) {
         const startNode = DataManager.getNode(edge.startNodeID);
         return startNode.color;
       },
-      'stroke-opacity': 1,
+      'stroke-opacity': edge => getOpacityForEntity(DataManager.getNode(edge.startNodeID)),
       style: (edge) =>'marker-end: url(#end-arrow-' + edge.id + ')'
     })
 }

@@ -26,6 +26,10 @@ function _dispatchUpdate(eventType, target, data) {
  * @type {Object}
  */
 class DataManager {
+  static isNodeSelected() {
+    return !!_nodes.filter(node => node.isSelected).length;
+  }
+
   static selectNode(id) {
     const node = DataManager.getNode(id);
 

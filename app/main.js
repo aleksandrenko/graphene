@@ -8,8 +8,9 @@ const initData = {
     { x: 516, y: 234, color: '#006400', id: 'fa70c835', isSelected: false }
   ],
   edges: [
-    { startNodeID: 'daeb3890', endNodeID: 'c9a88954', middlePoint: '', label: '...', id: 'c9a88956', isSelected: false },
-    { startNodeID: 'daeb3890', endNodeID: 'fa70c835', middlePoint: '', label: '...', id: 'c9a88959', isSelected: false }
+    { startNodeID: 'daeb3890', endNodeID: 'c9a88954', middlePoint: '', label: 'label', id: 'c9a88956', isSelected: false },
+    { startNodeID: 'daeb3890', endNodeID: 'fa70c835', middlePoint: '', label: 'lele', id: 'c9a88959', isSelected: false },
+    { startNodeID: 'c9a88954', endNodeID: 'fa70c835', middlePoint: '', label: '...', id: 'c9a88919', isSelected: false }
   ]
 };
 

@@ -23,7 +23,6 @@ html, body {
   cursor: pointer;
   stroke-width: 5px;
   r: 12px;
-  stroke-opacity: 1;
 }
 
 .graphEditor .node text {
