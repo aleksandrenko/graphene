@@ -580,7 +580,7 @@ define([
     }
 
     // each edge need to have it's own arrow for pointing,
-    // so you can set different colors and opacities when selecting nodes and the edge itself
+    // so you can set different colors and pacities when selecting nodes and the edge itself
     function createSvgMarkerForEdge(edge) {
 
       if (getArrowById(edge._uid).empty() === false) {
