@@ -2,6 +2,13 @@
 
 let _nodes = [];
 let _edges = [];
+let _options = {
+  position: {
+    top: 0,
+    left: 0
+  },
+  zoom: 1
+};
 let _onUpdateCallbackHandler = () => '';
 
 /**
@@ -17,7 +24,8 @@ function _dispatchUpdate(eventType, target, data) {
     change: data,
     data: {
       nodes: _nodes,
-      edges: _edges
+      edges: _edges,
+      options: _options
     }
   });
 }
@@ -26,6 +34,17 @@ function _dispatchUpdate(eventType, target, data) {
  * @type {Object}
  */
 class DataManager {
+  static getOptions() {
+    return _options;
+  }
+
+  static setOptions(options) {
+    _options = options;
+    _dispatchUpdate('update', 'options', options);
+
+    return DataManager;
+  }
+
   static isNodeSelected() {
     return !!_nodes.filter(node => node.isSelected).length;
   }

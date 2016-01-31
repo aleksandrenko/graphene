@@ -41,8 +41,6 @@ class GraphEditor {
     this.entitiesGroup = d3.select(entitiesGroupElement);
     this.renderManager = new RenderManager(this.entitiesGroup);
 
-    console.log(this.renderManager);
-
     const interactionManager = new InteractionManager(this.svg, parentDomContainer);
 
     /**
@@ -56,6 +54,10 @@ class GraphEditor {
     interactionManager.on(EVENTS.ADD_NODE, node => {
       DataManager.deselectAllEntities();
       DataManager.addNode(node);
+    });
+
+    interactionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
+      DataManager.setOptions(options);
     });
 
     interactionManager.on(EVENTS.SELECT_NODE, nodeId => DataManager.selectNode(nodeId));

@@ -31,8 +31,16 @@ html, body {
 
 .graphEditor path {
   stroke-width: 2px;
-
 }
+
+.graphEditor .dragLine {
+  stroke-dasharray: 2;
+  stroke: black;
+}
+
+/*.graphEditor .dragLine.hidden {*/
+  /*display: none;*/
+/*}*/
 
   /*  */
 .properties-menu {

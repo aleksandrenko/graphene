@@ -147,6 +147,10 @@ function _renderEdges(d3Element, edgesData) {
     })
 }
 
+function _setZoomAndPosition(d3Element, options) {
+  d3Element.transition().attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
+}
+
 /**
  * Render Manager Class
  */
@@ -159,10 +163,50 @@ class RenderManager {
     this.d3Element = d3Element;
 
     // a wrapper for path arrows
-    d3Element.append('defs').classed('defs');
+    this.d3Element.append('defs').classed('defs');
+
+    // a wrapper for temporal drawed paths
+    this.d3Element.append('g').classed('tempPaths', true);
+
+    // define arrow marker for leading arrow when creating new rel;
+    this.d3Element.select('defs')
+      .append('marker').attr({
+        id: 'mark-end-arrow',
+        viewBox: '0 -5 10 10',
+        refX: 7,
+        markerWidth: 6,
+        markerHeight: 6,
+        orient: 'auto'
+      })
+      .append('path').attr({
+        d: 'M0,-5L10,0L0,5'
+      });
+
+    //drag line, add this svg to the parent svg so line can be drawen outside the global g
+    this.d3Element.select('.tempPaths').append('path')
+      .attr('class', 'dragLine hidden')
+      .attr({
+        d: 'M0,0L100,100'
+      })
+      .style('marker-end', 'url(#mark-end-arrow)');
+  }
+
+  renderTempEdge(start, end) {
+    d3.select('.dragLine')
+      .classed('hidden', false)
+      .attr({
+      d: () => {
+        return `M${start[0]},${start[1]}L${end[0]}${end[1]}`;
+      }
+    });
+  }
+
+  removeTempEdge() {
+    d3.select('.dragLine').classed('hidden', true);
   }
 
   render(data) {
+    _setZoomAndPosition(this.d3Element, data.options);
     _renderEdges(this.d3Element, data.edges);
     _renderNodes(this.d3Element, data.nodes);
   }

@@ -15,5 +15,5 @@ const initData = {
 };
 
 const graphEditor = new GraphEditor('body');
-//graphEditor.onChange(updateEvent => console.log(JSON.stringify(updateEvent)));
+graphEditor.onChange(updateEvent => console.log(updateEvent));
 graphEditor.insertData(initData);

@@ -8,6 +8,7 @@ import Edge from './do/Edge';
 
 import ContextMenu from './ContextMenu';
 import PropertiesManager from './PropertiesManager';
+import DataManager from './DataManager'
 
 let instance;
 
@@ -52,6 +53,9 @@ class InteractionManager {
 
     this._container = d3Element;
     this._eventCallbackHandlers = {};
+
+    // user keyboard handling
+    d3.select("body").on("keydown", this.keydownHandler);
 
     // user event handling
     this._container.on('click', this.svgClickHandler);
@@ -107,8 +111,8 @@ class InteractionManager {
   }
 
   svgMouseMoveHandler() {
-    // const target = d3.event.target;
-    // console.log('svgMouseMoveHandler');
+    const target = _getTargetType(d3.event.target);
+
     d3.event.preventDefault();
   }
 
@@ -126,6 +130,39 @@ class InteractionManager {
 
     // dispatch(EVENTS.SELECT_NODE, {});
     // dispatch(EVENTS.SELECT_EDGE, {});
+  }
+
+  keydownHandler() {
+    const escKey = 27;
+    const leftKey = 37;
+    const topKey = 38;
+    const rightKey = 39;
+    const bottomKey = 40;
+    const keyMoveStep = 10;
+    const existingOptions = DataManager.getOptions();
+    let existingPosition = existingOptions.position;
+
+    switch(d3.event.keyCode) {
+      case escKey:
+        console.log('escKey');
+        break;
+      case leftKey:
+        existingPosition.left -= keyMoveStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+      case topKey:
+        existingPosition.top -= keyMoveStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+      case rightKey:
+        existingPosition.left += keyMoveStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+      case bottomKey:
+        existingPosition.top += keyMoveStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+    }
   }
 
   static dispatch(eventType, eventData) {
