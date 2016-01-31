@@ -18,7 +18,7 @@ let instance;
  * @param node
  * @private
  */
-function _getTargetType(node) {
+function _getTarget(node) {
   const type = node.nodeName;
   let target = {};
 
@@ -79,6 +79,12 @@ class InteractionManager {
         case ACTION.DELETE_NODE:
           InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
           break;
+        case ACTION.CREATE_EDGE:
+          this.svgMouseMoveHandler.target = action.target;
+          this.svgMouseMoveHandler.action = 'connect_edge';
+
+          this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
+          break;
         default:
           console.log('Unhandeled context menu action', action);
       }
@@ -88,10 +94,11 @@ class InteractionManager {
   }
 
   svgClickHandler() {
-    const target = _getTargetType(event.target);
+    const target = _getTarget(event.target);
 
     // close the context menu
     instance.contextMenu.close();
+    instance.propertiesManager.close();
 
     // click on the root svg element
     if(target.id === CONST.SVGROOT_ID) {
@@ -101,34 +108,46 @@ class InteractionManager {
 
       d3.event.preventDefault();
     }
-
-    instance.propertiesManager.close();
   }
 
   contextClickHandler() {
-    instance.contextMenu.open(d3.mouse(this), _getTargetType(d3.event.target));
     instance._container.on("mousemove", null);
+    instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
     d3.event.preventDefault();
   }
 
   svgMouseDownHandler() {
-    const target = this.svgMouseMoveHandler.target = _getTargetType(d3.event.target);
+    const target = this.svgMouseMoveHandler.target = _getTarget(d3.event.target);
+
+    if(this.svgMouseMoveHandler.action === 'connect_edge') {
+      this.svgMouseMoveHandler.action = '';
+      console.log('event', d3.event, this.svgMouseMoveHandler.position, this.svgMouseMoveHandler.target);
+    }
 
     // click on node
     if(target.id && target.isNode) {
       InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
+      this.svgMouseMoveHandler.action = 'move';
+      this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
     }
 
-    this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
     d3.event.preventDefault();
   }
 
   svgMouseMoveHandler() {
-    this.svgMouseMoveHandler.target.x = d3.event.x;
-    this.svgMouseMoveHandler.target.y = d3.event.y;
+    let position = this.svgMouseMoveHandler.position = [d3.event.x, d3.event.y];
 
     if(this.svgMouseMoveHandler.target.isNode) {
-      InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
+      if(this.svgMouseMoveHandler.action === 'move') {
+        this.svgMouseMoveHandler.target.x = position[0];
+        this.svgMouseMoveHandler.target.y = position[1];
+
+        InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
+      }
+
+      if(this.svgMouseMoveHandler.action === 'connect_edge') {
+        console.log('draw line ' + this.svgMouseMoveHandler.position);
+      }
     }
 
     d3.event.preventDefault();
@@ -140,7 +159,7 @@ class InteractionManager {
   }
 
   svgDbClickHandler() {
-    const target = _getTargetType(d3.event.target);
+    const target = _getTarget(d3.event.target);
 
     if(target.id && target.isNode) {
       instance.propertiesManager.open(d3.mouse(this), target);

@@ -137,6 +137,8 @@ class DataManager {
   static updateNode(node) {
     _nodes = _nodes.map(_node => _node.id === node.id ? node : _node);
 
+    console.log('update node');
+
     _dispatchUpdate('update', 'node', node);
     return DataManager;
   }
