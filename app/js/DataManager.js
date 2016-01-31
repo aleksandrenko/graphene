@@ -49,6 +49,10 @@ class DataManager {
     return !!_nodes.filter(node => node.isSelected).length;
   }
 
+  static getSelectedNode() {
+    return _nodes.filter(node => node.isSelected)[0];
+  }
+
   static selectNode(id) {
     const node = DataManager.getNode(id);
 
@@ -73,22 +77,22 @@ class DataManager {
   //  return DataManager;
   // },
 
-  static deselectAllEntities() {
+  static deselectAllEntities(forceRerender) {
     _nodes.forEach(node => {
       if (node.isSelected) {
-        /* eslint-disable */
         node.isSelected = false;
-        /* eslint-enable */
       }
     });
 
     _edges.forEach(_edge => {
       if (_edge.isSelected) {
-        /* eslint-disable */
         _edge.isSelected = false;
-        /* eslint-enable */
       }
     });
+
+    if(forceRerender) {
+      _dispatchUpdate('update', 'nodes', {});
+    }
 
     return DataManager;
   }

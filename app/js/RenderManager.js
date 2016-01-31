@@ -212,6 +212,8 @@ class RenderManager {
   }
 
   render(data) {
+    console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
+
     _setZoomAndPosition(this.d3Element, data.options);
 
     _renderEdges(this.d3Element, data.edges);

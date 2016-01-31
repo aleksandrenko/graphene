@@ -97,6 +97,10 @@ class InteractionManager {
 
     // click on the root svg element
     if(target.type === CONST.ENTITY_ROOT_SVG) {
+      if(DataManager.isNodeSelected()) {
+        DataManager.deselectAllEntities(true);
+      }
+
       d3.event.preventDefault();
     }
 
@@ -163,7 +167,12 @@ class InteractionManager {
 
     switch(d3.event.keyCode) {
       case escKey:
-        console.log('escKey');
+        const selectedNode = DataManager.getSelectedNode();
+
+        if(selectedNode) {
+          InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
+        }
+
         break;
       case leftKey:
         existingPosition.left -= keyMoveStep;
