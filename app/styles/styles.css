@@ -103,8 +103,13 @@ html, body {
   transition: background-color 0.2s;
 }
 
+.contextMenu li:last-child {
+  border-bottom: none;
+}
+
 .contextMenu li:hover {
   background-color: #617170;
+  color: #fff;
 }
 
 .propertiesMenuLayer {

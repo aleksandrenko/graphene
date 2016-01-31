@@ -60,6 +60,10 @@ class GraphEditor {
       DataManager.updateNode(node);
     });
 
+    interactionManager.on(EVENTS.DELETE_NODE, node => {
+      DataManager.deleteNode(node);
+    });
+
     interactionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
       DataManager.setOptions(options);
     });

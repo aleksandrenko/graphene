@@ -1,7 +1,7 @@
 'use strict';
 
-import getID from '../utils/id.js';
-import color from '../utils/color.js';
+import createId from '../utils/id';
+import color from '../utils/color';
 
 class Node {
   /**
@@ -17,8 +17,8 @@ class Node {
     this.x = options.x;
     this.y = options.y;
     this.color = options.color || color();
-    this.label = options.label;
-    this.id = getID();
+    this.label = options.label || '...';
+    this.id = createId();
     this.isSelected = false;
   }
 }

@@ -2,6 +2,7 @@
 
 import CONST from './enums/CONST';
 import EVENTS from './enums/EVENTS';
+import ACTION from './enums/ACTION';
 
 import Node from './do/Node';
 import Edge from './do/Edge';
@@ -67,6 +68,24 @@ class InteractionManager {
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
     this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
+    this.contextMenu.onAction((action) => {
+      switch(action.type) {
+        case ACTION.CREATE_NODE:
+          const node = new Node({
+            x: action.position.x,
+            y: action.position.y
+          });
+
+          InteractionManager.dispatch(EVENTS.ADD_NODE, node);
+          break;
+        case ACTION.DELETE_NODE:
+          InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
+          break;
+        default:
+          console.log('Unhandeled context menu action', action);
+      }
+    });
+
     return instance;
   }
 
@@ -78,24 +97,15 @@ class InteractionManager {
 
     // click on the root svg element
     if(target.type === CONST.ENTITY_ROOT_SVG) {
-      /* eslint-disable */
-      const node = new Node({
-        x: d3.mouse(this)[0],
-        y: d3.mouse(this)[1]
-      });
-      /* eslint-enable */
-
       d3.event.preventDefault();
-      InteractionManager.dispatch(EVENTS.ADD_NODE, node);
     }
 
     // click on node
     if(target.id && target.type === CONST.ENTITY_NODE) {
-      instance.propertiesManager.open(d3.mouse(this), target);
       InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
-    } else {
-      instance.propertiesManager.close();
     }
+
+    instance.propertiesManager.close();
   }
 
   contextClickHandler() {
@@ -126,12 +136,13 @@ class InteractionManager {
   }
 
   svgDbClickHandler() {
-    // const target = d3.event.target;
-    // console.log('svgDbClickHandler');
-    d3.event.preventDefault();
+    const target = _getTargetType(d3.event.target);
 
-    // dispatch(EVENTS.SELECT_NODE, {});
-    // dispatch(EVENTS.SELECT_EDGE, {});
+    if(target.id && target.type === CONST.ENTITY_NODE) {
+      instance.propertiesManager.open(d3.mouse(this), target);
+    }
+
+    d3.event.preventDefault();
   }
 
   keydownHandler() {

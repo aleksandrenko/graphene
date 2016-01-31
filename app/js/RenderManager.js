@@ -101,7 +101,7 @@ function _renderNodes(d3Element, nodesData) {
     })
     .transition()
     .duration(TRANSITION_DURATION)
-    .text(node => node.label || '...')
+    .text(node => node.label)
     .attr({
       fill: node => node.color,
       opacity: (node) => getOpacityForEntity(node)

@@ -1,9 +1,11 @@
 'use strict';
 
 import CONST from './enums/CONST';
+import ACTION from './enums/ACTION';
 import createDomElementInContainer from './utils/dom';
 
 let instance = null;
+let onActionHandlerFunction = () => {};
 
 class ContextMenu {
   /**
@@ -11,7 +13,7 @@ class ContextMenu {
    * @returns {*}
    */
   constructor(containerSelector) {
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
@@ -21,15 +23,43 @@ class ContextMenu {
     // create a context menu
     this.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', 'contextMenu', 'contextMenu');
 
+    this.openedPosition = {};
+    this.targetedEntity = {};
+
+    this.contextMenuElement.onclick = (e) => {
+      const action = e.target.attributes.action.value;
+
+      if(action) {
+        onActionHandlerFunction({
+          position: {
+            x: this.openedPosition[0],
+            y: this.openedPosition[1]
+          },
+          type: action,
+          target: this.targetedEntity
+        });
+      }
+
+      //close the menu once an action is fired
+      this.close();
+    };
+
     return instance;
+  }
+
+  onAction(fn) {
+    onActionHandlerFunction = fn;
   }
 
   /**
    * @param position
-   * @param options
+   * @param entity
    */
-  open(position, options) {
-    this.contextMenuElement.innerHTML = ContextMenu.getContextMenuHTML(options);
+  open(position, entity) {
+    this.contextMenuElement.innerHTML = ContextMenu.getContextMenuHTML(entity);
+
+    this.openedPosition = position;
+    this.targetedEntity = entity;
 
     this.contextMenuElement.style.left = `${position[0]}px`;
     this.contextMenuElement.style.top = `${position[1]}px`;
@@ -49,11 +79,11 @@ class ContextMenu {
   static getContextMenuHTML(entity) {
     let html = '';
 
-    if (entity.type === CONST.ENTITY_NODE) {
-      html += '<li>Create Edge</li>';
-      html += '<li>Delete Node</li>';
-    } else if (entity.type === CONST.ENTITY_ROOT_SVG) {
-      html += '<li>New Node</li>';
+    if(entity.type === CONST.ENTITY_NODE) {
+      html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from ${entity.label}</li>`;
+      html += `<li action="${ACTION.DELETE_NODE}">Delete Node ${entity.label}</li>`;
+    } else if(entity.type === CONST.ENTITY_ROOT_SVG) {
+      html += `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
 
     return html;

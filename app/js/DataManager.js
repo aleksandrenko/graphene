@@ -142,7 +142,23 @@ class DataManager {
    * @returns {Object}
    */
   static deleteNode(node) {
-    // TODO implement
+    _nodes = _nodes.reduce(function(acc, n) {
+      if(node.id !== n.id) {
+        acc.push(n);
+      }
+
+      return acc;
+    }, []);
+
+    _edges = _edges.reduce(function(acc, e) {
+      if(e.startNodeID !== node.id && e.endNodeID !== node.id) {
+        acc.push(e);
+      }
+
+      return acc;
+    }, []);
+
+
     _dispatchUpdate('delete', 'node', node);
     return DataManager;
   }
