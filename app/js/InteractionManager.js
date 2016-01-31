@@ -19,14 +19,14 @@ let instance;
  */
 function _getTargetType(node) {
   const type = node.nodeName;
-  const target = {};
+  let target = {};
 
-  if (type === 'circle' && node.parentNode.getAttribute('class')) {
+  if(type === 'circle' && node.parentNode.getAttribute('class')) {
+    target = DataManager.getNode(node.parentNode.id);
     target.type = CONST.ENTITY_NODE;
-    target.id = node.parentNode.id;
   }
 
-  if (type === 'svg' && node.id === CONST.SVGROOT_ID) {
+  if(type === 'svg' && node.id === CONST.SVGROOT_ID) {
     target.type = CONST.ENTITY_ROOT_SVG;
     target.id = node.id;
   }
@@ -43,11 +43,11 @@ function _getTargetType(node) {
  */
 class InteractionManager {
   constructor(d3Element, rootDivElement) {
-    if (d3Element === undefined) {
+    if(d3Element === undefined) {
       throw new Error('The EventManager needs a "container" to attach and listen for events.');
     }
 
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
@@ -60,8 +60,8 @@ class InteractionManager {
     // user event handling
     this._container.on('click', this.svgClickHandler);
     this._container.on('dblclick', this.svgDbClickHandler);
-    this._container.on('mousedown', this.svgMouseDownHandler);
-    this._container.on('mouseup', this.svgMouseUpHandler);
+    this._container.on('mousedown', this.svgMouseDownHandler.bind(this));
+    this._container.on('mouseup', this.svgMouseUpHandler.bind(this));
     this._container.on('contextmenu', this.contextClickHandler);
 
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
@@ -77,7 +77,7 @@ class InteractionManager {
     instance.contextMenu.close();
 
     // click on the root svg element
-    if (target.type === CONST.ENTITY_ROOT_SVG) {
+    if(target.type === CONST.ENTITY_ROOT_SVG) {
       /* eslint-disable */
       const node = new Node({
         x: d3.mouse(this)[0],
@@ -90,7 +90,7 @@ class InteractionManager {
     }
 
     // click on node
-    if (target.id && target.type === CONST.ENTITY_NODE) {
+    if(target.id && target.type === CONST.ENTITY_NODE) {
       instance.propertiesManager.open(d3.mouse(this), target);
       InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
     } else {
@@ -104,22 +104,24 @@ class InteractionManager {
   }
 
   svgMouseDownHandler() {
-    // const target = d3.event.target;
-    // console.log('svgMouseDownHandler');
-    // editor.svg.on("mousemove", svgMouseMoveHandler);
+    this.svgMouseMoveHandler.target = _getTargetType(d3.event.target);
+    this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
     d3.event.preventDefault();
   }
 
   svgMouseMoveHandler() {
-    const target = _getTargetType(d3.event.target);
+    this.svgMouseMoveHandler.target.x = d3.event.x;
+    this.svgMouseMoveHandler.target.y = d3.event.y;
+
+    if(this.svgMouseMoveHandler.target.type === CONST.ENTITY_NODE) {
+      InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
+    }
 
     d3.event.preventDefault();
   }
 
   svgMouseUpHandler() {
-    // const target = d3.event.target;
-    // console.log('svgMouseUpHandler');
-    // editor.svg.on("mousemove", null);
+    this._container.on("mousemove", null);
     d3.event.preventDefault();
   }
 
@@ -180,7 +182,7 @@ class InteractionManager {
   }
 
   static dispatch(eventType, eventData) {
-    if (instance._eventCallbackHandlers[eventType]) {
+    if(instance._eventCallbackHandlers[eventType]) {
       instance._eventCallbackHandlers[eventType](eventData);
     }
   }
@@ -192,7 +194,9 @@ class InteractionManager {
    */
   on(eventType, callbackHandler) {
     this._eventCallbackHandlers[eventType] = callbackHandler;
-  };
+  }
+
+;
 }
 
 

@@ -81,11 +81,13 @@ function _renderNodes(d3Element, nodesData) {
   nodes.attr({id: node => node.id});
 
   nodes.select('circle')
+    .attr({
+      cx: node => node.x,
+      cy: node => node.y
+    })
     .transition()
     .duration(TRANSITION_DURATION)
     .attr({
-      cx: node => node.x,
-      cy: node => node.y,
       r: 12,
       stroke: node => node.color,
       fill: node => node.isSelected ? node.color : '#ebebeb',
@@ -93,12 +95,14 @@ function _renderNodes(d3Element, nodesData) {
     });
 
   nodes.select('text')
+    .attr({
+      x: node => node.x + 20,
+      y: node => node.y + 5
+    })
     .transition()
     .duration(TRANSITION_DURATION)
     .text(node => node.label || '...')
     .attr({
-      x: node => node.x + 20,
-      y: node => node.y + 5,
       fill: node => node.color,
       opacity: (node) => getOpacityForEntity(node)
     });
@@ -128,14 +132,16 @@ function _renderEdges(d3Element, edgesData) {
   edges.attr({id: data => data.id});
 
   edges.select('path')
-    .transition()
-    .duration(TRANSITION_DURATION)
     .attr({
       d: (edge) => {
         const startNode = DataManager.getNode(edge.startNodeID);
         const endNode = DataManager.getNode(edge.endNodeID);
         return `M${startNode.x},${startNode.y}L${endNode.x},${endNode.y}`;
-      },
+      }
+    })
+    .transition()
+    .duration(TRANSITION_DURATION)
+    .attr({
       stroke: (edge) => {
         createOrUpdateArrowForEdge(edge);
 
@@ -207,6 +213,7 @@ class RenderManager {
 
   render(data) {
     _setZoomAndPosition(this.d3Element, data.options);
+
     _renderEdges(this.d3Element, data.edges);
     _renderNodes(this.d3Element, data.nodes);
   }

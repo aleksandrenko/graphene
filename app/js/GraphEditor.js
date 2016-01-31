@@ -56,6 +56,10 @@ class GraphEditor {
       DataManager.addNode(node);
     });
 
+    interactionManager.on(EVENTS.UPDATE_NODE, node => {
+      DataManager.updateNode(node);
+    });
+
     interactionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
       DataManager.setOptions(options);
     });
