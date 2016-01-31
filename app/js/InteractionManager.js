@@ -134,12 +134,18 @@ class InteractionManager {
 
   keydownHandler() {
     const escKey = 27;
+
     const leftKey = 37;
     const topKey = 38;
     const rightKey = 39;
     const bottomKey = 40;
+    const plusKey = 187;
+    const minusKey = 189;
+
     const keyMoveStep = 10;
-    const existingOptions = DataManager.getOptions();
+    const keyZoomStep = 0.05;
+
+    let existingOptions = DataManager.getOptions();
     let existingPosition = existingOptions.position;
 
     switch(d3.event.keyCode) {
@@ -160,6 +166,14 @@ class InteractionManager {
         break;
       case bottomKey:
         existingPosition.top += keyMoveStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+      case plusKey:
+        existingOptions.zoom += keyZoomStep;
+        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        break;
+      case minusKey:
+        existingOptions.zoom -= keyZoomStep;
         InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
     }
