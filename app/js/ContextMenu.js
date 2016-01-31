@@ -79,10 +79,10 @@ class ContextMenu {
   static getContextMenuHTML(entity) {
     let html = '';
 
-    if(entity.type === CONST.ENTITY_NODE) {
+    if(entity.isNode) {
       html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from ${entity.label}</li>`;
       html += `<li action="${ACTION.DELETE_NODE}">Delete Node ${entity.label}</li>`;
-    } else if(entity.type === CONST.ENTITY_ROOT_SVG) {
+    } else if(entity.id === CONST.SVGROOT_ID) {
       html += `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
 

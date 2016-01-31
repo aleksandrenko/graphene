@@ -13,7 +13,5 @@ export default {
   ENTITIES_GROUP_CLASS: 'entitiesGroup',
   PROPERTIES_GROUP_ID: 'propertiesGroup',
   PROPERTIES_GROUP_CLASS: 'propertiesGroup',
-  ROOT_GROUP_CLASS: 'rootGroup',
-  ENTITY_ROOT_SVG: 'entityTypeRootSVG',
-  ENTITY_NODE: 'entityTypeNODE'
+  ROOT_GROUP_CLASS: 'rootGroup'
 };

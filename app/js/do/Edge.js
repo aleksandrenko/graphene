@@ -19,6 +19,7 @@ class Edge {
     this.label = options.label;
     this.id = getID();
     this.isSelected = false;
+    this.isEdge = true;
   }
 }
 

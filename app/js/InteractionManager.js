@@ -24,12 +24,10 @@ function _getTargetType(node) {
 
   if(type === 'circle' && node.parentNode.getAttribute('class')) {
     target = DataManager.getNode(node.parentNode.id);
-    target.type = CONST.ENTITY_NODE;
   }
 
-  if(type === 'svg' && node.id === CONST.SVGROOT_ID) {
-    target.type = CONST.ENTITY_ROOT_SVG;
-    target.id = node.id;
+  if(node.id === CONST.SVGROOT_ID) {
+    target = node;
   }
 
   return target;
@@ -96,7 +94,7 @@ class InteractionManager {
     instance.contextMenu.close();
 
     // click on the root svg element
-    if(target.type === CONST.ENTITY_ROOT_SVG) {
+    if(target.id === CONST.SVGROOT_ID) {
       if(DataManager.isNodeSelected()) {
         DataManager.deselectAllEntities(true);
       }
@@ -104,21 +102,23 @@ class InteractionManager {
       d3.event.preventDefault();
     }
 
-    // click on node
-    if(target.id && target.type === CONST.ENTITY_NODE) {
-      InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
-    }
-
     instance.propertiesManager.close();
   }
 
   contextClickHandler() {
-    d3.event.preventDefault();
     instance.contextMenu.open(d3.mouse(this), _getTargetType(d3.event.target));
+    instance._container.on("mousemove", null);
+    d3.event.preventDefault();
   }
 
   svgMouseDownHandler() {
-    this.svgMouseMoveHandler.target = _getTargetType(d3.event.target);
+    const target = this.svgMouseMoveHandler.target = _getTargetType(d3.event.target);
+
+    // click on node
+    if(target.id && target.isNode) {
+      InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
+    }
+
     this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
     d3.event.preventDefault();
   }
@@ -127,7 +127,7 @@ class InteractionManager {
     this.svgMouseMoveHandler.target.x = d3.event.x;
     this.svgMouseMoveHandler.target.y = d3.event.y;
 
-    if(this.svgMouseMoveHandler.target.type === CONST.ENTITY_NODE) {
+    if(this.svgMouseMoveHandler.target.isNode) {
       InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
     }
 
@@ -142,7 +142,7 @@ class InteractionManager {
   svgDbClickHandler() {
     const target = _getTargetType(d3.event.target);
 
-    if(target.id && target.type === CONST.ENTITY_NODE) {
+    if(target.id && target.isNode) {
       instance.propertiesManager.open(d3.mouse(this), target);
     }
 

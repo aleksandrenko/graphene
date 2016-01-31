@@ -20,6 +20,7 @@ class Node {
     this.label = options.label || '...';
     this.id = createId();
     this.isSelected = false;
+    this.isNode = true;
   }
 }
 
