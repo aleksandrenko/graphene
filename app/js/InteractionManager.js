@@ -105,7 +105,11 @@ class InteractionManager {
           InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
           break;
         case ACTION.CREATE_EDGE:
-          console.log('create edge');
+          this.createEdgeMouseMove.startNode = action.target;
+          this.createEdgeMouseDown.startNode = action.target;
+
+          this._container.on('mousemove', this.createEdgeMouseMove);
+          this._container.on('mouseup', this.createEdgeMouseDown);
           break;
         default:
           console.log('Unhandeled context menu action', action);
@@ -122,7 +126,6 @@ class InteractionManager {
         d3.select(`#${entity.id}`)
           .on('click', node => {
             d3.event.preventDefault();
-            console.log(node);
           })
           .on('dblclick', node => {
             console.log('dbls click on node');
@@ -150,10 +153,6 @@ class InteractionManager {
     instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
     d3.event.preventDefault();
   }
-
-  //svgMouseMoveHandler() {
-  //  d3.event.preventDefault();
-  //}
 
   keydownHandler() {
     const escKey = 27;
@@ -221,6 +220,35 @@ class InteractionManager {
     if (instance._eventCallbackHandlers[eventType]) {
       instance._eventCallbackHandlers[eventType](eventData);
     }
+  }
+
+  createEdgeMouseMove() {
+    const startNode = instance.createEdgeMouseMove.startNode;
+
+    InteractionManager.dispatch(EVENTS.DRAW_LINE, {
+      start: [startNode.x, startNode.y],
+      end: [d3.event.x, d3.event.y]
+    });
+  }
+
+  createEdgeMouseDown() {
+    const endNode = _getTarget(d3.event.target);
+    const startNode = instance.createEdgeMouseMove.startNode;
+
+    InteractionManager.dispatch(EVENTS.REMOVE_DRAWN_LINE, {});
+
+    if (endNode.isNode) {
+      const newEdge = new Edge({
+        endNodeID: endNode.id,
+        startNodeID: startNode.id
+      });
+
+      InteractionManager.dispatch(EVENTS.CREATE_EDGE, newEdge);
+    }
+
+    instance._container.on('mousemove', null);
+    instance._container.on('mouseup', null);
+    d3.event.preventDefault();
   }
 
   /**

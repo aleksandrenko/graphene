@@ -42,9 +42,9 @@ html, body {
   stroke: black;
 }
 
-/*.graphEditor .dragLine.hidden {*/
-  /*display: none;*/
-/*}*/
+.graphEditor .dragLine.hidden {
+  display: none;
+}
 
   /*  */
 .properties-menu {

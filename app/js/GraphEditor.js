@@ -36,7 +36,7 @@ class GraphEditor {
 
     // var propertiesGroupElement = createGroupInSVG('#' + svgElement.id, CONST.PROPERTIES_GROUP_ID, CONST.PROPERTIES_GROUP_CLASS);
     // this.propertyManager = new PropertyManager('#' + propertiesGroupElement.id);
-    //
+
     this.svg = d3.select(svgElement);
     this.entitiesGroup = d3.select(entitiesGroupElement);
     this.renderManager = new RenderManager(this.entitiesGroup);
@@ -49,6 +49,19 @@ class GraphEditor {
     DataManager.onChange(updateEvent => {
       this.renderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
+    });
+
+    interactionManager.on(EVENTS.DRAW_LINE, data => {
+      RenderManager.renderLine(data);
+    });
+
+    interactionManager.on(EVENTS.REMOVE_DRAWN_LINE, () => {
+      console.log('REMOVE_DRAWN_LINE');
+      RenderManager.removeTempLine();
+    });
+
+    interactionManager.on(EVENTS.CREATE_EDGE, edge => {
+      DataManager.addEdge(edge);
     });
 
     interactionManager.on(EVENTS.ADD_NODE, node => {

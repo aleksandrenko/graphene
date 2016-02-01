@@ -197,22 +197,25 @@ class RenderManager {
     this.d3Element.select('.tempPaths').append('path')
       .attr('class', 'dragLine hidden')
       .attr({
-        d: 'M0,0L100,100'
+        d: 'M0,0L0,0'
       })
       .style('marker-end', 'url(#mark-end-arrow)');
   }
 
-  //renderTempEdge(start, end) {
-  //  d3.select('.dragLine')
-  //    .classed('hidden', false)
-  //    .attr({
-  //      d: () => `M${start[0]},${start[1]}L${end[0]}${end[1]}`
-  //    });
-  //}
-  //
-  //removeTempEdge() {
-  //  d3.select('.dragLine').classed('hidden', true);
-  //}
+  static renderLine(data) {
+    const start = data.start;
+    const end = data.end;
+
+    d3.select('.dragLine')
+      .classed('hidden', false)
+      .attr({
+        d: () => `M${start[0]},${start[1]}L${end[0]},${end[1]}`
+      });
+  }
+
+  static removeTempLine() {
+    d3.select('.dragLine').classed('hidden', true);
+  }
 
   render(data) {
     console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
