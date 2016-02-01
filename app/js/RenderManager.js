@@ -35,8 +35,8 @@ function createOrUpdateArrowForEdge(edge) {
         id: arrowId
       })
       .append('svg:path').attr({
-        d: `M0,-5L10,0L0,5`
-      });
+      d: `M0,-5L10,0L0,5`
+    });
   }
 
   // update an arrow
@@ -63,8 +63,8 @@ function _renderNodes(d3Element, nodesData) {
   // create svg element on item enter
   const nodesGroups = nodes.enter()
     .append('g').classed('node', true)
-    .call(InteractionManager.getNodeDragBehavior());
-  
+    .each(node => InteractionManager.bindEvents(node));
+
   const initialNodeAttr = {
     fill: '#ebebeb',
     stroke: '#ebebeb',
@@ -82,7 +82,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({ id: node => node.id });
+  nodes.attr({id: node => node.id});
 
   nodes.select('circle')
     .attr({
@@ -123,7 +123,7 @@ function _renderEdges(d3Element, edgesData) {
 
   const edgesGroups = edges.enter().append('g').classed('edge', true)
 
-  const initialEdgesAttr = { stroke: '#ebebeb' };
+  const initialEdgesAttr = {stroke: '#ebebeb'};
 
   edgesGroups.append('path').attr(initialEdgesAttr);
 
@@ -134,7 +134,7 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({ id: data => data.id });
+  edges.attr({id: data => data.id});
 
   edges.select('path')
     .attr({
@@ -159,7 +159,7 @@ function _renderEdges(d3Element, edgesData) {
 }
 
 function _setZoomAndPosition(d3Element, options) {
-  d3Element.transition().attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
+  d3Element.attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
 }
 
 /**
@@ -202,17 +202,17 @@ class RenderManager {
       .style('marker-end', 'url(#mark-end-arrow)');
   }
 
-  renderTempEdge(start, end) {
-    d3.select('.dragLine')
-      .classed('hidden', false)
-      .attr({
-        d: () => `M${start[0]},${start[1]}L${end[0]}${end[1]}`
-      });
-  }
-
-  removeTempEdge() {
-    d3.select('.dragLine').classed('hidden', true);
-  }
+  //renderTempEdge(start, end) {
+  //  d3.select('.dragLine')
+  //    .classed('hidden', false)
+  //    .attr({
+  //      d: () => `M${start[0]},${start[1]}L${end[0]}${end[1]}`
+  //    });
+  //}
+  //
+  //removeTempEdge() {
+  //  d3.select('.dragLine').classed('hidden', true);
+  //}
 
   render(data) {
     console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');

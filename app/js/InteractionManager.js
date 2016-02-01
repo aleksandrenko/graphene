@@ -35,18 +35,30 @@ function _getTarget(node) {
 
 const _nodeDragBehavior = d3.behavior.drag()
   .origin(node => node)
-  .on('dragstart', (node) => {
+  .on('dragstart', node => {
     d3.event.sourceEvent.stopPropagation();
-    console.log('dragstart');
-    // d3.select(this).classed('dragging', true);
+    d3.select(`#${node.id}`).classed('dragging', true);
   })
   .on('drag', node => {
-    console.log('drag');
-    // d3.select(this).attr('cx', node.x = d3.event.x).attr('cy', node.y = d3.event.y);
+    node.x = d3.event.x;
+    node.y = d3.event.y;
+    InteractionManager.dispatch(EVENTS.UPDATE_NODE, node);
   })
   .on('dragend', node => {
-    console.log('dragend');
-    // d3.select(this).classed('dragging', false);
+    d3.select(`#${node.id}`).classed('dragging', false);
+  });
+
+const _zoomBehaviour = d3.behavior.zoom()
+  .scaleExtent([0.5, 2])
+  .on('zoom', () => {
+    const existingOptions = DataManager.getOptions();
+    const existingPosition = existingOptions.position;
+
+    existingPosition.left = d3.event.translate[0];
+    existingPosition.top = d3.event.translate[1];
+    existingOptions.zoom = d3.event.scale;
+
+    InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
   });
 
 /**
@@ -71,11 +83,9 @@ class InteractionManager {
     // user keyboard handling
     d3.select('body').on('keydown', this.keydownHandler);
 
-    // user event handling
+    this._container.call(_zoomBehaviour);
+    this._container.on('dblclick.zoom', null);
     this._container.on('click', this.svgClickHandler);
-    this._container.on('dblclick', this.svgDbClickHandler);
-    this._container.on('mousedown', this.svgMouseDownHandler.bind(this));
-    this._container.on('mouseup', this.svgMouseUpHandler.bind(this));
     this._container.on('contextmenu', this.contextClickHandler);
 
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
@@ -105,65 +115,49 @@ class InteractionManager {
     return instance;
   }
 
-  static getNodeDragBehavior() {
-    return _nodeDragBehavior;
+  static bindEvents(entity) {
+    // need to wait for the entity to enter the dom
+    window.setTimeout(() => {
+      if (entity.isNode) {
+        d3.select(`#${entity.id}`)
+          .on('click', node => {
+            d3.event.preventDefault();
+            console.log(node);
+          })
+          .on('dblclick', node => {
+            console.log('dbls click on node');
+            d3.event.preventDefault();
+          })
+          .call(_nodeDragBehavior);
+      }
+    }, 0);
   }
 
   svgClickHandler() {
-    const target = _getTarget(event.target);
-
     // close the context menu
     instance.contextMenu.close();
     instance.propertiesManager.close();
 
     // click on the root svg element
-    if (target.id === CONST.SVGROOT_ID) {
-      if (DataManager.isNodeSelected()) {
-        DataManager.deselectAllEntities(true);
-      }
-
-      d3.event.preventDefault();
+    if (DataManager.isNodeSelected()) {
+      DataManager.deselectAllEntities(true);
     }
+
+    d3.event.preventDefault();
   }
 
   contextClickHandler() {
-    instance._container.on('mousemove', null);
     instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
     d3.event.preventDefault();
   }
 
-  svgMouseDownHandler() {
-    const target = _getTarget(d3.event.target);
-
-    // click on node
-    if (target.id && target.isNode) {
-      InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
-    }
-
-    d3.event.preventDefault();
-  }
-
-  svgMouseMoveHandler() {
-    d3.event.preventDefault();
-  }
-
-  svgMouseUpHandler() {
-    this._container.on('mousemove', null);
-    d3.event.preventDefault();
-  }
-
-  svgDbClickHandler() {
-    const target = _getTarget(d3.event.target);
-
-    if (target.id && target.isNode) {
-      instance.propertiesManager.open(d3.mouse(this), target);
-    }
-
-    d3.event.preventDefault();
-  }
+  //svgMouseMoveHandler() {
+  //  d3.event.preventDefault();
+  //}
 
   keydownHandler() {
     const escKey = 27;
+    const delKey = 46;
 
     const leftKey = 37;
     const topKey = 38;
@@ -179,13 +173,16 @@ class InteractionManager {
     const existingPosition = existingOptions.position;
 
     switch (d3.event.keyCode) {
-      case escKey:
+      case delKey:
         const selectedNode = DataManager.getSelectedNode();
 
         if (selectedNode) {
           InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
         }
 
+        break;
+      case escKey:
+        console.log('esc key');
         break;
       case leftKey:
         existingPosition.left -= keyMoveStep;
@@ -204,12 +201,16 @@ class InteractionManager {
         InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case plusKey:
-        existingOptions.zoom += keyZoomStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        if (existingOptions.zoom < 1.8) {
+          existingOptions.zoom += keyZoomStep;
+          InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        }
         break;
       case minusKey:
-        existingOptions.zoom -= keyZoomStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        if (existingOptions.zoom > 0.6) {
+          existingOptions.zoom -= keyZoomStep;
+          InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        }
         break;
       default:
         break;
@@ -230,8 +231,6 @@ class InteractionManager {
   on(eventType, callbackHandler) {
     this._eventCallbackHandlers[eventType] = callbackHandler;
   }
-
-  ;
 }
 
 

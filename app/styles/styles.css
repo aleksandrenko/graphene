@@ -19,6 +19,10 @@ html, body {
   width: 100%;
 }
 
+.graphEditor .node.dragging circle {
+  cursor: move;
+}
+
 .graphEditor .node circle {
   cursor: pointer;
   stroke-width: 5px;
