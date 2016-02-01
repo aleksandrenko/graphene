@@ -10,11 +10,11 @@ let instance = null;
 
 
 function getOpacityForEntity(entity) {
-  if(!DataManager.isNodeSelected()) {
+  if (!DataManager.isNodeSelected()) {
     return 1;
   }
 
-  if(DataManager.isNodeSelected() && entity.isSelected) {
+  if (DataManager.isNodeSelected() && entity.isSelected) {
     return 1;
   }
 
@@ -27,8 +27,8 @@ function createOrUpdateArrowForEdge(edge) {
   const edgeColor = DataManager.getNode(edge.startNodeID).color;
   const arrowId = `end-arrow-${edge.id}`;
 
-  //create an arrow
-  if(document.querySelector(`#${arrowId}`) === null) {
+  // create an arrow
+  if (document.querySelector(`#${arrowId}`) === null) {
     d3.select('defs')
       .append('marker').attr({
         id: arrowId
@@ -38,7 +38,7 @@ function createOrUpdateArrowForEdge(edge) {
       });
   }
 
-  //update an arrow
+  // update an arrow
   d3.select(`#${arrowId}`).attr({
     fill: edgeColor,
     viewBox: '0 -5 10 10',
@@ -78,7 +78,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({id: node => node.id});
+  nodes.attr({ id: node => node.id });
 
   nodes.select('circle')
     .attr({
@@ -118,7 +118,7 @@ function _renderEdges(d3Element, edgesData) {
   const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
-  const initialEdgesAttr = {stroke: '#ebebeb'};
+  const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);
 
@@ -129,7 +129,7 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({id: data => data.id});
+  edges.attr({ id: data => data.id });
 
   edges.select('path')
     .attr({
@@ -149,8 +149,8 @@ function _renderEdges(d3Element, edgesData) {
         return startNode.color;
       },
       'stroke-opacity': edge => getOpacityForEntity(DataManager.getNode(edge.startNodeID)),
-      style: (edge) =>'marker-end: url(#end-arrow-' + edge.id + ')'
-    })
+      style: (edge) => `marker-end: url(#end-arrow-${edge.id})`
+    });
 }
 
 function _setZoomAndPosition(d3Element, options) {
@@ -162,7 +162,7 @@ function _setZoomAndPosition(d3Element, options) {
  */
 class RenderManager {
   constructor(d3Element) {
-    if(!instance) {
+    if (!instance) {
       instance = this;
     }
 
@@ -188,7 +188,7 @@ class RenderManager {
         d: 'M0,-5L10,0L0,5'
       });
 
-    //drag line, add this svg to the parent svg so line can be drawen outside the global g
+    // drag line, add this svg to the parent svg so line can be drawen outside the global g
     this.d3Element.select('.tempPaths').append('path')
       .attr('class', 'dragLine hidden')
       .attr({
@@ -201,10 +201,8 @@ class RenderManager {
     d3.select('.dragLine')
       .classed('hidden', false)
       .attr({
-      d: () => {
-        return `M${start[0]},${start[1]}L${end[0]}${end[1]}`;
-      }
-    });
+        d: () => `M${start[0]},${start[1]}L${end[0]}${end[1]}`
+      });
   }
 
   removeTempEdge() {

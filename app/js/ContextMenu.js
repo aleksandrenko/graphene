@@ -5,7 +5,7 @@ import ACTION from './enums/ACTION';
 import createDomElementInContainer from './utils/dom';
 
 let instance = null;
-let onActionHandlerFunction = () => {};
+let onActionHandlerFunction = () => null;
 
 class ContextMenu {
   /**
@@ -13,7 +13,7 @@ class ContextMenu {
    * @returns {*}
    */
   constructor(containerSelector) {
-    if(!instance) {
+    if (!instance) {
       instance = this;
     }
 
@@ -29,7 +29,7 @@ class ContextMenu {
     this.contextMenuElement.onclick = (e) => {
       const action = e.target.attributes.action.value;
 
-      if(action) {
+      if (action) {
         onActionHandlerFunction({
           position: {
             x: this.openedPosition[0],
@@ -40,7 +40,7 @@ class ContextMenu {
         });
       }
 
-      //close the menu once an action is fired
+      // close the menu once an action is fired
       this.close();
     };
 
@@ -79,10 +79,10 @@ class ContextMenu {
   static getContextMenuHTML(entity) {
     let html = '';
 
-    if(entity.isNode) {
+    if (entity.isNode) {
       html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from ${entity.label}</li>`;
       html += `<li action="${ACTION.DELETE_NODE}">Delete Node ${entity.label}</li>`;
-    } else if(entity.id === CONST.SVGROOT_ID) {
+    } else if (entity.id === CONST.SVGROOT_ID) {
       html += `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
 

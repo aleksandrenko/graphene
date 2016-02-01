@@ -78,9 +78,9 @@ class DataManager {
   // },
 
   static deselectAllEntities(forceRerender) {
-    _nodes.forEach(node => {
-      if (node.isSelected) {
-        node.isSelected = false;
+    _nodes.forEach(_node => {
+      if (_node.isSelected) {
+        _node.isSelected = false;
       }
     });
 
@@ -90,7 +90,7 @@ class DataManager {
       }
     });
 
-    if(forceRerender) {
+    if (forceRerender) {
       _dispatchUpdate('update', 'nodes', {});
     }
 
@@ -148,16 +148,16 @@ class DataManager {
    * @returns {Object}
    */
   static deleteNode(node) {
-    _nodes = _nodes.reduce(function(acc, n) {
-      if(node.id !== n.id) {
+    _nodes = _nodes.reduce((acc, n) => {
+      if (node.id !== n.id) {
         acc.push(n);
       }
 
       return acc;
     }, []);
 
-    _edges = _edges.reduce(function(acc, e) {
-      if(e.startNodeID !== node.id && e.endNodeID !== node.id) {
+    _edges = _edges.reduce((acc, e) => {
+      if (e.startNodeID !== node.id && e.endNodeID !== node.id) {
         acc.push(e);
       }
 

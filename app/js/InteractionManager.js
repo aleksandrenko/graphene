@@ -9,7 +9,7 @@ import Edge from './do/Edge';
 
 import ContextMenu from './ContextMenu';
 import PropertiesManager from './PropertiesManager';
-import DataManager from './DataManager'
+import DataManager from './DataManager';
 
 let instance;
 
@@ -22,17 +22,16 @@ function _getTarget(node) {
   const type = node.nodeName;
   let target = {};
 
-  if(type === 'circle' && node.parentNode.getAttribute('class')) {
+  if (type === 'circle' && node.parentNode.getAttribute('class')) {
     target = DataManager.getNode(node.parentNode.id);
   }
 
-  if(node.id === CONST.SVGROOT_ID) {
+  if (node.id === CONST.SVGROOT_ID) {
     target = node;
   }
 
   return target;
 }
-
 
 /**
  *
@@ -42,11 +41,11 @@ function _getTarget(node) {
  */
 class InteractionManager {
   constructor(d3Element, rootDivElement) {
-    if(d3Element === undefined) {
+    if (d3Element === undefined) {
       throw new Error('The EventManager needs a "container" to attach and listen for events.');
     }
 
-    if(!instance) {
+    if (!instance) {
       instance = this;
     }
 
@@ -54,7 +53,7 @@ class InteractionManager {
     this._eventCallbackHandlers = {};
 
     // user keyboard handling
-    d3.select("body").on("keydown", this.keydownHandler);
+    d3.select('body').on('keydown', this.keydownHandler);
 
     // user event handling
     this._container.on('click', this.svgClickHandler);
@@ -67,7 +66,7 @@ class InteractionManager {
     this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
     this.contextMenu.onAction((action) => {
-      switch(action.type) {
+      switch (action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
             x: action.position.x,
@@ -83,7 +82,7 @@ class InteractionManager {
           this.svgMouseMoveHandler.target = action.target;
           this.svgMouseMoveHandler.action = 'connect_edge';
 
-          this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
+          this._container.on('mousemove', this.svgMouseMoveHandler.bind(this));
           break;
         default:
           console.log('Unhandeled context menu action', action);
@@ -101,8 +100,8 @@ class InteractionManager {
     instance.propertiesManager.close();
 
     // click on the root svg element
-    if(target.id === CONST.SVGROOT_ID) {
-      if(DataManager.isNodeSelected()) {
+    if (target.id === CONST.SVGROOT_ID) {
+      if (DataManager.isNodeSelected()) {
         DataManager.deselectAllEntities(true);
       }
 
@@ -111,7 +110,7 @@ class InteractionManager {
   }
 
   contextClickHandler() {
-    instance._container.on("mousemove", null);
+    instance._container.on('mousemove', null);
     instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
     d3.event.preventDefault();
   }
@@ -119,34 +118,33 @@ class InteractionManager {
   svgMouseDownHandler() {
     const target = this.svgMouseMoveHandler.target = _getTarget(d3.event.target);
 
-    if(this.svgMouseMoveHandler.action === 'connect_edge') {
+    if (this.svgMouseMoveHandler.action === 'connect_edge') {
       this.svgMouseMoveHandler.action = '';
       console.log('event', d3.event, this.svgMouseMoveHandler.position, this.svgMouseMoveHandler.target);
     }
 
     // click on node
-    if(target.id && target.isNode) {
+    if (target.id && target.isNode) {
       InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
       this.svgMouseMoveHandler.action = 'move';
-      this._container.on("mousemove", this.svgMouseMoveHandler.bind(this));
+      this._container.on('mousemove', this.svgMouseMoveHandler.bind(this));
     }
 
     d3.event.preventDefault();
   }
 
   svgMouseMoveHandler() {
-    let position = this.svgMouseMoveHandler.position = [d3.event.x, d3.event.y];
+    const position = this.svgMouseMoveHandler.position = [d3.event.x, d3.event.y];
 
-    if(this.svgMouseMoveHandler.target.isNode) {
-      if(this.svgMouseMoveHandler.action === 'move') {
+    if (this.svgMouseMoveHandler.target.isNode) {
+      if (this.svgMouseMoveHandler.action === 'move') {
         this.svgMouseMoveHandler.target.x = position[0];
         this.svgMouseMoveHandler.target.y = position[1];
 
         InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
       }
 
-      if(this.svgMouseMoveHandler.action === 'connect_edge') {
-        console.log('draw line ' + this.svgMouseMoveHandler.position);
+      if (this.svgMouseMoveHandler.action === 'connect_edge') {
       }
     }
 
@@ -154,14 +152,14 @@ class InteractionManager {
   }
 
   svgMouseUpHandler() {
-    this._container.on("mousemove", null);
+    this._container.on('mousemove', null);
     d3.event.preventDefault();
   }
 
   svgDbClickHandler() {
     const target = _getTarget(d3.event.target);
 
-    if(target.id && target.isNode) {
+    if (target.id && target.isNode) {
       instance.propertiesManager.open(d3.mouse(this), target);
     }
 
@@ -181,14 +179,14 @@ class InteractionManager {
     const keyMoveStep = 10;
     const keyZoomStep = 0.05;
 
-    let existingOptions = DataManager.getOptions();
-    let existingPosition = existingOptions.position;
+    const existingOptions = DataManager.getOptions();
+    const existingPosition = existingOptions.position;
 
-    switch(d3.event.keyCode) {
+    switch (d3.event.keyCode) {
       case escKey:
         const selectedNode = DataManager.getSelectedNode();
 
-        if(selectedNode) {
+        if (selectedNode) {
           InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
         }
 
@@ -217,11 +215,13 @@ class InteractionManager {
         existingOptions.zoom -= keyZoomStep;
         InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
+      default:
+        break;
     }
   }
 
   static dispatch(eventType, eventData) {
-    if(instance._eventCallbackHandlers[eventType]) {
+    if (instance._eventCallbackHandlers[eventType]) {
       instance._eventCallbackHandlers[eventType](eventData);
     }
   }
@@ -235,7 +235,7 @@ class InteractionManager {
     this._eventCallbackHandlers[eventType] = callbackHandler;
   }
 
-;
+  ;
 }
 
 
