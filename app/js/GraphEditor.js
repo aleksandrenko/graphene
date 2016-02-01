@@ -56,7 +56,6 @@ class GraphEditor {
     });
 
     interactionManager.on(EVENTS.REMOVE_DRAWN_LINE, () => {
-      console.log('REMOVE_DRAWN_LINE');
       RenderManager.removeTempLine();
     });
 
@@ -65,7 +64,6 @@ class GraphEditor {
     });
 
     interactionManager.on(EVENTS.ADD_NODE, node => {
-      DataManager.deselectAllEntities();
       DataManager.addNode(node);
     });
 

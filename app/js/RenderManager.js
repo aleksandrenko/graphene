@@ -179,6 +179,13 @@ class RenderManager {
     // a wrapper for temporal drawed paths
     this.d3Element.append('g').classed('tempPaths', true);
 
+    // a wrapper for all paths
+    this.d3GroupForEdges = this.d3Element.append('g').classed('edges', true);
+
+    // a wrapper for all nodes
+    this.d3GroupForNodes = this.d3Element.append('g').classed('nodes', true);
+
+
     // define arrow marker for leading arrow when creating new rel;
     this.d3Element.select('defs')
       .append('marker').attr({
@@ -222,8 +229,8 @@ class RenderManager {
 
     _setZoomAndPosition(this.d3Element, data.options);
 
-    _renderEdges(this.d3Element, data.edges);
-    _renderNodes(this.d3Element, data.nodes);
+    _renderEdges(this.d3GroupForEdges, data.edges);
+    _renderNodes(this.d3GroupForNodes, data.nodes);
   }
 }
 
