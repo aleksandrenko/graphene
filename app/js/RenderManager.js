@@ -1,6 +1,7 @@
 'use strict';
 
 import DataManager from './DataManager';
+import InteractionManager from './InteractionManager';
 
 /**
  * Private variables/consts
@@ -60,7 +61,10 @@ function _renderNodes(d3Element, nodesData) {
   const nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
 
   // create svg element on item enter
-  const nodesGroups = nodes.enter().append('g').classed('node', true);
+  const nodesGroups = nodes.enter()
+    .append('g').classed('node', true)
+    .call(InteractionManager.getNodeDragBehavior());
+  
   const initialNodeAttr = {
     fill: '#ebebeb',
     stroke: '#ebebeb',
@@ -117,7 +121,8 @@ function _renderNodes(d3Element, nodesData) {
 function _renderEdges(d3Element, edgesData) {
   const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
 
-  const edgesGroups = edges.enter().append('g').classed('edge', true);
+  const edgesGroups = edges.enter().append('g').classed('edge', true)
+
   const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);

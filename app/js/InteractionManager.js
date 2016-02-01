@@ -33,6 +33,22 @@ function _getTarget(node) {
   return target;
 }
 
+const _nodeDragBehavior = d3.behavior.drag()
+  .origin(node => node)
+  .on('dragstart', (node) => {
+    d3.event.sourceEvent.stopPropagation();
+    console.log('dragstart');
+    // d3.select(this).classed('dragging', true);
+  })
+  .on('drag', node => {
+    console.log('drag');
+    // d3.select(this).attr('cx', node.x = d3.event.x).attr('cy', node.y = d3.event.y);
+  })
+  .on('dragend', node => {
+    console.log('dragend');
+    // d3.select(this).classed('dragging', false);
+  });
+
 /**
  *
  * @param {object} d3Element
@@ -79,10 +95,7 @@ class InteractionManager {
           InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
           break;
         case ACTION.CREATE_EDGE:
-          this.svgMouseMoveHandler.target = action.target;
-          this.svgMouseMoveHandler.action = 'connect_edge';
-
-          this._container.on('mousemove', this.svgMouseMoveHandler.bind(this));
+          console.log('create edge');
           break;
         default:
           console.log('Unhandeled context menu action', action);
@@ -90,6 +103,10 @@ class InteractionManager {
     });
 
     return instance;
+  }
+
+  static getNodeDragBehavior() {
+    return _nodeDragBehavior;
   }
 
   svgClickHandler() {
@@ -116,38 +133,17 @@ class InteractionManager {
   }
 
   svgMouseDownHandler() {
-    const target = this.svgMouseMoveHandler.target = _getTarget(d3.event.target);
-
-    if (this.svgMouseMoveHandler.action === 'connect_edge') {
-      this.svgMouseMoveHandler.action = '';
-      console.log('event', d3.event, this.svgMouseMoveHandler.position, this.svgMouseMoveHandler.target);
-    }
+    const target = _getTarget(d3.event.target);
 
     // click on node
     if (target.id && target.isNode) {
       InteractionManager.dispatch(EVENTS.SELECT_NODE, target.id);
-      this.svgMouseMoveHandler.action = 'move';
-      this._container.on('mousemove', this.svgMouseMoveHandler.bind(this));
     }
 
     d3.event.preventDefault();
   }
 
   svgMouseMoveHandler() {
-    const position = this.svgMouseMoveHandler.position = [d3.event.x, d3.event.y];
-
-    if (this.svgMouseMoveHandler.target.isNode) {
-      if (this.svgMouseMoveHandler.action === 'move') {
-        this.svgMouseMoveHandler.target.x = position[0];
-        this.svgMouseMoveHandler.target.y = position[1];
-
-        InteractionManager.dispatch(EVENTS.UPDATE_NODE, this.svgMouseMoveHandler.target);
-      }
-
-      if (this.svgMouseMoveHandler.action === 'connect_edge') {
-      }
-    }
-
     d3.event.preventDefault();
   }
 
