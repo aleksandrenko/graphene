@@ -7,3 +7,5 @@
 3. npm install
 4. npm start
 5. open http://localhost:8080/app/
+
+(this is a lerning project with solely purpose of testing d3 and some ux ideas)
