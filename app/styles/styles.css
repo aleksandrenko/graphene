@@ -7,7 +7,13 @@ html, body {
 
 .graphEditor {
   background: #ebebeb;
+  color: #617170;
   font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+.graphEditor button,
+.graphEditor input {
+  cursor: pointer;
 }
 
 .graphEditor * {
@@ -46,7 +52,7 @@ html, body {
   display: none;
 }
 
-  /*  */
+/*  */
 .properties-menu {
   background: #fff;
   display: block;
@@ -125,7 +131,9 @@ html, body {
   pointer-events: none;
 }
 
-.propertiesMenuLayer .propertyMenu {
+/* Properties menu start */
+
+.propertyMenu {
   width: 250px;
   background: #ffffff;
   border-radius: 3px;
@@ -137,21 +145,159 @@ html, body {
   overflow: hidden;
 }
 
-.propertiesMenuLayer .propertyMenu.opened {
+.propertyMenu.opened {
   opacity: 1;
   pointer-events: all;
 }
 
-.propertiesMenuLayer .propertyMenu .header {
+/* header */
+
+.propertyMenu .header {
   background: #fafafa;
-  height: 25px;
+  border-bottom: solid 1px #f1f1f1;
+  padding: 10px 10px 7px;
+  position: relative;
 }
 
-.propertiesMenuLayer .propertyMenu .main {
+.propertyMenu .header input {
+  background: none;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+.propertyMenu .header .label {
+  margin: 0 22px;
+  display: block;
+}
+
+.propertyMenu .header .label input {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+  line-height: 24px;
+}
+
+.propertyMenu .header .label .type {
+  display: block;
+  color: #666;
+  line-height: 7px;
+  padding-bottom: 5px;
+}
+
+.propertyMenu .header .color {
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  left: 10px;
+  top: 13px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.propertyMenu .header .color input {
+  width: 100px;
+  height: 100px;
+  margin: -15px;
+}
+
+.propertyMenu .header .drag-handler {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 25px;
+  padding-top: 20px;
+  padding-left: 5px;
+  cursor: move;
+}
+
+.propertyMenu .header .drag-handler:before,
+.propertyMenu .header .drag-handler:after {
+  content: '';
+  margin-bottom: 2px;
+  display: block;
+  border-top: dotted 2px #ddd;
+  border-bottom: dotted 2px #ddd;
+  width: 6px;
+  height: 2px;
+}
+
+/* main */
+
+.propertyMenu .main {
   min-height: 25px;
+  max-height: 400px;
+  overflow: auto;
 }
 
-.propertiesMenuLayer .propertyMenu .footer {
-  height: 25px;
-  background: #fafafa;
+.propertyMenu .main ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
+.propertyMenu .main li {
+  position: relative;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.propertyMenu .main li .property {
+  padding: 6px 15px 6px 10px;
+  border-bottom: solid 1px #eee;
+}
+
+.propertyMenu .main li .property .type {
+  color: #999;
+  float: right;
+  transition: margin 0.2s;
+}
+
+.propertyMenu .main li .remove-property-button {
+  display: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  right: 7px;
+  width: 14px;
+  height: 14px;
+  background: #aaa;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 13px;
+  text-align: center;
+  color: #eee;
+}
+
+.propertyMenu .main li:hover {
+  background-color: #f1f1f1;
+}
+
+.propertyMenu .main li:hover .type {
+  margin-right: 10px;
+}
+
+.propertyMenu .main li:hover .remove-property-button {
+  display: block;
+}
+
+/* footer */
+
+.propertyMenu .footer {
+  background: #f1f1f1;
+  border-top: solid 1px #ddd;
+  padding: 10px;
+  display: flex;
+}
+
+.propertyMenu .footer button {
+  flex: 1;
+}
+
+.propertyMenu .footer button:first-child {
+  margin-right: 3px;
+}
+
+
+/* Properties menu end */

@@ -11,8 +11,58 @@ let instance;
  * @returns {string}
  * @private
  */
-const _getMenuHTML = function _getMenuHTMLC(target) {
-  return '<div class="header"></div><div class="main"></div><div class="footer"></div>';
+const _getMenuHTML = function _getMenuHTMLC(entity) {
+  return `
+  <div class="header">
+    <span class="color">
+      <input value="${entity.color}" type="color" />
+    </span>
+    <span class="label">
+      <input value="${entity.label}" />
+      <small class="type">${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
+      <span class="drag-handler"></span>
+    </span>
+  </div>
+  <div class="main">
+    <ul id="properties-list">
+      <li><div class="property">Name <small class="type">string</small></div><div class="remove-property-button" title="Delete">x</div></li>
+      <li><div class="property">Password <small class="type">password</small></div><div class="remove-property-button" title="Delete">x</div></li>
+      <li><div class="property">Avatar <small class="type">file</small></div><div class="remove-property-button" title="Delete">x</div></li>
+      <li><div class="property">Website <small class="type">url</small></div><div class="remove-property-button" title="Delete">x</div></li>
+    </ul>
+    <button>add property</button>
+    <div>
+      <input placeholder="key" type="text">
+      <select name="" id="">
+        <option>String</option>
+        <option>Number</option>
+        <option>Boolean</option>
+        <option>Password</option>
+        <option>Email</option>
+        <option>URL</option>
+        <option>Date</option>
+        <option>File</option>
+        <option>LatLng</option>
+      </select>
+      // default value
+      <label>Has default value <input type="checkbox"></label>
+      <input placeholder="default value" type="text">
+      // limit for strings and numbers
+      <label>Has Limit <input type="checkbox"></label>
+      <input placeholder="Min Number" type="number">
+      <input placeholder="Max Number" type="number">
+      // for strings
+      <input placeholder="Min Length" type="number" min="1">
+      <input placeholder="Max Length" type="number">
+      // is required value
+      <label>Is Required <input type="checkbox"></label>
+    </div>
+  </div>
+  <div class="footer">
+    <button>Save</button>
+    <button>Close</button>
+  </div>
+  `;
 };
 
 

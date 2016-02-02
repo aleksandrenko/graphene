@@ -91,6 +91,9 @@ class InteractionManager {
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
     this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
+    // TODO: remove this, it's only for development
+    instance.propertiesManager.open([100, 100], {});
+
     this.contextMenu.onAction((action) => {
       switch (action.type) {
         case ACTION.CREATE_NODE:
