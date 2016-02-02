@@ -124,11 +124,12 @@ class InteractionManager {
     window.setTimeout(() => {
       if (entity.isNode) {
         d3.select(`#${entity.id}`)
-          .on('click', node => {
+          .on('dblclick', node => {
+            instance.propertiesManager.open([d3.event.x, d3.event.y], node);
             d3.event.preventDefault();
           })
-          .on('dblclick', node => {
-            console.log('dbls click on node');
+          .on('mousedown', node => {
+            DataManager.selectNode(node.id);
             d3.event.preventDefault();
           })
           .call(_nodeDragBehavior);
@@ -142,7 +143,7 @@ class InteractionManager {
     instance.propertiesManager.close();
 
     // click on the root svg element
-    if (DataManager.isNodeSelected()) {
+    if (DataManager.isNodeSelected() && !_getTarget(d3.event.target).isNode) {
       DataManager.deselectAllEntities(true);
     }
 
