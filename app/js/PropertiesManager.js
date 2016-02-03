@@ -71,7 +71,7 @@ class PropertiesManager {
    * @param {string} containerSelector
    */
   constructor(containerSelector) {
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
@@ -109,7 +109,9 @@ class PropertiesManager {
    */
   close() {
     this.propertiesMenu.classList.remove('opened');
-  };
+  }
+
+;
 }
 
 export default PropertiesManager;

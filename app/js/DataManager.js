@@ -56,7 +56,7 @@ class DataManager {
   static selectNode(id) {
     const node = DataManager.getNode(id);
 
-    if (node && !node.isSelected) {
+    if(node && !node.isSelected) {
       DataManager.deselectAllEntities();
       node.isSelected = true;
       _dispatchUpdate('update', 'node', node);
@@ -79,18 +79,18 @@ class DataManager {
 
   static deselectAllEntities(forceRerender) {
     _nodes.forEach(_node => {
-      if (_node.isSelected) {
+      if(_node.isSelected) {
         _node.isSelected = false;
       }
     });
 
     _edges.forEach(_edge => {
-      if (_edge.isSelected) {
+      if(_edge.isSelected) {
         _edge.isSelected = false;
       }
     });
 
-    if (forceRerender) {
+    if(forceRerender) {
       _dispatchUpdate('update', 'nodes', {});
     }
 
@@ -149,7 +149,7 @@ class DataManager {
    */
   static deleteNode(node) {
     _nodes = _nodes.reduce((acc, n) => {
-      if (node.id !== n.id) {
+      if(node.id !== n.id) {
         acc.push(n);
       }
 
@@ -157,7 +157,7 @@ class DataManager {
     }, []);
 
     _edges = _edges.reduce((acc, e) => {
-      if (e.startNodeID !== node.id && e.endNodeID !== node.id) {
+      if(e.startNodeID !== node.id && e.endNodeID !== node.id) {
         acc.push(e);
       }
 
@@ -264,7 +264,9 @@ class DataManager {
    */
   static onChange(fn) {
     _onUpdateCallbackHandler = fn;
-  };
+  }
+
+;
 }
 
 export default DataManager;

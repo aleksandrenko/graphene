@@ -22,11 +22,11 @@ function _getTarget(node) {
   const type = node.nodeName;
   let target = {};
 
-  if (type === 'circle' && node.parentNode.getAttribute('class')) {
+  if(type === 'circle' && node.parentNode.getAttribute('class')) {
     target = DataManager.getNode(node.parentNode.id);
   }
 
-  if (node.id === CONST.SVGROOT_ID) {
+  if(node.id === CONST.SVGROOT_ID) {
     target = node;
   }
 
@@ -69,11 +69,11 @@ const _zoomBehaviour = d3.behavior.zoom()
  */
 class InteractionManager {
   constructor(d3Element, rootDivElement) {
-    if (d3Element === undefined) {
+    if(d3Element === undefined) {
       throw new Error('The EventManager needs a "container" to attach and listen for events.');
     }
 
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
@@ -95,7 +95,7 @@ class InteractionManager {
     instance.propertiesManager.open([100, 100], {});
 
     this.contextMenu.onAction((action) => {
-      switch (action.type) {
+      switch(action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
             x: action.position.x,
@@ -125,7 +125,7 @@ class InteractionManager {
   static bindEvents(entity) {
     // need to wait for the entity to enter the dom
     window.setTimeout(() => {
-      if (entity.isNode) {
+      if(entity.isNode) {
         d3.select(`#${entity.id}`)
           .on('dblclick', node => {
             instance.propertiesManager.open([d3.event.x, d3.event.y], node);
@@ -146,7 +146,7 @@ class InteractionManager {
     instance.propertiesManager.close();
 
     // click on the root svg element
-    if (DataManager.isNodeSelected() && !_getTarget(d3.event.target).isNode) {
+    if(DataManager.isNodeSelected() && !_getTarget(d3.event.target).isNode) {
       DataManager.deselectAllEntities(true);
     }
 
@@ -175,11 +175,11 @@ class InteractionManager {
     const existingOptions = DataManager.getOptions();
     const existingPosition = existingOptions.position;
 
-    switch (d3.event.keyCode) {
+    switch(d3.event.keyCode) {
       case delKey:
         const selectedNode = DataManager.getSelectedNode();
 
-        if (selectedNode) {
+        if(selectedNode) {
           InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
         }
 
@@ -204,13 +204,13 @@ class InteractionManager {
         InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case plusKey:
-        if (existingOptions.zoom < 1.8) {
+        if(existingOptions.zoom < 1.8) {
           existingOptions.zoom += keyZoomStep;
           InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         }
         break;
       case minusKey:
-        if (existingOptions.zoom > 0.6) {
+        if(existingOptions.zoom > 0.6) {
           existingOptions.zoom -= keyZoomStep;
           InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         }
@@ -221,7 +221,7 @@ class InteractionManager {
   }
 
   static dispatch(eventType, eventData) {
-    if (instance._eventCallbackHandlers[eventType]) {
+    if(instance._eventCallbackHandlers[eventType]) {
       instance._eventCallbackHandlers[eventType](eventData);
     }
   }
@@ -241,7 +241,7 @@ class InteractionManager {
 
     InteractionManager.dispatch(EVENTS.REMOVE_DRAWN_LINE, {});
 
-    if (endNode.isNode) {
+    if(endNode.isNode) {
       const newEdge = new Edge({
         endNodeID: endNode.id,
         startNodeID: startNode.id

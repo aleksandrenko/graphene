@@ -11,11 +11,11 @@ let instance = null;
 
 
 function getOpacityForEntity(entity) {
-  if (!DataManager.isNodeSelected()) {
+  if(!DataManager.isNodeSelected()) {
     return 1;
   }
 
-  if (DataManager.isNodeSelected() && entity.isSelected) {
+  if(DataManager.isNodeSelected() && entity.isSelected) {
     return 1;
   }
 
@@ -29,14 +29,14 @@ function createOrUpdateArrowForEdge(edge) {
   const arrowId = `end-arrow-${edge.id}`;
 
   // create an arrow
-  if (document.querySelector(`#${arrowId}`) === null) {
+  if(document.querySelector(`#${arrowId}`) === null) {
     d3.select('defs')
       .append('marker').attr({
         id: arrowId
       })
       .append('svg:path').attr({
-      d: `M0,-5L10,0L0,5`
-    });
+        d: `M0,-5L10,0L0,5`
+      });
   }
 
   // update an arrow
@@ -167,7 +167,7 @@ function _setZoomAndPosition(d3Element, options) {
  */
 class RenderManager {
   constructor(d3Element) {
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
