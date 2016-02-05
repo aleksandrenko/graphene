@@ -91,8 +91,9 @@ class InteractionManager {
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
     this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
-    // TODO: remove this, it's only for development
-    instance.propertiesManager.open([100, 100], {});
+    this.propertiesManager.onSave((entityToSave) => {
+      console.log('save to data', entityToSave);
+    });
 
     this.contextMenu.onAction((action) => {
       switch(action.type) {
@@ -177,11 +178,11 @@ class InteractionManager {
 
     switch(d3.event.keyCode) {
       case delKey:
-        const selectedNode = DataManager.getSelectedNode();
+        //const selectedNode = DataManager.getSelectedNode();
 
-        if(selectedNode) {
-          InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
-        }
+        //if(selectedNode) {
+        //  InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
+        //}
 
         break;
       case escKey:
