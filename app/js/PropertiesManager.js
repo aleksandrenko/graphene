@@ -30,32 +30,52 @@ const _getMenuHTML = function _getMenuHTMLC(entity) {
       <li><div class="property">Avatar <small class="type">file</small></div><div class="remove-property-button" title="Delete">x</div></li>
       <li><div class="property">Website <small class="type">url</small></div><div class="remove-property-button" title="Delete">x</div></li>
     </ul>
-    <button>add property</button>
-    <div>
-      <input placeholder="key" type="text">
-      <select name="" id="">
-        <option>String</option>
-        <option>Number</option>
-        <option>Boolean</option>
-        <option>Password</option>
-        <option>Email</option>
-        <option>URL</option>
-        <option>Date</option>
-        <option>File</option>
-        <option>LatLng</option>
-      </select>
-      // default value
-      <label>Has default value <input type="checkbox"></label>
-      <input placeholder="default value" type="text">
-      // limit for strings and numbers
-      <label>Has Limit <input type="checkbox"></label>
-      <input placeholder="Min Number" type="number">
-      <input placeholder="Max Number" type="number">
-      // for strings
-      <input placeholder="Min Length" type="number" min="1">
-      <input placeholder="Max Length" type="number">
-      // is required value
-      <label>Is Required <input type="checkbox"></label>
+    <button class="add-button">+ Add property</button>
+    <div class="edit-mode">
+      <ul>
+        <li>
+          <input placeholder="key" type="text">
+        </li>
+        <li>
+          <select name="" id="">
+            <option></option>
+            <option>String</option>
+            <option>Number</option>
+            <option>Boolean</option>
+            <option>Password</option>
+            <option>Email</option>
+            <option>URL</option>
+            <option>Date</option>
+            <option>File</option>
+            <option>LatLng</option>
+          </select>
+        </li>
+        <li>
+         <label><input type="checkbox">Has default value</label>
+        </li>
+        <li>
+          <!--default value-->
+          <input placeholder="default value" type="text">
+        </li>
+        <li>
+          <!--limit for strings and numbers-->
+          <label><input type="checkbox">Has Limit</label>
+        </li>
+        <li>
+          <!--limit for numbers-->
+          <input placeholder="Min Number" type="number">
+          <input placeholder="Max Number" type="number">
+        </li>
+        <li>
+          <!--limit for strings-->
+          <input placeholder="Min Length" type="number" min="1">
+          <input placeholder="Max Length" type="number">
+        </li>
+        <li>
+          <!--is required value-->
+          <label><input type="checkbox">Is Required</label>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="footer">

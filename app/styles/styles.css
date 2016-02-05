@@ -11,9 +11,28 @@ html, body {
   font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
+.graphEditor ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.graphEditor select,
 .graphEditor button,
 .graphEditor input {
   cursor: pointer;
+  height: 24px;
+  font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+.graphEditor label {
+  cursor: pointer;
+}
+
+.graphEditor input[type="checkbox"],
+.graphEditor input[type="radio"] {
+  height: auto;
+  vertical-align: bottom;
 }
 
 .graphEditor * {
@@ -227,34 +246,31 @@ html, body {
 
 .propertyMenu .main {
   min-height: 25px;
-  max-height: 400px;
+  max-height: 600px;
   overflow: auto;
 }
 
-.propertyMenu .main ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.propertyMenu .main ul#properties-list {
 }
 
-.propertyMenu .main li {
+.propertyMenu .main #properties-list li {
   position: relative;
   transition: background-color 0.2s;
   cursor: pointer;
 }
 
-.propertyMenu .main li .property {
+.propertyMenu .main  #properties-list li .property {
   padding: 6px 15px 6px 10px;
   border-bottom: solid 1px #eee;
 }
 
-.propertyMenu .main li .property .type {
+.propertyMenu .main #properties-list li .property .type {
   color: #999;
   float: right;
   transition: margin 0.2s;
 }
 
-.propertyMenu .main li .remove-property-button {
+.propertyMenu .main #properties-list li .remove-property-button {
   display: none;
   position: absolute;
   top: 50%;
@@ -270,16 +286,51 @@ html, body {
   color: #eee;
 }
 
-.propertyMenu .main li:hover {
+.propertyMenu .main #properties-list li:hover {
   background-color: #f1f1f1;
 }
 
-.propertyMenu .main li:hover .type {
+.propertyMenu .main #properties-list li:hover .type {
   margin-right: 10px;
 }
 
-.propertyMenu .main li:hover .remove-property-button {
+.propertyMenu .main #properties-list li:hover .remove-property-button {
   display: block;
+}
+
+.propertyMenu .add-button {
+  border: none;
+  background-color: transparent;
+  color: #ddd;
+  outline: none;
+  display: block;
+  width: 100%;
+  transition: all 0.2s;
+  height: 31px;
+}
+
+.propertyMenu .add-button:hover {
+  background-color: #f1f1f1;
+  color: #666;
+}
+
+/* edit mode */
+
+.propertyMenu .edit-mode {
+  padding: 10px;
+}
+
+.propertyMenu .edit-mode li {
+  padding: 4px 0;
+}
+
+.propertyMenu .edit-mode input[type="text"],
+.propertyMenu .edit-mode select {
+  width: 100%;
+}
+
+.propertyMenu .edit-mode input[type="number"] {
+  width: 49%;
 }
 
 /* footer */
