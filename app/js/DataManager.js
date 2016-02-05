@@ -30,6 +30,9 @@ function _dispatchUpdate(eventType, target, data) {
   });
 }
 
+const _getEdge = (id) => _edges.filter(edge => edge.id === id)[0];
+const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
+
 /**
  * @type {Object}
  */
@@ -50,13 +53,13 @@ class DataManager {
   }
 
   static getSelectedNode() {
-    return _nodes.filter(node => node.isSelected)[0];
+    return Object.assign({}, _nodes.filter(node => node.isSelected)[0]);
   }
 
   static selectNode(id) {
-    const node = DataManager.getNode(id);
+    const node = _getNode(id);
 
-    if(node && !node.isSelected) {
+    if (node && !node.isSelected) {
       DataManager.deselectAllEntities();
       node.isSelected = true;
       _dispatchUpdate('update', 'node', node);
@@ -66,7 +69,7 @@ class DataManager {
   }
 
   // selectEdge: function(id) {
-  //  var edge = DataManager.getEdge(id);
+  //  var edge = _getEdge(id);
   //
   //  if(edge && !edge.isSelected) {
   //    DataManager.deselectAllEntities();
@@ -77,20 +80,20 @@ class DataManager {
   //  return DataManager;
   // },
 
-  static deselectAllEntities(forceRerender) {
+  static deselectAllEntities(forceRender) {
     _nodes.forEach(_node => {
-      if(_node.isSelected) {
+      if (_node.isSelected) {
         _node.isSelected = false;
       }
     });
 
     _edges.forEach(_edge => {
-      if(_edge.isSelected) {
+      if (_edge.isSelected) {
         _edge.isSelected = false;
       }
     });
 
-    if(forceRerender) {
+    if (forceRender) {
       _dispatchUpdate('update', 'nodes', {});
     }
 
@@ -149,7 +152,7 @@ class DataManager {
    */
   static deleteNode(node) {
     _nodes = _nodes.reduce((acc, n) => {
-      if(node.id !== n.id) {
+      if (node.id !== n.id) {
         acc.push(n);
       }
 
@@ -157,7 +160,7 @@ class DataManager {
     }, []);
 
     _edges = _edges.reduce((acc, e) => {
-      if(e.startNodeID !== node.id && e.endNodeID !== node.id) {
+      if (e.startNodeID !== node.id && e.endNodeID !== node.id) {
         acc.push(e);
       }
 
@@ -174,14 +177,14 @@ class DataManager {
    * @returns {Object}
    */
   static getNode(id) {
-    return _nodes.filter(_node => _node.id === id)[0];
+    return Object.assign({}, _getNode(id));
   }
 
   /**
    * @returns {Array}
    */
   static getAllNodes() {
-    return _nodes;
+    return Array.of(_nodes);
   }
 
   /**
@@ -239,14 +242,14 @@ class DataManager {
    * @returns {Array}
    */
   static getEdge(id) {
-    return _edges.filter(edge => edge.id === id)[0];
+    return Object.assign({}, _getEdge(id));
   }
 
   /**
    * @returns {Array}
    */
   static getAllEdges() {
-    return _edges;
+    return Array.of(_edges);
   }
 
   /**
@@ -266,7 +269,7 @@ class DataManager {
     _onUpdateCallbackHandler = fn;
   }
 
-;
+  ;
 }
 
 export default DataManager;

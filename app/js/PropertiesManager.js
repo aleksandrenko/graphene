@@ -122,6 +122,7 @@ class PropertiesManager {
    * @param entity
    */
   open(position, entity) {
+    // Copy the entity so it's not updated when the user make changes
     _entity = Object.assign({}, entity);
 
     var nameProperty = new Property({
@@ -139,7 +140,6 @@ class PropertiesManager {
       type: PROPERTY_TYPES.URL
     });
 
-    console.log(_entity);
     _entity.properties.concat([nameProperty, passwordProperty, avatarProperty]);
 
 

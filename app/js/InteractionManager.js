@@ -91,9 +91,7 @@ class InteractionManager {
     this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
     this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
-    this.propertiesManager.onSave((entityToSave) => {
-      console.log('save to data', entityToSave);
-    });
+    this.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     this.contextMenu.onAction((action) => {
       switch(action.type) {
