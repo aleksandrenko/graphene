@@ -11,7 +11,7 @@ let _saveHandlerFunction = () => null;
 
 /**
  *
- * @param {Object} target
+ * @param {Object} entity
  * @returns {string}
  * @private
  */
@@ -28,12 +28,7 @@ const _getMenuHTML = function _getMenuHTMLC(entity) {
     </span>
   </div>
   <div class='main'>
-    <ul id='properties-list'>
-      <li><div class='property'>Name <small class='type'>string</small></div><div class='remove-property-button' title='Delete'>x</div></li>
-      <li><div class='property'>Password <small class='type'>password</small></div><div class='remove-property-button' title='Delete'>x</div></li>
-      <li><div class='property'>Avatar <small class='type'>file</small></div><div class='remove-property-button' title='Delete'>x</div></li>
-      <li><div class='property'>Website <small class='type'>url</small></div><div class='remove-property-button' title='Delete'>x</div></li>
-    </ul>
+    <ul id='properties-list'></ul>
     <button class='add-button'>+ Add property</button>
     <div class='edit-mode'>
       <ul>
@@ -124,6 +119,7 @@ class PropertiesManager {
   open(position, entity) {
     // Copy the entity so it's not updated when the user make changes
     _entity = Object.assign({}, entity);
+    _entity.properties = Array.from(entity.properties);
 
     var nameProperty = new Property({
       key: 'Name',
@@ -140,14 +136,48 @@ class PropertiesManager {
       type: PROPERTY_TYPES.URL
     });
 
-    _entity.properties.concat([nameProperty, passwordProperty, avatarProperty]);
-
+    _entity.properties.push(nameProperty);
+    _entity.properties.push(passwordProperty);
+    _entity.properties.push(avatarProperty);
 
     this.propertiesMenu.classList.add('opened');
     this.propertiesMenu.style.left = `${position[0]}px`;
     this.propertiesMenu.style.top = `${position[1]}px`;
 
     this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
+
+    let _drawProperties = () => {
+      var list = d3.select('#properties-list');
+      var properties = list.selectAll('.property').data(_entity.properties);
+
+      properties.exit().remove();
+
+      var property = properties.enter()
+        .append('li')
+        .append('div')
+        .classed('property', true)
+        .text(e => e.key);
+
+      property.append('small')
+        .classed('type', true)
+        .text(e => e.type);
+
+      property.append('div')
+        .classed('remove-property-button', true)
+        .attr('title', 'Delete')
+        .text('x');
+
+      property.on('click', e => {
+        if (d3.event.target.classList.contains('remove-property-button')) {
+          const i = _entity.properties.indexOf(e);
+          _entity.properties.splice(i, 1);
+
+          _drawProperties();
+        }
+      });
+    };
+
+    _drawProperties();
 
     d3.select('#entity-label').on('input', () => {
       // TODO: label validation is needed, no spaces and charectes ...

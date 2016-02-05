@@ -268,6 +268,7 @@ html, body {
   color: #999;
   float: right;
   transition: margin 0.2s;
+  text-transform: lowercase;
 }
 
 .propertyMenu .main #properties-list li .remove-property-button {
@@ -318,6 +319,7 @@ html, body {
 
 .propertyMenu .edit-mode {
   padding: 10px;
+  display: none;
 }
 
 .propertyMenu .edit-mode li {
