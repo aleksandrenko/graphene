@@ -344,8 +344,25 @@ html, body {
   display: flex;
 }
 
+.propertyMenu #save-button:hover {
+  color: #fff;
+  background: #92b344;
+  border-color: #7f9c3b;
+}
+
+.propertyMenu #close-button:hover {
+  color: #fff;
+  background: #b35136;
+  border-color: #98452e;
+}
+
 .propertyMenu .footer button {
   flex: 1;
+  border-radius: 3px;
+  border: solid 1px #bbb;
+  background: #e6e6e6;
+  color: #666;
+  transition: all 0.2s;
 }
 
 .propertyMenu .footer button:first-child {

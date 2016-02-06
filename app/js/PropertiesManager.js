@@ -19,10 +19,10 @@ const _getMenuHTML = function _getMenuHTMLC(entity) {
   return `
   <div class='header'>
     <span class='color'>
-      <input id="entity-color" value='${entity.color}' type='color' />
+      <input id='entity-color' value='${entity.color}' type='color' />
     </span>
     <span class='label'>
-      <input id="entity-label" value='${entity.label}' />
+      <input id='entity-label' value='${entity.label}' />
       <small class='type'>${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
       <span class='drag-handler'></span>
     </span>
@@ -78,8 +78,8 @@ const _getMenuHTML = function _getMenuHTMLC(entity) {
     </div>
   </div>
   <div class='footer'>
-    <button id="save-button">Save</button>
-    <button id="close-button">Close</button>
+    <button id='save-button'>Save</button>
+    <button id='close-button'>Close</button>
   </div>
   `;
 };
@@ -178,6 +178,27 @@ class PropertiesManager {
     };
 
     _drawProperties();
+
+    let isDraggedByTheHandler = false;
+    let startDragOffset = [0, 0];
+
+    const drag = d3.behavior.drag()
+      .on('dragstart', () => {
+        const event = d3.event.sourceEvent;
+        const target = event.target;
+        isDraggedByTheHandler = target.classList.contains('drag-handler');
+        startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
+      })
+      .on('drag', () => {
+        if (isDraggedByTheHandler) {
+          d3.select(this.propertiesMenu).style({
+            left: `${d3.event.x - startDragOffset[0]}px`,
+            top: `${d3.event.y - startDragOffset[1]}px`
+          });
+        }
+      });
+
+    d3.select(this.propertiesMenu).call(drag);
 
     d3.select('#entity-label').on('input', () => {
       // TODO: label validation is needed, no spaces and charectes ...
