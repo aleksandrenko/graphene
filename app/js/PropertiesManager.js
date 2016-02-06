@@ -148,9 +148,18 @@ class PropertiesManager {
 
     let _drawProperties = () => {
       var list = d3.select('#properties-list');
-      var properties = list.selectAll('.property').data(_entity.properties);
+      var properties = list.selectAll('.property').data(_entity.properties, e => e.key);
 
-      properties.exit().remove();
+      properties.exit()
+        .transition()
+        .style({
+          height: '1px',
+          'line-height': '1px',
+          'font-size': '1px',
+          opacity: '0',
+          margin: '-7px 0'
+        })
+        .remove();
 
       var property = properties.enter()
         .append('li')
@@ -179,6 +188,7 @@ class PropertiesManager {
 
     _drawProperties();
 
+    // Drag functionality start
     let isDraggedByTheHandler = false;
     let startDragOffset = [0, 0];
 
@@ -199,6 +209,8 @@ class PropertiesManager {
       });
 
     d3.select(this.propertiesMenu).call(drag);
+
+    // Drag functionality end
 
     d3.select('#entity-label').on('input', () => {
       // TODO: label validation is needed, no spaces and charectes ...

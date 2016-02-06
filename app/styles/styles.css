@@ -257,6 +257,7 @@ html, body {
   position: relative;
   transition: background-color 0.2s;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .propertyMenu .main  #properties-list li .property {
