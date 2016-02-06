@@ -46,7 +46,7 @@ class PropertiesManager {
    * @param {string} containerSelector
    */
   constructor(containerSelector) {
-    if (!instance) {
+    if(!instance) {
       instance = this;
     }
 
@@ -93,16 +93,14 @@ class PropertiesManager {
 
       editWrapper.html('');
 
-      if (!_propertyInEdit) {
-        editWrapper.style({ display: 'none' });
+      if(!_propertyInEdit) {
+        editWrapper.style({display: 'none'});
         return false;
       } else {
-        editWrapper.style({ display: 'inline-block' });
+        editWrapper.style({display: 'inline-block'});
       }
 
-      const propertyParamsInEdit = editWrapper
-        .append('div').classed('edit-mode', true)
-        .append('ul');
+      const propertyParamsInEdit = editWrapper.append('ul');
 
       propertyParamsInEdit
         .append('li')
@@ -126,6 +124,12 @@ class PropertiesManager {
 
       propertyParamsInEditSelect.on('input', () => {
         prop.type = d3.event.target.value;
+
+        prop.hasLimit = false;
+        prop.limit = [0, 0];
+        prop.hasDefaultValue = false;
+        prop.defaultValue = '';
+
         _drawPropertyInEdit();
       });
 
@@ -143,109 +147,174 @@ class PropertiesManager {
         selected: true
       });
 
-      const propHasDefaultCheckbox = propertyParamsInEdit
-        .append('li')
-        .append('label')
-        .text('Has default value')
-        .append('input')
-        .attr({
-          type: 'checkbox'
-        })
-        .on('change', () => {
-          prop.hasDefaultValue = d3.event.target.checked;
-          _drawPropertyInEdit();
-        });
-
-      if (prop.hasDefaultValue) {
-        propHasDefaultCheckbox.attr({ checked: true });
-
-        propertyParamsInEdit
+      if(prop.type) {
+        const propHasDefaultCheckbox = propertyParamsInEdit
           .append('li')
+          .append('label')
+          .text('Has Default Value')
           .append('input')
           .attr({
-            placeholder: 'Default Value',
-            type: 'text',
-            value: () => prop.defaultValue
-          })
-          .style({
-            display: () => prop.hasDefaultValue ? 'inherit' : 'none'
+            type: 'checkbox'
           })
           .on('change', () => {
-            prop.defaultValue = d3.event.target.value;
+            prop.hasDefaultValue = d3.event.target.checked;
+
+            if (!prop.hasDefaultValue) {
+              prop.defaultValue = '';
+            }
             _drawPropertyInEdit();
           });
+
+        if(prop.hasDefaultValue) {
+          propHasDefaultCheckbox.attr({checked: true});
+
+          if(prop.type === PROPERTY_TYPES.BOOLEAN) {
+            const propertyParamsInEditDefaultBoolean = propertyParamsInEdit.append('li');
+
+            propertyParamsInEditDefaultBoolean.classed('default-bool', true);
+
+            const defaultPropertyTruth = propertyParamsInEditDefaultBoolean
+              .append('label')
+              .text('True')
+              .append('input')
+              .attr({
+                type: 'radio',
+                name: 'defaultBool'
+              });
+
+            if(prop.defaultValue === true) {
+              defaultPropertyTruth.attr({checked: true});
+            }
+
+            defaultPropertyTruth.on('click', () => {
+              prop.defaultValue = true;
+              _drawPropertyInEdit();
+            });
+
+            const defaultPropertyFalse = propertyParamsInEditDefaultBoolean
+              .append('label')
+              .text('False')
+              .append('input')
+              .attr({
+                type: 'radio',
+                name: 'defaultBool'
+              });
+
+            if(prop.defaultValue === false) {
+              defaultPropertyFalse.attr({checked: true});
+            }
+
+            defaultPropertyFalse.on('click', () => {
+              prop.defaultValue = false;
+              _drawPropertyInEdit();
+            });
+          } else {
+            propertyParamsInEdit
+              .append('li')
+              .append('input')
+              .attr({
+                placeholder: 'Default Value',
+                type: 'text',
+                value: () => prop.defaultValue
+              })
+              .style({
+                display: () => prop.hasDefaultValue ? 'inherit' : 'none'
+              })
+              .on('change', () => {
+                prop.defaultValue = d3.event.target.value;
+                _drawPropertyInEdit();
+              });
+          }
+        }
       }
 
-      const propHasLimitCheckbox = propertyParamsInEdit
-        .append('li')
-        .append('label')
-        .text('Has limit')
-        .append('input')
-        .attr({
-          type: 'checkbox'
-        })
-        .on('change', () => {
-          prop.hasLimit = d3.event.target.checked;
-          _drawPropertyInEdit();
-        });
+      if(prop.type === PROPERTY_TYPES.STRING ||
+        prop.type === PROPERTY_TYPES.PASSWORD ||
+        prop.type === PROPERTY_TYPES.EMAIL ||
+        prop.type === PROPERTY_TYPES.URL ||
+        prop.type === PROPERTY_TYPES.LATLNG ||
+        prop.type === PROPERTY_TYPES.NUMBER) {
 
-      if (prop.hasLimit) {
-        propHasLimitCheckbox.attr({ checked: true });
+        const propHasLimitCheckbox = propertyParamsInEdit
+          .append('li')
+          .append('label')
+          .text('Has Limit')
+          .append('input')
+          .attr({
+            type: 'checkbox'
+          })
+          .on('change', () => {
+            prop.hasLimit = d3.event.target.checked;
 
-        const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
+            if(!prop.hasLimit) {
+              prop.limit = [0, 0];
+            }
+            _drawPropertyInEdit();
+          });
 
-        if (prop.type === PROPERTY_TYPES.NUMBER) {
-          // if it is of type number
-          propertyParamsInEditLimits
-            .append('input')
-            .attr({
-              placeholder: 'Min',
-              type: 'number',
-              value: () => prop.limit[0]
-            })
-            .on('change', () => {
-              prop.limit[0] = d3.event.target.value;
-              _drawPropertyInEdit();
-            });
+        if(prop.hasLimit) {
+          propHasLimitCheckbox.attr({checked: true});
 
-          propertyParamsInEditLimits
-            .append('input')
-            .attr({
-              placeholder: 'Max',
-              type: 'number',
-              value: () => prop.limit[1]
-            })
-            .on('change', () => {
-              prop.limit[1] = d3.event.target.value;
-              _drawPropertyInEdit();
-            });
-        }
+          const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
 
-        if (prop.type === PROPERTY_TYPES.STRING) {
-          propertyParamsInEditLimits
-            .append('input')
-            .attr({
-              placeholder: 'Min',
-              type: 'number',
-              min: 0,
-              value: () => prop.limit[0]
-            })
-            .on('change', () => {
-              prop.limit[0] = d3.event.target.value;
-              _drawPropertyInEdit();
-            });
+          if(prop.type === PROPERTY_TYPES.NUMBER) {
+            // if it is of type number
+            propertyParamsInEditLimits
+              .append('input')
+              .attr({
+                placeholder: 'Min',
+                type: 'number',
+                value: () => prop.limit[0]
+              })
+              .on('change', () => {
+                prop.limit[0] = d3.event.target.value;
+                _drawPropertyInEdit();
+              });
 
-          propertyParamsInEditLimits
-            .append('input')
-            .attr({
-              placeholder: 'Max',
-              type: 'number',
-              value: () => prop.limit[1]
-            })
-            .on('change', () => {
-              prop.limit[1] = d3.event.target.value;
-              _drawPropertyInEdit();
-            });
+            propertyParamsInEditLimits
+              .append('input')
+              .attr({
+                placeholder: 'Max',
+                type: 'number',
+                value: () => prop.limit[1]
+              })
+              .on('change', () => {
+                prop.limit[1] = d3.event.target.value;
+                _drawPropertyInEdit();
+              });
+          }
+
+          if(prop.type === PROPERTY_TYPES.STRING ||
+            prop.type === PROPERTY_TYPES.PASSWORD ||
+            prop.type === PROPERTY_TYPES.EMAIL ||
+            prop.type === PROPERTY_TYPES.URL ||
+            prop.type === PROPERTY_TYPES.LATLNG) {
+
+            propertyParamsInEditLimits
+              .append('input')
+              .attr({
+                placeholder: 'Min',
+                type: 'number',
+                min: 0,
+                value: () => prop.limit[0]
+              })
+              .on('change', () => {
+                prop.limit[0] = d3.event.target.value;
+                _drawPropertyInEdit();
+              });
+
+            propertyParamsInEditLimits
+              .append('input')
+              .attr({
+                placeholder: 'Max',
+                type: 'number',
+                value: () => prop.limit[1]
+              })
+              .on('change', () => {
+                prop.limit[1] = d3.event.target.value;
+                _drawPropertyInEdit();
+              });
+          }
         }
       }
 
@@ -262,8 +331,8 @@ class PropertiesManager {
           _drawPropertyInEdit();
         });
 
-      if (prop.isRequired) {
-        propIsRequiredCheckbox.attr({ checked: true });
+      if(prop.isRequired) {
+        propIsRequiredCheckbox.attr({checked: true});
       }
 
       propertyParamsInEdit.append('li').classed('actions', true)
@@ -308,7 +377,7 @@ class PropertiesManager {
       properties.on('click', prop => {
         const target = d3.event.target;
 
-        if (target.classList.contains('remove-property-button')) {
+        if(target.classList.contains('remove-property-button')) {
           const i = _entity.properties.indexOf(prop);
           _entity.properties.splice(i, 1);
 
@@ -340,7 +409,7 @@ class PropertiesManager {
         startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
       })
       .on('drag', () => {
-        if (isDraggedByTheHandler) {
+        if(isDraggedByTheHandler) {
           d3.select(this.propertiesMenu).style({
             left: `${d3.event.x - startDragOffset[0]}px`,
             top: `${d3.event.y - startDragOffset[1]}px`
@@ -391,7 +460,8 @@ class PropertiesManager {
   onSave(fn) {
     _saveHandlerFunction = fn;
   }
-  ;
+
+;
 }
 
 export default PropertiesManager;

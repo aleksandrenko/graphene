@@ -275,22 +275,6 @@ html, body {
   vertical-align: top;
 }
 
-.propertyMenu .main .property-edit {
-  border-left: solid 1px #ddd;
-  width: 180px;
-  display: none;
-  vertical-align: top;
-}
-
-.propertyMenu .main .property-edit .actions {
-  display: flex;
-}
-
-.propertyMenu .main .property-edit .actions button {
-  flex: 1;
-  margin-right: 3px;
-}
-
 .propertyMenu .main ul#properties-list {
 }
 
@@ -298,10 +282,6 @@ html, body {
   position: relative;
   transition: background-color 0.2s;
   overflow: hidden;
-}
-
-.propertyMenu .main #properties-list li .edit-mode {
-  border-bottom: solid 1px #eee;
 }
 
 .propertyMenu .main #properties-list li .property {
@@ -363,25 +343,60 @@ html, body {
 
 /* edit mode */
 
-.propertyMenu .edit-mode {
+.propertyMenu .property-edit {
   padding: 10px;
 }
 
-.propertyMenu .edit-mode li {
+.propertyMenu .property-edit li {
   padding: 4px 0;
 }
 
-.propertyMenu .edit-mode input[type="checkbox"] {
+.propertyMenu .property-edit input[type="checkbox"] {
   float: left;
 }
 
-.propertyMenu .edit-mode input[type="text"],
-.propertyMenu .edit-mode select {
+.propertyMenu .property-edit .default-bool {
+  display: flex;
+}
+
+.propertyMenu .property-edit .default-bool label {
+  margin-right: 3px;
+  flex: 1;
+}
+
+.propertyMenu .property-edit .default-bool label input {
+  float: left;
+  margin-top: 2px;
+  margin-right: 5px;
+}
+
+.propertyMenu .property-edit input[type="text"],
+.propertyMenu .property-edit select {
   width: 100%;
 }
 
-.propertyMenu .edit-mode input[type="number"] {
+.propertyMenu .property-edit input[type="number"] {
   width: 49%;
+}
+
+.propertyMenu .main .property-edit {
+  border-left: solid 1px #ddd;
+  width: 180px;
+  display: none;
+  vertical-align: top;
+}
+
+.propertyMenu .main .property-edit .actions {
+  display: flex;
+}
+
+.propertyMenu .main .property-edit .actions button {
+  flex: 1;
+  margin-right: 3px;
+}
+
+.propertyMenu .main #properties-list li .property-edit {
+  border-bottom: solid 1px #eee;
 }
 
 /* footer */
