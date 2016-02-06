@@ -71,7 +71,6 @@ html, body {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-
 /* ============================================================================ */
 /* Node styles */
 /* ============================================================================ */
@@ -360,7 +359,7 @@ html, body {
   display: flex;
 }
 
-.property-menu  .main.property-edit .default-bool label {
+.property-menu .main.property-edit .default-bool label {
   margin-right: 3px;
   flex: 1;
 }
@@ -376,7 +375,7 @@ html, body {
   width: 100%;
 }
 
-.property-menu  .main.property-edit input[type="number"] {
+.property-menu .main.property-edit input[type="number"] {
   width: 49%;
 }
 

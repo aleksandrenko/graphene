@@ -39,8 +39,8 @@ function createOrUpdateArrowForEdge(edge) {
         id: arrowId
       })
       .append('svg:path').attr({
-      d: `M0,-5L10,0L0,5`
-    });
+        d: `M0,-5L10,0L0,5`
+      });
   }
 
   // update an arrow
@@ -86,7 +86,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({ id: node => node.id });
+  nodes.attr({id: node => node.id});
 
   nodes.select('circle')
     .attr({
@@ -127,7 +127,7 @@ function _renderEdges(d3Element, edgesData) {
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
 
-  const initialEdgesAttr = { stroke: '#ebebeb' };
+  const initialEdgesAttr = {stroke: '#ebebeb'};
 
   edgesGroups.append('path').attr(initialEdgesAttr);
   edgesGroups.append('text');
@@ -139,18 +139,18 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({ id: data => data.id });
+  edges.attr({id: data => data.id});
 
   edges.select('text').attr({
-      x: edge => {
-        return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
-      },
-      y: edge => {
-        return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
-      },
-      fill: edge => DataManager.getNode(edge.startNodeID).color,
-      opacity: edge => getOpacityForEntity(edge)
-    })
+    x: edge => {
+      return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
+    },
+    y: edge => {
+      return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
+    },
+    fill: edge => DataManager.getNode(edge.startNodeID).color,
+    opacity: edge => getOpacityForEntity(edge)
+  })
     .text(e => e.label);
 
   edges.select('path')
@@ -214,8 +214,8 @@ class RenderManager {
         orient: 'auto'
       })
       .append('path').attr({
-      d: 'M0,-5L10,0L0,5'
-    });
+        d: 'M0,-5L10,0L0,5'
+      });
 
     // drag line, add this svg to the parent svg so line can be drawen outside the global g
     this.d3Element.select('.tempPaths').append('path')

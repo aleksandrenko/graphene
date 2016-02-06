@@ -273,7 +273,7 @@ class DataManager {
     _onUpdateCallbackHandler = fn;
   }
 
-  ;
+;
 }
 
 export default DataManager;

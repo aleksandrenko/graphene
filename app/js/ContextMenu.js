@@ -18,10 +18,10 @@ class ContextMenu {
     }
 
     // create and attach a contextMenuLayer
-    const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', 'contextMenuLayer', 'contextMenuLayer');
+    const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', CONST.CONTEXT_MENU_LAYER_ID, CONST.CONTEXT_MENU_LAYER_CLASS);
 
     // create a context menu
-    this.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', 'contextMenu', 'contextMenu');
+    this.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', CONST.CONTEXT_MENU_ID, CONST.CONTEXT_MENU_CLASS);
 
     this.openedPosition = {};
     this.targetedEntity = {};

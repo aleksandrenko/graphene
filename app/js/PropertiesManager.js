@@ -8,8 +8,6 @@ import createDomElementInContainer from './utils/dom';
 let instance;
 let _entity;
 let _saveHandlerFunction = () => null;
-let _propertyInEdit = null;
-
 
 /**
  *
@@ -88,16 +86,16 @@ class PropertiesManager {
      * @private
      */
     const _drawPropertyInEdit = () => {
-      const prop = _propertyInEdit;
+      const prop = _drawPropertyInEdit.property;
       const editWrapper = d3.select('.property-edit');
 
       editWrapper.html('');
 
-      if(!_propertyInEdit) {
-        editWrapper.style({display: 'none'});
+      if (!prop) {
+        editWrapper.style({ display: 'none' });
         return false;
       } else {
-        editWrapper.style({display: 'inline-block'});
+        editWrapper.style({ display: 'inline-block' });
       }
 
       const propertyParamsInEdit = editWrapper.append('ul');
@@ -166,7 +164,7 @@ class PropertiesManager {
           });
 
         if(prop.hasDefaultValue) {
-          propHasDefaultCheckbox.attr({checked: true});
+          propHasDefaultCheckbox.attr({ checked: true });
 
           if(prop.type === PROPERTY_TYPES.BOOLEAN) {
             const propertyParamsInEditDefaultBoolean = propertyParamsInEdit.append('li');
@@ -183,7 +181,7 @@ class PropertiesManager {
               });
 
             if(prop.defaultValue === true) {
-              defaultPropertyTruth.attr({checked: true});
+              defaultPropertyTruth.attr({ checked: true });
             }
 
             defaultPropertyTruth.on('click', () => {
@@ -201,7 +199,7 @@ class PropertiesManager {
               });
 
             if(prop.defaultValue === false) {
-              defaultPropertyFalse.attr({checked: true});
+              defaultPropertyFalse.attr({ checked: true });
             }
 
             defaultPropertyFalse.on('click', () => {
@@ -253,7 +251,7 @@ class PropertiesManager {
           });
 
         if(prop.hasLimit) {
-          propHasLimitCheckbox.attr({checked: true});
+          propHasLimitCheckbox.attr({ checked: true });
 
           const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
 
@@ -332,14 +330,14 @@ class PropertiesManager {
         });
 
       if(prop.isRequired) {
-        propIsRequiredCheckbox.attr({checked: true});
+        propIsRequiredCheckbox.attr({ checked: true });
       }
 
       propertyParamsInEdit.append('li').classed('actions', true)
         .append('button')
         .text('Close')
         .on('click', () => {
-          _propertyInEdit = null;
+          _drawPropertyInEdit.property = null;
           _drawPropertyInEdit();
         });
 
@@ -377,12 +375,12 @@ class PropertiesManager {
       properties.on('click', prop => {
         const target = d3.event.target;
 
-        if(target.classList.contains('remove-property-button')) {
+        if (target.classList.contains('remove-property-button')) {
           const i = _entity.properties.indexOf(prop);
           _entity.properties.splice(i, 1);
 
-          //close the edit part of the menu
-          _propertyInEdit = null;
+          // close the edit part of the menu
+          _drawPropertyInEdit.property = null;
           _drawPropertyInEdit();
 
           _drawProperties();
@@ -390,11 +388,10 @@ class PropertiesManager {
           return;
         }
 
-        _propertyInEdit = prop;
+        _drawPropertyInEdit.property = prop;
         _drawPropertyInEdit();
       });
     };
-
     _drawProperties();
 
     // Drag functionality start
@@ -409,7 +406,7 @@ class PropertiesManager {
         startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
       })
       .on('drag', () => {
-        if(isDraggedByTheHandler) {
+        if (isDraggedByTheHandler) {
           d3.select(this.propertiesMenu).style({
             left: `${d3.event.x - startDragOffset[0]}px`,
             top: `${d3.event.y - startDragOffset[1]}px`
@@ -443,7 +440,7 @@ class PropertiesManager {
     let propertyInc = 0;
 
     d3.select('.add-button').on('click', () => {
-      let newProperty = new Property({
+      const newProperty = new Property({
         key: `Property(${propertyInc++})`
       });
       _entity.properties.push(newProperty);

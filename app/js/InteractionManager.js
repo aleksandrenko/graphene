@@ -94,7 +94,7 @@ class InteractionManager {
     this.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     this.contextMenu.onAction((action) => {
-      switch (action.type) {
+      switch(action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
             x: action.position.x,
@@ -176,7 +176,7 @@ class InteractionManager {
     const existingOptions = DataManager.getOptions();
     const existingPosition = existingOptions.position;
 
-    switch (d3.event.keyCode) {
+    switch(d3.event.keyCode) {
       case delKey:
         //const selectedNode = DataManager.getSelectedNode();
 
