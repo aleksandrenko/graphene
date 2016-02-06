@@ -8,45 +8,6 @@ import createDomElementInContainer from './utils/dom';
 let instance;
 let _entity;
 let _saveHandlerFunction = () => null;
-let _newProperty = null;
-
-const _getFormHTML = (property) => `
-    <div class='edit-mode'>
-      <ul>
-        <li>
-          <input placeholder='key' type='text' value="${property.key}" />
-        </li>
-        <li>
-          <select id='property-types'></select>
-        </li>
-        <li>
-         <label><input type='checkbox' ${property.hasDefault && 'checked'}>Has default value</label>
-        </li>
-        <li>
-          <!--default value-->
-          <input placeholder='default value' type='text'>
-        </li>
-        <li>
-          <!--limit for strings and numbers-->
-          <label><input type='checkbox' ${property.hasLimit && 'checked'}>Has Limit</label>
-        </li>
-        <li>
-          <!--limit for numbers-->
-          <input placeholder='Min Number' type='number' value="${property.limit[0]}">
-          <input placeholder='Max Number' type='number' value="${property.limit[1]}">
-        </li>
-        <li>
-          <!--limit for strings-->
-          <input placeholder='Min Length' type='number' min='1' value="${property.limit[0]}">
-          <input placeholder='Max Length' type='number' value="${property.limit[1]}">
-        </li>
-        <li>
-          <!--is required value-->
-          <label><input type='checkbox' ${property.isRequired && 'checked'}>Is Required</label>
-        </li>
-      </ul>
-    </div>
-  `;
 
 /**
  *
@@ -55,23 +16,23 @@ const _getFormHTML = (property) => `
  * @private
  */
 const _getMenuHTML = (entity) =>`
-  <div class='header'>
-    <span class='color'>
-      <input id='entity-color' value='${entity.color}' type='color' />
+  <div class="header">
+    <span class="color">
+      <input id="entity-color" value="${entity.color}" type="color" />
     </span>
-    <span class='label'>
-      <input id='entity-label' value='${entity.label}' />
-      <small class='type'>${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
-      <span class='drag-handler'></span>
+    <span class="label">
+      <input id="entity-label" value="${entity.label}" />
+      <small class="type">${entity.isNode && "node" || entity.isEdge && "edge"}</small>
+      <span class="drag-handler"></span>
     </span>
   </div>
-  <div class='main'>
-    <ul id='properties-list'></ul>
-    <button class='add-button'>+ Add property</button>
+  <div class="main">
+    <ul id="properties-list"></ul>
+    <button class="add-button">+ Add property</button>
   </div>
-  <div class='footer'>
-    <button id='save-button'>Save</button>
-    <button id='close-button'>Close</button>
+  <div class="footer">
+    <button id="save-button">Save</button>
+    <button id="close-button">Close</button>
   </div>
   `;
 
@@ -112,25 +73,6 @@ class PropertiesManager {
     _entity = Object.assign({}, entity);
     _entity.properties = Array.from(entity.properties);
 
-    const nameProperty = new Property({
-      key: 'Name',
-      type: PROPERTY_TYPES.STRING
-    });
-
-    const passwordProperty = new Property({
-      key: 'Password',
-      type: PROPERTY_TYPES.PASSWORD
-    });
-
-    const avatarProperty = new Property({
-      key: 'Avatar',
-      type: PROPERTY_TYPES.URL
-    });
-
-    _entity.properties.push(nameProperty);
-    _entity.properties.push(passwordProperty);
-    _entity.properties.push(avatarProperty);
-
     this.propertiesMenu.classList.add('opened');
     this.propertiesMenu.style.left = `${position[0]}px`;
     this.propertiesMenu.style.top = `${position[1]}px`;
@@ -138,21 +80,190 @@ class PropertiesManager {
     this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
 
     const _drawProperties = () => {
+      // clear before rerender
       const list = d3.select('#properties-list');
-      const properties = list.selectAll('.property').data(_entity.properties, e => e.key);
+      list.html('');
 
-      properties.exit()
-        .transition()
-        .style({
-          height: '1px',
-          'line-height': '1px',
-          'font-size': '1px',
-          opacity: '0',
-          margin: '-7px 0'
+      const propertiesInEditData = _entity.properties.filter(prop => prop.inEditMode);
+      const propertiesNotInEditData = _entity.properties.filter(prop => !prop.inEditMode);
+
+
+      const propertiesNotInEdit = list.selectAll('.property').data(propertiesNotInEditData, e => e.key);
+      const propertiesInEdit = list.selectAll('.property-in-edit').data(propertiesInEditData, e => e.key);
+
+      const propertyParamsInEdit = propertiesInEdit.enter()
+        .append('li')
+        .append('div').classed('edit-mode', true)
+        .append('ul');
+
+      propertyParamsInEdit
+        .append('li')
+        .append('input')
+        .attr({
+          placeholder: 'Key',
+          type: 'text',
+          value: p => p.key
         })
-        .remove();
+        .on('change', prop => {
+          prop.key = d3.event.target.value;
+          _drawProperties();
+        });
 
-      const property = properties.enter()
+      const propertyParamsInEditSelect = propertyParamsInEdit
+        .append('li')
+        .append('select')
+        .attr({
+          id: 'property-types'
+        });
+
+      propertyParamsInEditSelect.on('input', prop => {
+        prop.type = d3.event.target.value;
+      });
+
+      propertyParamsInEditSelect
+        .selectAll('option')
+        .data(Object.keys(PROPERTY_TYPES))
+        .enter()
+        .append('option')
+        .text(type => PROPERTY_TYPES[type].toLowerCase());
+
+      propertyParamsInEdit
+        .append('li')
+        .append('label')
+        .text('Has default value')
+        .append('input')
+        .attr({
+          type: 'checkbox'
+        })
+        .on('change', prop => {
+          prop.hasDefaultValue = d3.event.target.checked;
+          _drawProperties();
+        });
+
+      propertyParamsInEdit
+        .append('li')
+        .append('input')
+        .attr({
+          placeholder: 'Default Value',
+          type: 'text',
+          value: p => p.defaultValue
+        })
+        .style({
+          display: p => p.hasDefaultValue ? 'inherit' : 'none'
+        })
+        .on('change', prop => {
+          prop.ldefaultValue = d3.event.target.value;
+          _drawProperties();
+        });
+
+      propertyParamsInEdit
+        .append('li')
+        .append('label')
+        .text('Has limit')
+        .append('input')
+        .attr({
+          type: 'checkbox'
+        })
+        .on('change', prop => {
+          prop.hasLimit = d3.event.target.checked;
+          _drawProperties();
+        });
+
+      const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
+      // if it is of type number
+      propertyParamsInEditLimits
+        .append('input')
+        .attr({
+          placeholder: 'Min Number',
+          type: 'number',
+          value: p => p.limit[0]
+        })
+        .style({
+          display: p => p.type === PROPERTY_TYPES.NUMBER ? 'inherit' : 'none'
+        })
+        .on('change', prop => {
+          prop.limit[0] = d3.event.target.value;
+          _drawProperties();
+        });
+
+      propertyParamsInEditLimits
+        .append('input')
+        .attr({
+          placeholder: 'Max Number',
+          type: 'number',
+          value: p => p.limit[1]
+        })
+        .style({
+          display: p => p.type === PROPERTY_TYPES.NUMBER ? 'inherit' : 'none'
+        })
+        .on('change', prop => {
+          prop.limit[1] = d3.event.target.value;
+          _drawProperties();
+        });
+
+      // if it is a string
+      propertyParamsInEditLimits
+        .append('input')
+        .attr({
+          placeholder: 'Min length',
+          type: 'number',
+          min: 0,
+          value: p => p.limit[0]
+        })
+        .style({
+          display: p => p.type === PROPERTY_TYPES.STRING ? 'inherit' : 'none'
+        })
+        .on('change', prop => {
+          prop.limit[0] = d3.event.target.value;
+          _drawProperties();
+        });
+
+      propertyParamsInEditLimits
+        .append('input')
+        .attr({
+          placeholder: 'Max length',
+          type: 'number',
+          value: p => p.limit[1]
+        })
+        .style({
+          display: p => p.type === PROPERTY_TYPES.STRING ? 'inherit' : 'none'
+        })
+        .on('change', prop => {
+          prop.limit[1] = d3.event.target.value;
+          _drawProperties();
+        });
+
+      propertyParamsInEdit
+        .append('li')
+        .append('label')
+        .text('Is Required')
+        .append('input')
+        .attr({
+          type: 'checkbox'
+        })
+        .on('change', prop => {
+          prop.isRequired = d3.event.target.checked;
+          _drawProperties();
+        });
+
+      const propertyParamsInEditButtons = propertyParamsInEdit.append('li');
+      propertyParamsInEditButtons
+        .append('button')
+        .text('Revert').on('click', prop => {
+          // TODO revert
+          _drawProperties();
+        });
+
+      propertyParamsInEditButtons
+        .append('button')
+        .text('Close')
+        .on('click', prop => {
+          prop.inEditMode = false;
+          _drawProperties();
+        });
+
+
+      const property = propertiesNotInEdit.enter()
         .append('li')
         .append('div')
         .classed('property', true)
@@ -167,6 +278,7 @@ class PropertiesManager {
         .attr('title', 'Delete')
         .text('x');
 
+      // Click on property li
       property.on('click', property => {
         const target = d3.event.target;
 
@@ -177,8 +289,8 @@ class PropertiesManager {
           _drawProperties();
         }
 
-        console.log(target, property);
-        target.innerHTML = _getFormHTML(property);
+        property.inEditMode = true;
+        _drawProperties();
       });
     };
 
@@ -227,28 +339,14 @@ class PropertiesManager {
     });
 
     // Add new Property
+    let propertyInc = 0;
 
     d3.select('.add-button').on('click', () => {
-      let newProperty = new Property();
-      console.log(_getFormHTML(newProperty));
-    });
-
-    // Fill property types
-
-    d3.select('#property-types').append('option');
-
-    d3.select('#property-types')
-      .selectAll('option')
-      .data(Object.keys(PROPERTY_TYPES), type => type)
-      .enter()
-      .append('option')
-      .attr({
-        value: (type) => PROPERTY_TYPES[type]
-      })
-      .text(type => PROPERTY_TYPES[type]);
-
-    d3.select('#property-types').on('change', () => {
-      console.log(d3.event.target.selectedOptions[0].value.toLowerCase());
+      let newProperty = new Property({
+        key: `Property(${propertyInc++})`
+      });
+      _entity.properties.push(newProperty);
+      _drawProperties();
     });
   }
 

@@ -1,6 +1,7 @@
 'use strict';
 
 export default {
+  NONE: '',
   STRING: 'STRING',
   NUMBER: 'NUMBER',
   BOOLEAN: 'BOOLEAN',
