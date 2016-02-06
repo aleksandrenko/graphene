@@ -11,11 +11,11 @@ let instance = null;
 
 
 function getOpacityForEntity(entity) {
-  if(!DataManager.isNodeSelected()) {
+  if(entity.isNode && entity.isSelected) {
     return 1;
   }
 
-  if(DataManager.isNodeSelected() && entity.isSelected) {
+  if(!entity.isNode && DataManager.getNode(entity.startNodeID).isSelected) {
     return 1;
   }
 
@@ -121,11 +121,12 @@ function _renderNodes(d3Element, nodesData) {
 function _renderEdges(d3Element, edgesData) {
   const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
 
-  const edgesGroups = edges.enter().append('g').classed('edge', true)
+  const edgesGroups = edges.enter().append('g').classed('edge', true);
 
-  const initialEdgesAttr = {stroke: '#ebebeb'};
+  const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);
+  edgesGroups.append('text');
 
   edges.exit()
     .transition()
@@ -134,7 +135,19 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({id: data => data.id});
+  edges.attr({ id: data => data.id });
+
+  edges.select('text').attr({
+    x: edge => {
+      return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
+    },
+    y: edge => {
+      return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
+    },
+    fill: edge => DataManager.getNode(edge.startNodeID).color,
+    opacity: edge => getOpacityForEntity(edge)
+    })
+    .text(e => e.label);
 
   edges.select('path')
     .attr({
@@ -167,7 +180,7 @@ function _setZoomAndPosition(d3Element, options) {
  */
 class RenderManager {
   constructor(d3Element) {
-    if(!instance) {
+    if (!instance) {
       instance = this;
     }
 
