@@ -158,6 +158,8 @@ class InteractionManager {
   }
 
   keydownHandler() {
+    return;
+
     const escKey = 27;
     const delKey = 46;
 

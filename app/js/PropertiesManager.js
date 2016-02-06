@@ -8,6 +8,8 @@ import createDomElementInContainer from './utils/dom';
 let instance;
 let _entity;
 let _saveHandlerFunction = () => null;
+let _propertyInEdit = null;
+
 
 /**
  *
@@ -27,8 +29,10 @@ const _getMenuHTML = (entity) =>`
     </span>
   </div>
   <div class="main">
-    <ul id="properties-list"></ul>
-    <button class="add-button">+ Add property</button>
+    <div class="properties">
+      <ul id="properties-list"></ul>
+      <button class="add-button">+ Add property</button>
+    </div><div class="property-edit"></div>
   </div>
   <div class="footer">
     <button id="save-button">Save</button>
@@ -79,20 +83,24 @@ class PropertiesManager {
 
     this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
 
-    const _drawProperties = () => {
-      // clear before rerender
-      const list = d3.select('#properties-list');
-      list.html('');
+    /**
+     *
+     * @private
+     */
+    const _drawPropertyInEdit = () => {
+      const prop = _propertyInEdit;
+      const editWrapper = d3.select('.property-edit');
 
-      const propertiesInEditData = _entity.properties.filter(prop => prop.inEditMode);
-      const propertiesNotInEditData = _entity.properties.filter(prop => !prop.inEditMode);
+      editWrapper.html('');
 
+      if (!_propertyInEdit) {
+        editWrapper.style({ display: 'none' });
+        return false;
+      } else {
+        editWrapper.style({ display: 'inline-block' });
+      }
 
-      const propertiesNotInEdit = list.selectAll('.property').data(propertiesNotInEditData, e => e.key);
-      const propertiesInEdit = list.selectAll('.property-in-edit').data(propertiesInEditData, e => e.key);
-
-      const propertyParamsInEdit = propertiesInEdit.enter()
-        .append('li')
+      const propertyParamsInEdit = editWrapper
         .append('div').classed('edit-mode', true)
         .append('ul');
 
@@ -102,11 +110,11 @@ class PropertiesManager {
         .attr({
           placeholder: 'Key',
           type: 'text',
-          value: p => p.key
+          value: () => prop.key
         })
-        .on('change', prop => {
+        .on('change', () => {
           prop.key = d3.event.target.value;
-          _drawProperties();
+          _drawPropertyInEdit();
         });
 
       const propertyParamsInEditSelect = propertyParamsInEdit
@@ -116,8 +124,9 @@ class PropertiesManager {
           id: 'property-types'
         });
 
-      propertyParamsInEditSelect.on('input', prop => {
+      propertyParamsInEditSelect.on('input', () => {
         prop.type = d3.event.target.value;
+        _drawPropertyInEdit();
       });
 
       propertyParamsInEditSelect
@@ -125,9 +134,16 @@ class PropertiesManager {
         .data(Object.keys(PROPERTY_TYPES))
         .enter()
         .append('option')
-        .text(type => PROPERTY_TYPES[type].toLowerCase());
+        .attr({
+          value: type => type
+        })
+        .text(type => PROPERTY_TYPES[type]);
 
-      propertyParamsInEdit
+      d3.select(`option[value="${prop.type}"]`).attr({
+        selected: true
+      });
+
+      const propHasDefaultCheckbox = propertyParamsInEdit
         .append('li')
         .append('label')
         .text('Has default value')
@@ -135,28 +151,32 @@ class PropertiesManager {
         .attr({
           type: 'checkbox'
         })
-        .on('change', prop => {
+        .on('change', () => {
           prop.hasDefaultValue = d3.event.target.checked;
-          _drawProperties();
+          _drawPropertyInEdit();
         });
 
-      propertyParamsInEdit
-        .append('li')
-        .append('input')
-        .attr({
-          placeholder: 'Default Value',
-          type: 'text',
-          value: p => p.defaultValue
-        })
-        .style({
-          display: p => p.hasDefaultValue ? 'inherit' : 'none'
-        })
-        .on('change', prop => {
-          prop.ldefaultValue = d3.event.target.value;
-          _drawProperties();
-        });
+      if (prop.hasDefaultValue) {
+        propHasDefaultCheckbox.attr({ checked: true });
 
-      propertyParamsInEdit
+        propertyParamsInEdit
+          .append('li')
+          .append('input')
+          .attr({
+            placeholder: 'Default Value',
+            type: 'text',
+            value: () => prop.defaultValue
+          })
+          .style({
+            display: () => prop.hasDefaultValue ? 'inherit' : 'none'
+          })
+          .on('change', () => {
+            prop.defaultValue = d3.event.target.value;
+            _drawPropertyInEdit();
+          });
+      }
+
+      const propHasLimitCheckbox = propertyParamsInEdit
         .append('li')
         .append('label')
         .text('Has limit')
@@ -164,76 +184,72 @@ class PropertiesManager {
         .attr({
           type: 'checkbox'
         })
-        .on('change', prop => {
+        .on('change', () => {
           prop.hasLimit = d3.event.target.checked;
-          _drawProperties();
+          _drawPropertyInEdit();
         });
 
-      const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
-      // if it is of type number
-      propertyParamsInEditLimits
-        .append('input')
-        .attr({
-          placeholder: 'Min Number',
-          type: 'number',
-          value: p => p.limit[0]
-        })
-        .style({
-          display: p => p.type === PROPERTY_TYPES.NUMBER ? 'inherit' : 'none'
-        })
-        .on('change', prop => {
-          prop.limit[0] = d3.event.target.value;
-          _drawProperties();
-        });
+      if (prop.hasLimit) {
+        propHasLimitCheckbox.attr({ checked: true });
 
-      propertyParamsInEditLimits
-        .append('input')
-        .attr({
-          placeholder: 'Max Number',
-          type: 'number',
-          value: p => p.limit[1]
-        })
-        .style({
-          display: p => p.type === PROPERTY_TYPES.NUMBER ? 'inherit' : 'none'
-        })
-        .on('change', prop => {
-          prop.limit[1] = d3.event.target.value;
-          _drawProperties();
-        });
+        const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
 
-      // if it is a string
-      propertyParamsInEditLimits
-        .append('input')
-        .attr({
-          placeholder: 'Min length',
-          type: 'number',
-          min: 0,
-          value: p => p.limit[0]
-        })
-        .style({
-          display: p => p.type === PROPERTY_TYPES.STRING ? 'inherit' : 'none'
-        })
-        .on('change', prop => {
-          prop.limit[0] = d3.event.target.value;
-          _drawProperties();
-        });
+        if (prop.type === PROPERTY_TYPES.NUMBER) {
+          // if it is of type number
+          propertyParamsInEditLimits
+            .append('input')
+            .attr({
+              placeholder: 'Min',
+              type: 'number',
+              value: () => prop.limit[0]
+            })
+            .on('change', () => {
+              prop.limit[0] = d3.event.target.value;
+              _drawPropertyInEdit();
+            });
 
-      propertyParamsInEditLimits
-        .append('input')
-        .attr({
-          placeholder: 'Max length',
-          type: 'number',
-          value: p => p.limit[1]
-        })
-        .style({
-          display: p => p.type === PROPERTY_TYPES.STRING ? 'inherit' : 'none'
-        })
-        .on('change', prop => {
-          prop.limit[1] = d3.event.target.value;
-          _drawProperties();
-        });
+          propertyParamsInEditLimits
+            .append('input')
+            .attr({
+              placeholder: 'Max',
+              type: 'number',
+              value: () => prop.limit[1]
+            })
+            .on('change', () => {
+              prop.limit[1] = d3.event.target.value;
+              _drawPropertyInEdit();
+            });
+        }
 
-      propertyParamsInEdit
+        if (prop.type === PROPERTY_TYPES.STRING) {
+          propertyParamsInEditLimits
+            .append('input')
+            .attr({
+              placeholder: 'Min',
+              type: 'number',
+              min: 0,
+              value: () => prop.limit[0]
+            })
+            .on('change', () => {
+              prop.limit[0] = d3.event.target.value;
+              _drawPropertyInEdit();
+            });
+
+          propertyParamsInEditLimits
+            .append('input')
+            .attr({
+              placeholder: 'Max',
+              type: 'number',
+              value: () => prop.limit[1]
+            })
+            .on('change', () => {
+              prop.limit[1] = d3.event.target.value;
+              _drawPropertyInEdit();
+            });
+        }
+      }
+
+      const propIsRequiredCheckbox = propertyParamsInEdit
         .append('li')
         .append('label')
         .text('Is Required')
@@ -241,29 +257,37 @@ class PropertiesManager {
         .attr({
           type: 'checkbox'
         })
-        .on('change', prop => {
+        .on('change', () => {
           prop.isRequired = d3.event.target.checked;
-          _drawProperties();
+          _drawPropertyInEdit();
         });
 
-      const propertyParamsInEditButtons = propertyParamsInEdit.append('li');
-      propertyParamsInEditButtons
-        .append('button')
-        .text('Revert').on('click', prop => {
-          // TODO revert
-          _drawProperties();
-        });
+      if (prop.isRequired) {
+        propIsRequiredCheckbox.attr({ checked: true });
+      }
 
-      propertyParamsInEditButtons
+      propertyParamsInEdit.append('li').classed('actions', true)
         .append('button')
         .text('Close')
-        .on('click', prop => {
-          prop.inEditMode = false;
-          _drawProperties();
+        .on('click', () => {
+          _propertyInEdit = null;
+          _drawPropertyInEdit();
         });
 
+      _drawProperties();
+    };
 
-      const property = propertiesNotInEdit.enter()
+    /**
+     *
+     * @private
+     */
+    const _drawProperties = () => {
+      // clear before render
+      const list = d3.select('#properties-list').html('');
+
+      const properties = list.selectAll('.property').data(_entity.properties, e => e.key);
+
+      const property = properties.enter()
         .append('li')
         .append('div')
         .classed('property', true)
@@ -278,19 +302,27 @@ class PropertiesManager {
         .attr('title', 'Delete')
         .text('x');
 
+      properties.exit().remove();
+
       // Click on property li
-      property.on('click', property => {
+      properties.on('click', prop => {
         const target = d3.event.target;
 
         if (target.classList.contains('remove-property-button')) {
-          const i = _entity.properties.indexOf(property);
+          const i = _entity.properties.indexOf(prop);
           _entity.properties.splice(i, 1);
 
+          //close the edit part of the menu
+          _propertyInEdit = null;
+          _drawPropertyInEdit();
+
           _drawProperties();
+          d3.event.preventDefault();
+          return;
         }
 
-        property.inEditMode = true;
-        _drawProperties();
+        _propertyInEdit = prop;
+        _drawPropertyInEdit();
       });
     };
 

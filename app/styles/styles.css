@@ -171,7 +171,6 @@ html, body {
 /* Properties menu start */
 
 .propertyMenu {
-  width: 250px;
   background: #ffffff;
   border-radius: 3px;
   position: absolute;
@@ -213,6 +212,7 @@ html, body {
   font-weight: bold;
   text-transform: capitalize;
   line-height: 24px;
+  width: 150px;
 }
 
 .propertyMenu .header .label .type {
@@ -266,6 +266,29 @@ html, body {
   min-height: 25px;
   max-height: 600px;
   overflow: auto;
+  white-space: nowrap;
+}
+
+.propertyMenu .main .properties {
+  width: 240px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.propertyMenu .main .property-edit {
+  border-left: solid 1px #ddd;
+  width: 180px;
+  display: none;
+  vertical-align: top;
+}
+
+.propertyMenu .main .property-edit .actions {
+  display: flex;
+}
+
+.propertyMenu .main .property-edit .actions button {
+  flex: 1;
+  margin-right: 3px;
 }
 
 .propertyMenu .main ul#properties-list {
