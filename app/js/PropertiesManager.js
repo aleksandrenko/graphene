@@ -35,8 +35,8 @@ const _getMenuHTML = (entity) =>`
     </div><div class="property-edit"></div>
   </div>
   <div class="footer">
-    <button id="save-button">Save</button>
     <button id="close-button">Close</button>
+    <button id="save-button">Save</button>
   </div>
   `;
 

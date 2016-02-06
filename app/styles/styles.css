@@ -5,46 +5,55 @@ html, body {
   width: 100%;
 }
 
-.graphEditor {
+/* ============================================================================ */
+/* Global styles */
+/* ============================================================================ */
+
+.graph-editor {
   background: #ebebeb;
   color: #617170;
   font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
-.graphEditor * {
+.graph-editor * {
   box-sizing: border-box;
 }
 
-.graphEditor {
+.graph-editor {
   height: 100%;
   width: 100%;
 }
 
-.graphEditor ul {
+.graph-editor ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.graphEditor select,
-.graphEditor button,
-.graphEditor input {
+.graph-editor input,
+.graph-editor select {
+  color: #666;
+}
+
+.graph-editor select,
+.graph-editor button,
+.graph-editor input {
   cursor: pointer;
   height: 24px;
   font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
-.graphEditor label {
+.graph-editor label {
   cursor: pointer;
 }
 
-.graphEditor input[type="checkbox"],
-.graphEditor input[type="radio"] {
+.graph-editor input[type="checkbox"],
+.graph-editor input[type="radio"] {
   height: auto;
   vertical-align: bottom;
 }
 
-.graphEditor button {
+.graph-editor button {
   border-radius: 3px;
   border: solid 1px #bbb;
   background: #e6e6e6;
@@ -54,67 +63,55 @@ html, body {
   outline: none;
 }
 
-.graphEditor button:hover {
+.graph-editor button:hover {
   background: #dddddd;
 }
 
-.graphEditor button:active {
+.graph-editor button:active {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.graphEditor .node.dragging circle {
+
+/* ============================================================================ */
+/* Node styles */
+/* ============================================================================ */
+
+.graph-editor .node.dragging circle {
   cursor: move;
 }
 
-.graphEditor .node circle {
+.graph-editor .node circle {
   cursor: pointer;
   stroke-width: 5px;
 }
 
-.graphEditor .node text {
+.graph-editor .node text {
   white-space: nowrap;
   fill-opacity: 1;
 }
 
-.graphEditor path {
+/* ============================================================================ */
+/* Edge styles */
+/* ============================================================================ */
+
+.graph-editor path {
   stroke-width: 2px;
 }
 
-.graphEditor .dragLine {
+.graph-editor .dragLine {
   stroke-dasharray: 2;
   stroke: black;
 }
 
-.graphEditor .dragLine.hidden {
+.graph-editor .dragLine.hidden {
   display: none;
 }
 
-/*  */
-.properties-menu {
-  background: #fff;
-  display: block;
-  height: 1px;
-  position: relative;
-  width: 100px;
-}
+/* ============================================================================ */
+/* Context menu styles */
+/* ============================================================================ */
 
-.properties-menu .header {
-  background: #aaa;
-  height: 20px;
-}
-
-.properties-menu .main {
-  background: #ffffff;
-  display: block;
-  min-height: 40px;
-}
-
-.properties-menu .footer {
-  background: #ddd;
-  height: 20px;
-}
-
-.contextMenuLayer {
+.context-menuLayer {
   bottom: 0;
   left: 0;
   pointer-events: none;
@@ -123,7 +120,7 @@ html, body {
   top: 0;
 }
 
-.contextMenu {
+.context-menu {
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -138,28 +135,32 @@ html, body {
   padding: 0;
 }
 
-.contextMenu.opened {
+.context-menu.opened {
   pointer-events: all;
   opacity: 1;
 }
 
-.contextMenu li {
+.context-menu li {
   border-bottom: solid 1px #fafafa;
   cursor: pointer;
   padding: 10px 15px;
   transition: background-color 0.2s;
 }
 
-.contextMenu li:last-child {
+.context-menu li:last-child {
   border-bottom: none;
 }
 
-.contextMenu li:hover {
+.context-menu li:hover {
   background-color: #617170;
   color: #fff;
 }
 
-.propertiesMenuLayer {
+/* ============================================================================ */
+/* Properties menu styles */
+/* ============================================================================ */
+
+.properties-menu-layer {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -170,7 +171,7 @@ html, body {
 
 /* Properties menu start */
 
-.propertyMenu {
+.property-menu {
   background: #ffffff;
   border-radius: 3px;
   position: absolute;
@@ -181,33 +182,33 @@ html, body {
   overflow: hidden;
 }
 
-.propertyMenu.opened {
+.property-menu.opened {
   opacity: 1;
   pointer-events: all;
 }
 
-/* header */
+/* header ===================================================================== */
 
-.propertyMenu .header {
+.property-menu .header {
   background: #fafafa;
   border-bottom: solid 1px #ddd;
   padding: 10px 10px 7px;
   position: relative;
 }
 
-.propertyMenu .header input {
+.property-menu .header input {
   background: none;
   padding: 0;
   border: none;
   outline: none;
 }
 
-.propertyMenu .header .label {
+.property-menu .header .label {
   margin: 0 22px;
   display: block;
 }
 
-.propertyMenu .header .label input {
+.property-menu .header .label input {
   font-size: 16px;
   font-weight: bold;
   text-transform: capitalize;
@@ -215,14 +216,14 @@ html, body {
   width: 150px;
 }
 
-.propertyMenu .header .label .type {
+.property-menu .header .label .type {
   display: block;
-  color: #666;
+  color: #888;
   line-height: 7px;
   padding-bottom: 5px;
 }
 
-.propertyMenu .header .color {
+.property-menu .header .color {
   height: 16px;
   width: 16px;
   position: absolute;
@@ -232,13 +233,13 @@ html, body {
   overflow: hidden;
 }
 
-.propertyMenu .header .color input {
+.property-menu .header .color input {
   width: 100px;
   height: 100px;
   margin: -15px;
 }
 
-.propertyMenu .header .drag-handler {
+.property-menu .header .drag-handler {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -249,8 +250,8 @@ html, body {
   cursor: move;
 }
 
-.propertyMenu .header .drag-handler:before,
-.propertyMenu .header .drag-handler:after {
+.property-menu .header .drag-handler:before,
+.property-menu .header .drag-handler:after {
   content: '';
   margin-bottom: 2px;
   display: block;
@@ -260,44 +261,44 @@ html, body {
   height: 2px;
 }
 
-/* main */
+/* main ======================================================================= */
 
-.propertyMenu .main {
+.property-menu .main {
   min-height: 25px;
   max-height: 600px;
   overflow: auto;
   white-space: nowrap;
 }
 
-.propertyMenu .main .properties {
+.property-menu .main .properties {
   width: 240px;
   display: inline-block;
   vertical-align: top;
 }
 
-.propertyMenu .main ul#properties-list {
+.property-menu .main ul#properties-list {
 }
 
-.propertyMenu .main #properties-list li {
+.property-menu .main #properties-list li {
   position: relative;
   transition: background-color 0.2s;
   overflow: hidden;
 }
 
-.propertyMenu .main #properties-list li .property {
+.property-menu .main #properties-list li .property {
   cursor: pointer;
   padding: 6px 15px 6px 10px;
   border-bottom: solid 1px #eee;
 }
 
-.propertyMenu .main #properties-list li .property .type {
+.property-menu .main #properties-list li .property .type {
   color: #999;
   float: right;
   transition: margin 0.2s;
   text-transform: lowercase;
 }
 
-.propertyMenu .main #properties-list li .remove-property-button {
+.property-menu .main #properties-list li .remove-property-button {
   display: none;
   position: absolute;
   top: 50%;
@@ -313,19 +314,19 @@ html, body {
   color: #eee;
 }
 
-.propertyMenu .main #properties-list li:hover {
+.property-menu .main #properties-list li:hover {
   background-color: #f1f1f1;
 }
 
-.propertyMenu .main #properties-list li:hover .type {
+.property-menu .main #properties-list li:hover .type {
   margin-right: 10px;
 }
 
-.propertyMenu .main #properties-list li:hover .remove-property-button {
+.property-menu .main #properties-list li:hover .remove-property-button {
   display: block;
 }
 
-.propertyMenu .add-button {
+.property-menu .main .add-button {
   border: none;
   background-color: transparent;
   color: #ddd;
@@ -336,96 +337,94 @@ html, body {
   height: 31px;
 }
 
-.propertyMenu .add-button:hover {
+.property-menu .main .add-button:hover {
   background-color: #f1f1f1;
   color: #666;
 }
 
-/* edit mode */
+/* edit mode ================================================================== */
 
-.propertyMenu .property-edit {
+.property-menu .main .property-edit {
   padding: 10px;
 }
 
-.propertyMenu .property-edit li {
+.property-menu .main .property-edit li {
   padding: 4px 0;
 }
 
-.propertyMenu .property-edit input[type="checkbox"] {
+.property-menu .main .property-edit input[type="checkbox"] {
   float: left;
 }
 
-.propertyMenu .property-edit .default-bool {
+.property-menu .main .property-edit .default-bool {
   display: flex;
 }
 
-.propertyMenu .property-edit .default-bool label {
+.property-menu  .main.property-edit .default-bool label {
   margin-right: 3px;
   flex: 1;
 }
 
-.propertyMenu .property-edit .default-bool label input {
+.property-menu .main .property-edit .default-bool label input {
   float: left;
   margin-top: 2px;
   margin-right: 5px;
 }
 
-.propertyMenu .property-edit input[type="text"],
-.propertyMenu .property-edit select {
+.property-menu .main .property-edit input[type="text"],
+.property-menu .main .property-edit select {
   width: 100%;
 }
 
-.propertyMenu .property-edit input[type="number"] {
+.property-menu  .main.property-edit input[type="number"] {
   width: 49%;
 }
 
-.propertyMenu .main .property-edit {
+.property-menu .main .property-edit {
   border-left: solid 1px #ddd;
   width: 180px;
   display: none;
   vertical-align: top;
 }
 
-.propertyMenu .main .property-edit .actions {
+.property-menu .main .property-edit .actions {
   display: flex;
 }
 
-.propertyMenu .main .property-edit .actions button {
+.property-menu .main .property-edit .actions button {
   flex: 1;
   margin-right: 3px;
 }
 
-.propertyMenu .main #properties-list li .property-edit {
+.property-menu .main #properties-list li .property-edit {
   border-bottom: solid 1px #eee;
 }
 
-/* footer */
+/* footer ===================================================================== */
 
-.propertyMenu .footer {
+.property-menu .footer {
   background: #f1f1f1;
   border-top: solid 1px #ddd;
   padding: 10px;
   display: flex;
 }
 
-.propertyMenu #save-button:hover {
+.property-menu. footer #save-button:hover {
   color: #fff;
   background: #92b344;
   border-color: #7f9c3b;
 }
 
-.propertyMenu #close-button:hover {
+.property-menu .footer #close-button:hover {
   color: #fff;
   background: #b35136;
   border-color: #98452e;
 }
 
-.propertyMenu .footer button {
+.property-menu .footer button {
   flex: 1;
 }
 
-.propertyMenu .footer button:first-child {
+.property-menu .footer button:first-child {
   margin-right: 3px;
 }
-
-/* Properties menu end */
