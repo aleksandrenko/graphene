@@ -23,7 +23,7 @@ class GraphEditor {
    * @constructor
    */
   constructor(containerSelector) {
-    if(containerSelector === undefined) {
+    if (containerSelector === undefined) {
       throw new Error('Editor must be created with provided "Container Id"!');
     }
 

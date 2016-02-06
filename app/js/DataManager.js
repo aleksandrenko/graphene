@@ -49,7 +49,11 @@ class DataManager {
   }
 
   static isNodeSelected() {
-    return !!_nodes.filter(node => node.isSelected).length;
+    return !!_nodes.filter(n => n.isSelected).length;
+  }
+
+  static isEdgeSelected() {
+    return !!_edges.filter(e => e.isSelected).length;
   }
 
   static getSelectedNode() {
@@ -68,17 +72,17 @@ class DataManager {
     return DataManager;
   }
 
-  // selectEdge: function(id) {
-  //  var edge = _getEdge(id);
-  //
-  //  if(edge && !edge.isSelected) {
-  //    DataManager.deselectAllEntities();
-  //    edge.isSelected = true;
-  //    _dispatchUpdate('update', 'edge', edge);
-  //  }
-  //
-  //  return DataManager;
-  // },
+  static selectEdge(id) {
+    var edge = _getEdge(id);
+
+    if (edge && !edge.isSelected) {
+      DataManager.deselectAllEntities();
+      edge.isSelected = true;
+      _dispatchUpdate('update', 'edge', edge);
+    }
+
+    return DataManager;
+  }
 
   static deselectAllEntities(forceRender) {
     _nodes.forEach(_node => {

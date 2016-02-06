@@ -260,7 +260,7 @@ html, body {
   overflow: hidden;
 }
 
-.propertyMenu .main  #properties-list li .property {
+.propertyMenu .main #properties-list li .property {
   padding: 6px 15px 6px 10px;
   border-bottom: solid 1px #eee;
 }
@@ -320,7 +320,6 @@ html, body {
 
 .propertyMenu .edit-mode {
   padding: 10px;
-  display: none;
 }
 
 .propertyMenu .edit-mode li {

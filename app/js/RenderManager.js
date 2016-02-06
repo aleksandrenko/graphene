@@ -11,11 +11,15 @@ let instance = null;
 
 
 function getOpacityForEntity(entity) {
-  if(entity.isNode && entity.isSelected) {
+  if (entity.isNode && entity.isSelected) {
     return 1;
   }
 
-  if(!entity.isNode && DataManager.getNode(entity.startNodeID).isSelected) {
+  if (!entity.isNode && DataManager.getNode(entity.startNodeID).isSelected) {
+    return 1;
+  }
+
+  if (!DataManager.isNodeSelected() && !DataManager.isEdgeSelected()) {
     return 1;
   }
 
@@ -29,14 +33,14 @@ function createOrUpdateArrowForEdge(edge) {
   const arrowId = `end-arrow-${edge.id}`;
 
   // create an arrow
-  if(document.querySelector(`#${arrowId}`) === null) {
+  if (document.querySelector(`#${arrowId}`) === null) {
     d3.select('defs')
       .append('marker').attr({
         id: arrowId
       })
       .append('svg:path').attr({
-        d: `M0,-5L10,0L0,5`
-      });
+      d: `M0,-5L10,0L0,5`
+    });
   }
 
   // update an arrow
@@ -82,7 +86,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({id: node => node.id});
+  nodes.attr({ id: node => node.id });
 
   nodes.select('circle')
     .attr({
@@ -138,14 +142,14 @@ function _renderEdges(d3Element, edgesData) {
   edges.attr({ id: data => data.id });
 
   edges.select('text').attr({
-    x: edge => {
-      return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
-    },
-    y: edge => {
-      return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
-    },
-    fill: edge => DataManager.getNode(edge.startNodeID).color,
-    opacity: edge => getOpacityForEntity(edge)
+      x: edge => {
+        return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
+      },
+      y: edge => {
+        return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
+      },
+      fill: edge => DataManager.getNode(edge.startNodeID).color,
+      opacity: edge => getOpacityForEntity(edge)
     })
     .text(e => e.label);
 
@@ -210,8 +214,8 @@ class RenderManager {
         orient: 'auto'
       })
       .append('path').attr({
-        d: 'M0,-5L10,0L0,5'
-      });
+      d: 'M0,-5L10,0L0,5'
+    });
 
     // drag line, add this svg to the parent svg so line can be drawen outside the global g
     this.d3Element.select('.tempPaths').append('path')

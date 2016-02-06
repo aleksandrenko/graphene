@@ -8,6 +8,45 @@ import createDomElementInContainer from './utils/dom';
 let instance;
 let _entity;
 let _saveHandlerFunction = () => null;
+let _newProperty = null;
+
+const _getFormHTML = (property) => `
+    <div class='edit-mode'>
+      <ul>
+        <li>
+          <input placeholder='key' type='text' value="${property.key}" />
+        </li>
+        <li>
+          <select id='property-types'></select>
+        </li>
+        <li>
+         <label><input type='checkbox' ${property.hasDefault && 'checked'}>Has default value</label>
+        </li>
+        <li>
+          <!--default value-->
+          <input placeholder='default value' type='text'>
+        </li>
+        <li>
+          <!--limit for strings and numbers-->
+          <label><input type='checkbox' ${property.hasLimit && 'checked'}>Has Limit</label>
+        </li>
+        <li>
+          <!--limit for numbers-->
+          <input placeholder='Min Number' type='number' value="${property.limit[0]}">
+          <input placeholder='Max Number' type='number' value="${property.limit[1]}">
+        </li>
+        <li>
+          <!--limit for strings-->
+          <input placeholder='Min Length' type='number' min='1' value="${property.limit[0]}">
+          <input placeholder='Max Length' type='number' value="${property.limit[1]}">
+        </li>
+        <li>
+          <!--is required value-->
+          <label><input type='checkbox' ${property.isRequired && 'checked'}>Is Required</label>
+        </li>
+      </ul>
+    </div>
+  `;
 
 /**
  *
@@ -15,8 +54,7 @@ let _saveHandlerFunction = () => null;
  * @returns {string}
  * @private
  */
-const _getMenuHTML = function _getMenuHTMLC(entity) {
-  return `
+const _getMenuHTML = (entity) =>`
   <div class='header'>
     <span class='color'>
       <input id='entity-color' value='${entity.color}' type='color' />
@@ -30,59 +68,12 @@ const _getMenuHTML = function _getMenuHTMLC(entity) {
   <div class='main'>
     <ul id='properties-list'></ul>
     <button class='add-button'>+ Add property</button>
-    <div class='edit-mode'>
-      <ul>
-        <li>
-          <input placeholder='key' type='text'>
-        </li>
-        <li>
-          <select name='' id=''>
-            <option></option>
-            <option>String</option>
-            <option>Number</option>
-            <option>Boolean</option>
-            <option>Password</option>
-            <option>Email</option>
-            <option>URL</option>
-            <option>Date</option>
-            <option>File</option>
-            <option>LatLng</option>
-          </select>
-        </li>
-        <li>
-         <label><input type='checkbox'>Has default value</label>
-        </li>
-        <li>
-          <!--default value-->
-          <input placeholder='default value' type='text'>
-        </li>
-        <li>
-          <!--limit for strings and numbers-->
-          <label><input type='checkbox'>Has Limit</label>
-        </li>
-        <li>
-          <!--limit for numbers-->
-          <input placeholder='Min Number' type='number'>
-          <input placeholder='Max Number' type='number'>
-        </li>
-        <li>
-          <!--limit for strings-->
-          <input placeholder='Min Length' type='number' min='1'>
-          <input placeholder='Max Length' type='number'>
-        </li>
-        <li>
-          <!--is required value-->
-          <label><input type='checkbox'>Is Required</label>
-        </li>
-      </ul>
-    </div>
   </div>
   <div class='footer'>
     <button id='save-button'>Save</button>
     <button id='close-button'>Close</button>
   </div>
   `;
-};
 
 
 class PropertiesManager {
@@ -121,17 +112,17 @@ class PropertiesManager {
     _entity = Object.assign({}, entity);
     _entity.properties = Array.from(entity.properties);
 
-    var nameProperty = new Property({
+    const nameProperty = new Property({
       key: 'Name',
       type: PROPERTY_TYPES.STRING
     });
 
-    var passwordProperty = new Property({
+    const passwordProperty = new Property({
       key: 'Password',
       type: PROPERTY_TYPES.PASSWORD
     });
 
-    var avatarProperty = new Property({
+    const avatarProperty = new Property({
       key: 'Avatar',
       type: PROPERTY_TYPES.URL
     });
@@ -146,9 +137,9 @@ class PropertiesManager {
 
     this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
 
-    let _drawProperties = () => {
-      var list = d3.select('#properties-list');
-      var properties = list.selectAll('.property').data(_entity.properties, e => e.key);
+    const _drawProperties = () => {
+      const list = d3.select('#properties-list');
+      const properties = list.selectAll('.property').data(_entity.properties, e => e.key);
 
       properties.exit()
         .transition()
@@ -161,7 +152,7 @@ class PropertiesManager {
         })
         .remove();
 
-      var property = properties.enter()
+      const property = properties.enter()
         .append('li')
         .append('div')
         .classed('property', true)
@@ -176,13 +167,18 @@ class PropertiesManager {
         .attr('title', 'Delete')
         .text('x');
 
-      property.on('click', e => {
-        if (d3.event.target.classList.contains('remove-property-button')) {
-          const i = _entity.properties.indexOf(e);
+      property.on('click', property => {
+        const target = d3.event.target;
+
+        if (target.classList.contains('remove-property-button')) {
+          const i = _entity.properties.indexOf(property);
           _entity.properties.splice(i, 1);
 
           _drawProperties();
         }
+
+        console.log(target, property);
+        target.innerHTML = _getFormHTML(property);
       });
     };
 
@@ -213,7 +209,7 @@ class PropertiesManager {
     // Drag functionality end
 
     d3.select('#entity-label').on('input', () => {
-      // TODO: label validation is needed, no spaces and charectes ...
+      // TODO: label validation is needed, no spaces and characters ...
       _entity.label = d3.event.target.value;
     });
 
@@ -229,6 +225,31 @@ class PropertiesManager {
       _saveHandlerFunction(_entity);
       this.close();
     });
+
+    // Add new Property
+
+    d3.select('.add-button').on('click', () => {
+      let newProperty = new Property();
+      console.log(_getFormHTML(newProperty));
+    });
+
+    // Fill property types
+
+    d3.select('#property-types').append('option');
+
+    d3.select('#property-types')
+      .selectAll('option')
+      .data(Object.keys(PROPERTY_TYPES), type => type)
+      .enter()
+      .append('option')
+      .attr({
+        value: (type) => PROPERTY_TYPES[type]
+      })
+      .text(type => PROPERTY_TYPES[type]);
+
+    d3.select('#property-types').on('change', () => {
+      console.log(d3.event.target.selectedOptions[0].value.toLowerCase());
+    });
   }
 
   /**
@@ -240,7 +261,7 @@ class PropertiesManager {
   onSave(fn) {
     _saveHandlerFunction = fn;
   }
-;
+  ;
 }
 
 export default PropertiesManager;
