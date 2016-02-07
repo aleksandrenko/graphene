@@ -127,10 +127,10 @@ function _renderEdges(d3Element, edgesData) {
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
 
-  const initialEdgesAttr = {stroke: '#ebebeb'};
+  const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);
-  edgesGroups.append('text');
+  edgesGroups.append('text').each(edge => InteractionManager.bindEvents(edge));
 
   edges.exit()
     .transition()
@@ -139,7 +139,7 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({id: data => data.id});
+  edges.attr({ id: data => data.id });
 
   edges.select('text').attr({
     x: edge => {
@@ -153,12 +153,18 @@ function _renderEdges(d3Element, edgesData) {
   })
     .text(e => e.label);
 
+  // Helper function to draw paths
+  const lineFunction = d3.svg.line()
+    .x(d => d[0])
+    .y(d => d[1])
+    .interpolate('cardinal');
+
   edges.select('path')
     .attr({
       d: (edge) => {
         const startNode = DataManager.getNode(edge.startNodeID);
         const endNode = DataManager.getNode(edge.endNodeID);
-        return `M${startNode.x},${startNode.y}L${endNode.x},${endNode.y}`;
+        return lineFunction([[startNode.x, startNode.y], [100, 100], [endNode.x, endNode.y]]);
       }
     })
     .transition()
@@ -166,7 +172,6 @@ function _renderEdges(d3Element, edgesData) {
     .attr({
       stroke: (edge) => {
         createOrUpdateArrowForEdge(edge);
-
         const startNode = DataManager.getNode(edge.startNodeID);
         return startNode.color;
       },

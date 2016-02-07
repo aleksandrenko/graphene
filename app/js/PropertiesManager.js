@@ -457,8 +457,6 @@ class PropertiesManager {
   onSave(fn) {
     _saveHandlerFunction = fn;
   }
-
-;
 }
 
 export default PropertiesManager;

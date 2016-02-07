@@ -15,7 +15,7 @@ class Edge {
   constructor(options) {
     this.startNodeID = options.startNodeID;
     this.endNodeID = options.endNodeID;
-    this.middlePoint = options.middlePoint;
+    this.middlePointOffset = options.middlePointOffset;
     this.properties = [];
     this.label = options.label;
     this.id = getID();

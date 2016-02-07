@@ -93,8 +93,13 @@ html, body {
 /* Edge styles */
 /* ============================================================================ */
 
+.graph-editor .edge text.dragging {
+  cursor: move;
+}
+
 .graph-editor path {
   stroke-width: 2px;
+  fill: none;
 }
 
 .graph-editor .dragLine {
@@ -408,7 +413,7 @@ html, body {
   display: flex;
 }
 
-.property-menu. footer #save-button:hover {
+.property-menu .footer #save-button:hover {
   color: #fff;
   background: #92b344;
   border-color: #7f9c3b;

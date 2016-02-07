@@ -33,6 +33,7 @@ function _getTarget(node) {
   return target;
 }
 
+// TODO: node and edge drag can be the same?!
 const _nodeDragBehavior = d3.behavior.drag()
   .origin(node => node)
   .on('dragstart', node => {
@@ -46,6 +47,22 @@ const _nodeDragBehavior = d3.behavior.drag()
   })
   .on('dragend', node => {
     d3.select(`#${node.id}`).classed('dragging', false);
+  });
+
+const _edgeDragBehavior = d3.behavior.drag()
+  .origin(edge => edge)
+  .on('dragstart', edge => {
+    d3.event.sourceEvent.stopPropagation();
+    d3.select(`#${edge.id}`).select('text').classed('dragging', true);
+  })
+  .on('drag', edge => {
+    console.log(edge);
+    edge.x = d3.event.x;
+    edge.y = d3.event.y;
+    InteractionManager.dispatch(EVENTS.UPDATE_EDGE, edge);
+  })
+  .on('dragend', edge => {
+    d3.select(`#${edge.id}`).select('text').classed('dragging', false);
   });
 
 const _zoomBehaviour = d3.behavior.zoom()
@@ -135,6 +152,20 @@ class InteractionManager {
             d3.event.preventDefault();
           })
           .call(_nodeDragBehavior);
+      }
+
+      if (entity.isEdge) {
+        const selection = d3.select(`#${entity.id}`).select('text');
+
+        selection.on('dblclick', edge => {
+            instance.propertiesManager.open([d3.event.x, d3.event.y], edge);
+            d3.event.preventDefault();
+          })
+          .on('mousedown', edge => {
+            DataManager.selectEdge(edge.id);
+            d3.event.preventDefault();
+          })
+          .call(_edgeDragBehavior);
       }
     }, 0);
   }
