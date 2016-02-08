@@ -71,6 +71,11 @@ class GraphEditor {
       DataManager.updateNode(node);
     });
 
+    interactionManager.on(EVENTS.UPDATE_EDGE, edge => {
+      DataManager.updateEdge(edge);
+    });
+
+
     interactionManager.on(EVENTS.DELETE_NODE, node => {
       DataManager.deleteNode(node);
     });

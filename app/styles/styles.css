@@ -93,6 +93,10 @@ html, body {
 /* Edge styles */
 /* ============================================================================ */
 
+.graph-editor .edge text {
+  cursor: pointer;
+}
+
 .graph-editor .edge text.dragging {
   cursor: move;
 }

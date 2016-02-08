@@ -226,7 +226,7 @@ class DataManager {
    * @returns {Object}
    */
   static updateEdge(edge) {
-    // TODO implement
+    _edges = _edges.map(_edge => _edge.id === edge.id ? edge : _edge);
     _dispatchUpdate('update', 'edge', edge);
     return DataManager;
   }

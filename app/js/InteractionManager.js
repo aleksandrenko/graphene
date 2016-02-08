@@ -56,9 +56,10 @@ const _edgeDragBehavior = d3.behavior.drag()
     d3.select(`#${edge.id}`).select('text').classed('dragging', true);
   })
   .on('drag', edge => {
-    console.log(edge);
-    edge.x = d3.event.x;
-    edge.y = d3.event.y;
+    edge.middlePointOffset = [
+      Edge.getEdgeMiddlePoint(edge)[0] - d3.event.sourceEvent.x,
+      Edge.getEdgeMiddlePoint(edge)[1] - d3.event.sourceEvent.y
+    ];
     InteractionManager.dispatch(EVENTS.UPDATE_EDGE, edge);
   })
   .on('dragend', edge => {

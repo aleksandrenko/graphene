@@ -1,5 +1,6 @@
 'use strict';
 
+import Edge from './do/Edge';
 import DataManager from './DataManager';
 import InteractionManager from './InteractionManager';
 
@@ -8,7 +9,6 @@ import InteractionManager from './InteractionManager';
  */
 const TRANSITION_DURATION = 100;
 let instance = null;
-
 
 function getOpacityForEntity(entity) {
   if (entity.isNode && entity.isSelected) {
@@ -86,7 +86,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({id: node => node.id});
+  nodes.attr({ id: node => node.id });
 
   nodes.select('circle')
     .attr({
@@ -143,10 +143,11 @@ function _renderEdges(d3Element, edgesData) {
 
   edges.select('text').attr({
     x: edge => {
-      return (DataManager.getNode(edge.startNodeID).x + DataManager.getNode(edge.endNodeID).x) / 2;
+      const TEXT_X_OFFSET = 10;
+      return Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + TEXT_X_OFFSET;
     },
     y: edge => {
-      return (DataManager.getNode(edge.startNodeID).y + DataManager.getNode(edge.endNodeID).y) / 2;
+      return Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1];
     },
     fill: edge => DataManager.getNode(edge.startNodeID).color,
     opacity: edge => getOpacityForEntity(edge)
@@ -164,7 +165,13 @@ function _renderEdges(d3Element, edgesData) {
       d: (edge) => {
         const startNode = DataManager.getNode(edge.startNodeID);
         const endNode = DataManager.getNode(edge.endNodeID);
-        return lineFunction([[startNode.x, startNode.y], [100, 100], [endNode.x, endNode.y]]);
+        const midPoint = Edge.getEdgeMiddlePoint(edge);
+
+        return lineFunction([
+          [startNode.x, startNode.y],
+          [midPoint[0] - edge.middlePointOffset[0], midPoint[1] - edge.middlePointOffset[1]],
+          [endNode.x, endNode.y]
+        ]);
       }
     })
     .transition()
