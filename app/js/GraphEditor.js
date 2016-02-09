@@ -34,12 +34,21 @@ class GraphEditor {
     const svgElement = createSVGInContainer(`#${parentDomContainer.id}`, CONST.SVGROOT_ID, CONST.SVGROOT_CLASS);
     const entitiesGroupElement = createGroupInSVG(`#${svgElement.id}`, CONST.ENTITIES_GROUP_ID, CONST.ENTITIES_GROUP_CLASS);
 
-    // var propertiesGroupElement = createGroupInSVG('#' + svgElement.id, CONST.PROPERTIES_GROUP_ID, CONST.PROPERTIES_GROUP_CLASS);
-    // this.propertyManager = new PropertyManager('#' + propertiesGroupElement.id);
-
     this.svg = d3.select(svgElement);
     this.entitiesGroup = d3.select(entitiesGroupElement);
     this.renderManager = new RenderManager(this.entitiesGroup);
+
+    // Create help icon and helper menu
+    const help = createDomElementInContainer(`#${parentDomContainer.id}`, 'div', CONST.HELP_ID, CONST.HELP_CLASS);
+    // make it focusable so the help panel is toggable when the dom element is in focus
+    help.setAttribute('tabindex', 0);
+    help.setAttribute('title', 'User short help.');
+
+    const helpPanel = createDomElementInContainer(`#${help.id}`, 'div', CONST.HELP_PANEL_ID, CONST.HELP_PANEL_CLASS);
+
+    helpPanel.innerHTML = `
+      <span>A text describing how to use optimal this small app.</span>
+    `;
 
     const interactionManager = new InteractionManager(this.svg, parentDomContainer);
 
