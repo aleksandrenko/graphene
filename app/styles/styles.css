@@ -101,9 +101,12 @@ html, body {
   cursor: move;
 }
 
+.graph-editor .edge path {
+  fill: none;
+}
+
 .graph-editor path {
   stroke-width: 2px;
-  fill: none;
 }
 
 .graph-editor .dragLine {
