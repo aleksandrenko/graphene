@@ -33,7 +33,7 @@ const _getMenuHTML = (entity) =>`
     </div><div class="property-edit"></div>
   </div>
   <div class="footer">
-    <button id="close-button">Close</button>
+    <button id="close-button">Cancel</button>
     <button id="save-button">Save</button>
   </div>
   `;
@@ -244,18 +244,18 @@ class PropertiesManager {
           .on('change', () => {
             prop.hasLimit = d3.event.target.checked;
 
-            if(!prop.hasLimit) {
+            if (!prop.hasLimit) {
               prop.limit = [0, 0];
             }
             _drawPropertyInEdit();
           });
 
-        if(prop.hasLimit) {
+        if (prop.hasLimit) {
           propHasLimitCheckbox.attr({ checked: true });
 
-          const propertyParamsInEditLimits = propertyParamsInEdit.append('li');
+          const propertyParamsInEditLimits = propertyParamsInEdit.append('li').classed('hbox', true);
 
-          if(prop.type === PROPERTY_TYPES.NUMBER) {
+          if (prop.type === PROPERTY_TYPES.NUMBER) {
             // if it is of type number
             propertyParamsInEditLimits
               .append('input')

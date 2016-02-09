@@ -276,18 +276,20 @@ html, body {
 
 .property-menu .main {
   min-height: 25px;
-  max-height: 600px;
-  overflow: auto;
-  white-space: nowrap;
+  display: flex;
 }
 
 .property-menu .main .properties {
   width: 240px;
-  display: inline-block;
-  vertical-align: top;
+  display: flex;
+  flex-direction: column;
 }
 
 .property-menu .main ul#properties-list {
+  flex: 1;
+  max-height: 40vh;
+  overflow: auto;
+  border-bottom: solid 1px #ddd;
 }
 
 .property-menu .main #properties-list li {
@@ -357,6 +359,10 @@ html, body {
 
 .property-menu .main .property-edit {
   padding: 10px;
+  border-left: solid 1px #ddd;
+  width: 180px;
+  display: none;
+  vertical-align: top;
 }
 
 .property-menu .main .property-edit li {
@@ -365,6 +371,14 @@ html, body {
 
 .property-menu .main .property-edit input[type="checkbox"] {
   float: left;
+}
+
+.property-menu .main .property-edit .hbox {
+  display: flex;
+}
+
+.property-menu .main .property-edit .hbox > * {
+  flex: 1;
 }
 
 .property-menu .main .property-edit .default-bool {
@@ -385,17 +399,6 @@ html, body {
 .property-menu .main .property-edit input[type="text"],
 .property-menu .main .property-edit select {
   width: 100%;
-}
-
-.property-menu .main.property-edit input[type="number"] {
-  width: 49%;
-}
-
-.property-menu .main .property-edit {
-  border-left: solid 1px #ddd;
-  width: 180px;
-  display: none;
-  vertical-align: top;
 }
 
 .property-menu .main .property-edit .actions {
@@ -424,6 +427,10 @@ html, body {
   color: #fff;
   background: #92b344;
   border-color: #7f9c3b;
+}
+
+.property-menu .footer #save-button {
+  flex: 2;
 }
 
 .property-menu .footer #close-button:hover {
