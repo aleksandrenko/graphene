@@ -130,8 +130,12 @@ class DataManager {
    * @param data
    */
   static addData(data) {
-    _nodes = _nodes.concat(data.nodes);
-    _edges = _edges.concat(data.edges);
+    if (!data) {
+      return DataManager;
+    }
+
+    _nodes = _nodes.concat(data.nodes) || _nodes;
+    _edges = _edges.concat(data.edges) || _edges;
 
     _dispatchUpdate('add', 'nodes', data);
     return DataManager;
