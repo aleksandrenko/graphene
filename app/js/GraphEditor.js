@@ -64,6 +64,10 @@ class GraphEditor {
       _onUpdateCallbackHandler(updateEvent);
     });
 
+    interactionManager.on(EVENTS.DRAW_LINE_START, data => {
+      RenderManager.prepareForRenderLine(data);
+    });
+
     interactionManager.on(EVENTS.DRAW_LINE, data => {
       RenderManager.renderLine(data);
     });
@@ -87,7 +91,6 @@ class GraphEditor {
     interactionManager.on(EVENTS.UPDATE_EDGE, edge => {
       DataManager.updateEdge(edge);
     });
-
 
     interactionManager.on(EVENTS.DELETE_NODE, node => {
       DataManager.deleteNode(node);

@@ -38,7 +38,7 @@ function createOrUpdateArrowForEdge(edge) {
       .append('marker').attr({
         id: arrowId
       })
-      .append('svg:path').attr({
+      .append('path').attr({
         d: `M0,-5L10,0L0,5`
       });
   }
@@ -142,13 +142,8 @@ function _renderEdges(d3Element, edgesData) {
   edges.attr({ id: data => data.id });
 
   edges.select('text').attr({
-    x: edge => {
-      const TEXT_X_OFFSET = 10;
-      return Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + TEXT_X_OFFSET;
-    },
-    y: edge => {
-      return Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1];
-    },
+    x: edge => Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + 10,
+    y: edge => Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1],
     fill: edge => DataManager.getNode(edge.startNodeID).color,
     opacity: edge => getOpacityForEntity(edge)
   })
@@ -238,12 +233,32 @@ class RenderManager {
       .style('marker-end', 'url(#mark-end-arrow)');
   }
 
-  static renderLine(data) {
-    const start = data.start;
-    const end = data.end;
+  /**
+   *
+   * @param data
+   */
+  static prepareForRenderLine(data) {
+    const source = data.source;
+
+    d3.select('#mark-end-arrow').select('path').attr({
+      fill: source.color
+    });
 
     d3.select('.dragLine')
       .classed('hidden', false)
+      .attr({
+        stroke: source.color,
+        d: ''
+      });
+
+    d3.select('body').classed('no-cursor', true);
+  }
+
+  static renderLine(data) {
+    const start = [data.source.x, data.source.y];
+    const end = data.end;
+
+    d3.select('.dragLine')
       .attr({
         d: () => `M${start[0]},${start[1]}L${end[0]},${end[1]}`
       });
@@ -251,6 +266,7 @@ class RenderManager {
 
   static removeTempLine() {
     d3.select('.dragLine').classed('hidden', true);
+    d3.select('body').classed('no-cursor', false);
   }
 
   render(data) {

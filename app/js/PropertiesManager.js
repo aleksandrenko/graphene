@@ -180,7 +180,7 @@ class PropertiesManager {
                 name: 'defaultBool'
               });
 
-            if(prop.defaultValue === true) {
+            if (prop.defaultValue === true) {
               defaultPropertyTruth.attr({ checked: true });
             }
 

@@ -131,6 +131,10 @@ class InteractionManager {
           this.createEdgeMouseMove.startNode = action.target;
           this.createEdgeMouseDown.startNode = action.target;
 
+          InteractionManager.dispatch(EVENTS.DRAW_LINE_START, {
+            source: action.target
+          });
+
           this._container.on('mousemove', this.createEdgeMouseMove);
           this._container.on('mouseup', this.createEdgeMouseDown);
           break;
@@ -211,13 +215,13 @@ class InteractionManager {
     const existingOptions = DataManager.getOptions();
     const existingPosition = existingOptions.position;
 
-    switch(d3.event.keyCode) {
+    switch (d3.event.keyCode) {
       case delKey:
-        //const selectedNode = DataManager.getSelectedNode();
+        // const selectedNode = DataManager.getSelectedNode();
 
-        //if(selectedNode) {
-        //  InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
-        //}
+        // if(selectedNode) {
+        //   InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
+        // }
 
         break;
       case escKey:
@@ -266,7 +270,7 @@ class InteractionManager {
     const startNode = instance.createEdgeMouseMove.startNode;
 
     InteractionManager.dispatch(EVENTS.DRAW_LINE, {
-      start: [startNode.x, startNode.y],
+      source: startNode,
       end: [d3.event.x, d3.event.y]
     });
   }
