@@ -44,7 +44,7 @@ class PropertiesManager {
    * @param {string} containerSelector
    */
   constructor(containerSelector) {
-    if(!instance) {
+    if (!instance) {
       instance = this;
     }
 
@@ -92,10 +92,10 @@ class PropertiesManager {
       editWrapper.html('');
 
       if (!prop) {
-        editWrapper.style({ display: 'none' });
+        editWrapper.style({display: 'none'});
         return false;
       } else {
-        editWrapper.style({ display: 'inline-block' });
+        editWrapper.style({display: 'inline-block'});
       }
 
       const propertyParamsInEdit = editWrapper.append('ul');
@@ -164,7 +164,7 @@ class PropertiesManager {
           });
 
         if (prop.hasDefaultValue) {
-          propHasDefaultCheckbox.attr({ checked: true });
+          propHasDefaultCheckbox.attr({checked: true});
 
           if (prop.type === PROPERTY_TYPES.BOOLEAN) {
             const propertyParamsInEditDefaultBoolean = propertyParamsInEdit.append('li');
@@ -181,7 +181,7 @@ class PropertiesManager {
               });
 
             if (prop.defaultValue === true) {
-              defaultPropertyTruth.attr({ checked: true });
+              defaultPropertyTruth.attr({checked: true});
             }
 
             defaultPropertyTruth.on('click', () => {
@@ -198,8 +198,8 @@ class PropertiesManager {
                 name: 'defaultBool'
               });
 
-            if(prop.defaultValue === false) {
-              defaultPropertyFalse.attr({ checked: true });
+            if (prop.defaultValue === false) {
+              defaultPropertyFalse.attr({checked: true});
             }
 
             defaultPropertyFalse.on('click', () => {
@@ -251,7 +251,7 @@ class PropertiesManager {
           });
 
         if (prop.hasLimit) {
-          propHasLimitCheckbox.attr({ checked: true });
+          propHasLimitCheckbox.attr({checked: true});
 
           const propertyParamsInEditLimits = propertyParamsInEdit.append('li').classed('hbox', true);
 
@@ -282,7 +282,7 @@ class PropertiesManager {
               });
           }
 
-          if(prop.type === PROPERTY_TYPES.STRING ||
+          if (prop.type === PROPERTY_TYPES.STRING ||
             prop.type === PROPERTY_TYPES.PASSWORD ||
             prop.type === PROPERTY_TYPES.EMAIL ||
             prop.type === PROPERTY_TYPES.URL ||
@@ -329,8 +329,8 @@ class PropertiesManager {
           _drawPropertyInEdit();
         });
 
-      if(prop.isRequired) {
-        propIsRequiredCheckbox.attr({ checked: true });
+      if (prop.isRequired) {
+        propIsRequiredCheckbox.attr({checked: true});
       }
 
       propertyParamsInEdit.append('li').classed('actions', true)

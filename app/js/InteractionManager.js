@@ -166,9 +166,9 @@ class InteractionManager {
         const selection = d3.select(`#${entity.id}`).select('text');
 
         selection.on('dblclick', edge => {
-            instance.propertiesManager.open([d3.event.x, d3.event.y], edge);
-            d3.event.preventDefault();
-          })
+          instance.propertiesManager.open([d3.event.x, d3.event.y], edge);
+          d3.event.preventDefault();
+        })
           .on('mousedown', edge => {
             DataManager.selectEdge(edge.id);
             d3.event.preventDefault();
@@ -297,6 +297,7 @@ class InteractionManager {
     instance._container.on('mouseup', null);
     d3.event.preventDefault();
   }
+
   /**
    *
    * @param {string} eventType

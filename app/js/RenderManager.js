@@ -11,7 +11,6 @@ const TRANSITION_DURATION = 100;
 let instance = null;
 
 function getOpacityForEntity(entity) {
-
   if (entity.isNode) {
     const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
 
@@ -101,7 +100,7 @@ function _renderNodes(d3Element, nodesData) {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({ id: node => node.id });
+  nodes.attr({id: node => node.id});
 
   nodes.select('circle')
     .attr({
@@ -142,7 +141,7 @@ function _renderEdges(d3Element, edgesData) {
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
 
-  const initialEdgesAttr = { stroke: '#ebebeb' };
+  const initialEdgesAttr = {stroke: '#ebebeb'};
 
   edgesGroups.append('path').attr(initialEdgesAttr);
   edgesGroups.append('text').classed('path-text', true).each(edge => InteractionManager.bindEvents(edge));
@@ -154,7 +153,7 @@ function _renderEdges(d3Element, edgesData) {
     .remove();
 
   // set edges id
-  edges.attr({ id: data => data.id });
+  edges.attr({id: data => data.id});
 
   edges.select('text').attr({
     x: edge => Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + 10,
