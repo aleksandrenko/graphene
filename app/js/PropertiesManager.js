@@ -145,7 +145,7 @@ class PropertiesManager {
         selected: true
       });
 
-      if(prop.type) {
+      if (prop.type) {
         const propHasDefaultCheckbox = propertyParamsInEdit
           .append('li')
           .append('label')
@@ -163,10 +163,10 @@ class PropertiesManager {
             _drawPropertyInEdit();
           });
 
-        if(prop.hasDefaultValue) {
+        if (prop.hasDefaultValue) {
           propHasDefaultCheckbox.attr({ checked: true });
 
-          if(prop.type === PROPERTY_TYPES.BOOLEAN) {
+          if (prop.type === PROPERTY_TYPES.BOOLEAN) {
             const propertyParamsInEditDefaultBoolean = propertyParamsInEdit.append('li');
 
             propertyParamsInEditDefaultBoolean.classed('default-bool', true);
@@ -226,7 +226,7 @@ class PropertiesManager {
         }
       }
 
-      if(prop.type === PROPERTY_TYPES.STRING ||
+      if (prop.type === PROPERTY_TYPES.STRING ||
         prop.type === PROPERTY_TYPES.PASSWORD ||
         prop.type === PROPERTY_TYPES.EMAIL ||
         prop.type === PROPERTY_TYPES.URL ||

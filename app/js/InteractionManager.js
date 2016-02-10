@@ -112,7 +112,7 @@ class InteractionManager {
     this.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     this.contextMenu.onAction((action) => {
-      switch(action.type) {
+      switch (action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
             x: action.position.x,
@@ -123,6 +123,9 @@ class InteractionManager {
           break;
         case ACTION.DELETE_NODE:
           InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
+          break;
+        case ACTION.EDIT:
+          instance.propertiesManager.open([action.position.x, action.position.y], action.target);
           break;
         case ACTION.CREATE_EDGE:
           this.createEdgeMouseMove.startNode = action.target;
@@ -177,7 +180,7 @@ class InteractionManager {
     instance.propertiesManager.close();
 
     // click on the root svg element
-    if (DataManager.isNodeSelected() && !_getTarget(d3.event.target).isNode) {
+    if (DataManager.isNodeSelected() && DataManager.isEdgeSelected()) {
       DataManager.deselectAllEntities(true);
     }
 
@@ -287,7 +290,6 @@ class InteractionManager {
     instance._container.on('mouseup', null);
     d3.event.preventDefault();
   }
-
   /**
    *
    * @param {string} eventType

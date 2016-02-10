@@ -80,8 +80,9 @@ class ContextMenu {
     let html = '';
 
     if (entity.isNode) {
-      html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from ${entity.label}</li>`;
-      html += `<li action="${ACTION.DELETE_NODE}">Delete Node ${entity.label}</li>`;
+      html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>`;
+      html += `<li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>`;
+      html += `<li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>`;
     } else if (entity.id === CONST.SVGROOT_ID) {
       html += `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
