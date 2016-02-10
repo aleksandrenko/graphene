@@ -236,16 +236,6 @@ class DataManager {
   }
 
   /**
-   * @param edge
-   * @returns {Object}
-   */
-  static deleteEdge(edge) {
-    // TODO implement
-    _dispatchUpdate('delete', 'edge', edge);
-    return DataManager;
-  }
-
-  /**
    * @param id
    * @returns {Array}
    */
@@ -257,7 +247,7 @@ class DataManager {
    * @returns {Array}
    */
   static getAllEdges() {
-    return Array.of(_edges);
+    return Array.from(_edges);
   }
 
   /**

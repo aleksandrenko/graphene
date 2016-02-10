@@ -11,14 +11,29 @@ const TRANSITION_DURATION = 100;
 let instance = null;
 
 function getOpacityForEntity(entity) {
-  if (entity.isNode && entity.isSelected) {
+
+  if (entity.isNode) {
+    const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
+
+    for (let i = 0; i < allSelectedEdges.length; i++) {
+      const nodeIsConnectedToSelectedEdge = [allSelectedEdges[i].endNodeID, allSelectedEdges[i].startNodeID].indexOf(entity.id) !== -1;
+
+      if (nodeIsConnectedToSelectedEdge) {
+        return 1;
+      }
+    }
+  }
+
+  if (entity.isSelected) {
     return 1;
   }
 
-  if (!entity.isNode && DataManager.getNode(entity.startNodeID).isSelected) {
+  // if the edge is starting from a selected node
+  if (entity.isEdge && DataManager.getNode(entity.startNodeID).isSelected) {
     return 1;
   }
 
+  // if there is no selected node nor edge
   if (!DataManager.isNodeSelected() && !DataManager.isEdgeSelected()) {
     return 1;
   }
@@ -51,7 +66,7 @@ function createOrUpdateArrowForEdge(edge) {
     markerWidth: 6,
     markerHeight: 6,
     orient: 'auto',
-    opacity: getOpacityForEntity(DataManager.getNode(edge.startNodeID))
+    opacity: getOpacityForEntity(edge)
   });
 }
 
@@ -176,7 +191,7 @@ function _renderEdges(d3Element, edgesData) {
         const startNode = DataManager.getNode(edge.startNodeID);
         return startNode.color;
       },
-      'stroke-opacity': edge => getOpacityForEntity(DataManager.getNode(edge.startNodeID)),
+      'stroke-opacity': edge => getOpacityForEntity(edge),
       style: (edge) => `marker-end: url(#end-arrow-${edge.id})`
     });
 }
