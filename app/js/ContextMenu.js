@@ -26,6 +26,9 @@ class ContextMenu {
     this.openedPosition = {};
     this.targetedEntity = {};
 
+    /**
+     * @param e
+     */
     this.contextMenuElement.onclick = (e) => {
       const action = e.target.attributes.action.value;
 
@@ -77,14 +80,16 @@ class ContextMenu {
    * @returns {string} HTML
    */
   static getContextMenuHTML(entity) {
-    let html = '';
+    let html;
 
     if (entity.isNode) {
-      html += `<li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>`;
-      html += `<li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>`;
-      html += `<li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>`;
+      html = `
+        <li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>
+        <li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>
+        <li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>
+      `;
     } else if (entity.id === CONST.SVGROOT_ID) {
-      html += `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
+      html = `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
 
     return html;

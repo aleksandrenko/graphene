@@ -5,7 +5,6 @@ import getID from '../utils/id.js';
 
 class Edge {
   /**
-   *
    * @param {object} options
    * @param {number} options.startNodeID
    * @param {number} options.endNodeID
@@ -27,7 +26,6 @@ class Edge {
   static getEdgeMiddlePoint(edge) {
     const startNode = DataManager.getNode(edge.startNodeID);
     const endNode = DataManager.getNode(edge.endNodeID);
-    const mOffset = edge.middlePointOffset;
 
     return [
       (startNode.x + endNode.x) / 2,

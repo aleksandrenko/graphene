@@ -4,7 +4,6 @@ import createId from '../utils/id';
 
 class Property {
   /**
-   *
    * @constructor
    */
   constructor(options) {

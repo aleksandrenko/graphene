@@ -5,7 +5,6 @@ import color from '../utils/color';
 
 class Node {
   /**
-   *
    * @param {object} options
    * @param {number} options.x
    * @param {number} options.y

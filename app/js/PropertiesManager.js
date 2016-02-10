@@ -22,7 +22,7 @@ const _getMenuHTML = (entity) =>`
     </span>
     <span class="label">
       <input id="entity-label" value="${entity.label}" />
-      <small class="type">${entity.isNode && "node" || entity.isEdge && "edge"}</small>
+      <small class="type">${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
       <span class="drag-handler"></span>
     </span>
   </div>
@@ -82,7 +82,6 @@ class PropertiesManager {
     this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
 
     /**
-     *
      * @private
      */
     const _drawPropertyInEdit = () => {
@@ -92,13 +91,17 @@ class PropertiesManager {
       editWrapper.html('');
 
       if (!prop) {
-        editWrapper.style({display: 'none'});
+        editWrapper.style({ display: 'none' });
         return false;
       } else {
-        editWrapper.style({display: 'inline-block'});
+        editWrapper.style({ display: 'inline-block' });
       }
 
       const propertyParamsInEdit = editWrapper.append('ul');
+
+      /** --------------------------
+       * property key input
+       --------------------------- */
 
       propertyParamsInEdit
         .append('li')
@@ -112,6 +115,10 @@ class PropertiesManager {
           prop.key = d3.event.target.value;
           _drawPropertyInEdit();
         });
+
+      /** -------------------------------
+       * property type drop-down/select
+       ------------------------------- */
 
       const propertyParamsInEditSelect = propertyParamsInEdit
         .append('li')
@@ -145,6 +152,10 @@ class PropertiesManager {
         selected: true
       });
 
+      /** ------------------------------
+       * Property has default checkbox
+       ------------------------------- */
+
       if (prop.type) {
         const propHasDefaultCheckbox = propertyParamsInEdit
           .append('li')
@@ -163,8 +174,12 @@ class PropertiesManager {
             _drawPropertyInEdit();
           });
 
+        /** -----------------------------------------
+         * property default value input/radio button
+         ------------------------------------------ */
+
         if (prop.hasDefaultValue) {
-          propHasDefaultCheckbox.attr({checked: true});
+          propHasDefaultCheckbox.attr({ checked: true });
 
           if (prop.type === PROPERTY_TYPES.BOOLEAN) {
             const propertyParamsInEditDefaultBoolean = propertyParamsInEdit.append('li');
@@ -181,7 +196,7 @@ class PropertiesManager {
               });
 
             if (prop.defaultValue === true) {
-              defaultPropertyTruth.attr({checked: true});
+              defaultPropertyTruth.attr({ checked: true });
             }
 
             defaultPropertyTruth.on('click', () => {
@@ -199,7 +214,7 @@ class PropertiesManager {
               });
 
             if (prop.defaultValue === false) {
-              defaultPropertyFalse.attr({checked: true});
+              defaultPropertyFalse.attr({ checked: true });
             }
 
             defaultPropertyFalse.on('click', () => {
@@ -226,6 +241,10 @@ class PropertiesManager {
         }
       }
 
+      /** --------------------------
+       * property limit checkbox
+       --------------------------- */
+
       if (prop.type === PROPERTY_TYPES.STRING ||
         prop.type === PROPERTY_TYPES.PASSWORD ||
         prop.type === PROPERTY_TYPES.EMAIL ||
@@ -251,9 +270,13 @@ class PropertiesManager {
           });
 
         if (prop.hasLimit) {
-          propHasLimitCheckbox.attr({checked: true});
+          propHasLimitCheckbox.attr({ checked: true });
 
           const propertyParamsInEditLimits = propertyParamsInEdit.append('li').classed('hbox', true);
+
+          /** --------------------------------
+           * property limit inputs for number
+           --------------------------------- */
 
           if (prop.type === PROPERTY_TYPES.NUMBER) {
             // if it is of type number
@@ -281,6 +304,10 @@ class PropertiesManager {
                 _drawPropertyInEdit();
               });
           }
+
+          /** ---------------------------------
+           * property limit inputs for strings
+           ---------------------------------- */
 
           if (prop.type === PROPERTY_TYPES.STRING ||
             prop.type === PROPERTY_TYPES.PASSWORD ||
@@ -316,6 +343,10 @@ class PropertiesManager {
         }
       }
 
+      /** -----------------------------
+       * property is required checkbox
+       ------------------------------ */
+
       const propIsRequiredCheckbox = propertyParamsInEdit
         .append('li')
         .append('label')
@@ -330,8 +361,12 @@ class PropertiesManager {
         });
 
       if (prop.isRequired) {
-        propIsRequiredCheckbox.attr({checked: true});
+        propIsRequiredCheckbox.attr({ checked: true });
       }
+
+      /** --------------------------
+       * close button
+       --------------------------- */
 
       propertyParamsInEdit.append('li').classed('actions', true)
         .append('button')
@@ -345,7 +380,6 @@ class PropertiesManager {
     };
 
     /**
-     *
      * @private
      */
     const _drawProperties = () => {
@@ -371,7 +405,10 @@ class PropertiesManager {
 
       properties.exit().remove();
 
-      // Click on property li
+      /** -----------------------------------------------------
+       * click on property in list, select a property for edit
+       ------------------------------------------------------ */
+
       properties.on('click', prop => {
         const target = d3.event.target;
 
@@ -394,7 +431,10 @@ class PropertiesManager {
     };
     _drawProperties();
 
-    // Drag functionality start
+    /** --------------------------
+     * drag the property panel
+     --------------------------- */
+
     let isDraggedByTheHandler = false;
     let startDragOffset = [0, 0];
 
@@ -416,7 +456,9 @@ class PropertiesManager {
 
     d3.select(this.propertiesMenu).call(drag);
 
-    // Drag functionality end
+    /** --------------------------
+     * entity label and color, close and save buttons
+     --------------------------- */
 
     d3.select('#entity-label').on('input', () => {
       // TODO: label validation is needed, no spaces and characters ...
@@ -435,7 +477,7 @@ class PropertiesManager {
       _saveHandlerFunction(_entity);
     });
 
-    // Add new Property
+    // Add new Property with increasing name-number
     let propertyInc = 0;
 
     d3.select('.add-button').on('click', () => {
@@ -448,11 +490,15 @@ class PropertiesManager {
   }
 
   /**
+   *
    */
   close() {
     this.propertiesMenu.classList.remove('opened');
   }
 
+  /**
+   * @param fn
+   */
   onSave(fn) {
     _saveHandlerFunction = fn;
   }

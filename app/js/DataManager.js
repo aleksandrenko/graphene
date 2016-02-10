@@ -9,6 +9,7 @@ let _options = {
   },
   zoom: 1
 };
+
 let _onUpdateCallbackHandler = () => '';
 
 /**
@@ -56,10 +57,6 @@ class DataManager {
     return !!_edges.filter(e => e.isSelected).length;
   }
 
-  static getSelectedNode() {
-    return Object.assign({}, _nodes.filter(node => node.isSelected)[0]);
-  }
-
   static selectNode(id) {
     const node = _getNode(id);
 
@@ -72,8 +69,11 @@ class DataManager {
     return DataManager;
   }
 
+  /**
+   * @param id
+   */
   static selectEdge(id) {
-    var edge = _getEdge(id);
+    const edge = _getEdge(id);
 
     if (edge && !edge.isSelected) {
       DataManager.deselectAllEntities();
@@ -84,6 +84,9 @@ class DataManager {
     return DataManager;
   }
 
+  /**
+   * @param forceRender
+   */
   static deselectAllEntities(forceRender) {
     _nodes.forEach(_node => {
       if (_node.isSelected) {
@@ -116,17 +119,6 @@ class DataManager {
   }
 
   /**
-   * @param nodes
-   * @returns {Object}
-   */
-  static addNodes(nodes) {
-    _nodes = _nodes.concat(nodes);
-
-    _dispatchUpdate('add', 'node', nodes);
-    return DataManager;
-  }
-
-  /**
    * @param data
    */
   static addData(data) {
@@ -147,8 +139,6 @@ class DataManager {
    */
   static updateNode(node) {
     _nodes = _nodes.map(_node => _node.id === node.id ? node : _node);
-
-    console.log('update node');
 
     _dispatchUpdate('update', 'node', node);
     return DataManager;
@@ -192,17 +182,7 @@ class DataManager {
    * @returns {Array}
    */
   static getAllNodes() {
-    return Array.of(_nodes);
-  }
-
-  /**
-   * @param nodes
-   * @returns {Object}
-   */
-  static deleteAllNodes(nodes) {
-    _nodes = [];
-    _dispatchUpdate('delete', 'node', nodes);
-    return DataManager;
+    return Array.from(_nodes);
   }
 
   /**
@@ -212,16 +192,6 @@ class DataManager {
   static addEdge(edge) {
     _edges.push(edge);
     _dispatchUpdate('add', 'edge', edge);
-    return DataManager;
-  }
-
-  /**
-   * @param edges
-   * @returns {Object}
-   */
-  static addEdges(edges) {
-    _edges = _edges.concat(edges);
-    _dispatchUpdate('add', 'edge', edges);
     return DataManager;
   }
 
@@ -251,23 +221,11 @@ class DataManager {
   }
 
   /**
-   * @param edge
-   * @returns {Object}
-   */
-  static deleteAllEdges(edge) {
-    _edges = [];
-    _dispatchUpdate('delete', 'edge', edge);
-    return DataManager;
-  }
-
-  /**
    * @param {function} fn
    */
   static onChange(fn) {
     _onUpdateCallbackHandler = fn;
   }
-
-;
 }
 
 export default DataManager;
