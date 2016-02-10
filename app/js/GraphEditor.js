@@ -47,7 +47,11 @@ class GraphEditor {
     const helpPanel = createDomElementInContainer(`#${help.id}`, 'div', CONST.HELP_PANEL_ID, CONST.HELP_PANEL_CLASS);
 
     helpPanel.innerHTML = `
-      <span>A text describing how to use optimal this small app.</span>
+      1. Use the right mouse button to show the a context menu from which you can create, delete and connect nodes.
+      <br/><br/>
+      2. Double click on a node or edge to open the properties panel.
+      <br/><br/>
+      3. You can move the middle points of the edges to make the connection between the nodes more visible.
     `;
 
     const interactionManager = new InteractionManager(this.svg, parentDomContainer);

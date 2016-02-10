@@ -494,7 +494,7 @@ html, body {
 }
 
 .help-panel {
-  width: 180px;
+  width: 250px;
   display: none;
   position: absolute;
   bottom: 30px;
