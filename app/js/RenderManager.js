@@ -130,7 +130,7 @@ function _renderEdges(d3Element, edgesData) {
   const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);
-  edgesGroups.append('text').each(edge => InteractionManager.bindEvents(edge));
+  edgesGroups.append('text').classed('path-text', true).each(edge => InteractionManager.bindEvents(edge));
 
   edges.exit()
     .transition()
@@ -146,8 +146,7 @@ function _renderEdges(d3Element, edgesData) {
     y: edge => Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1],
     fill: edge => DataManager.getNode(edge.startNodeID).color,
     opacity: edge => getOpacityForEntity(edge)
-  })
-    .text(e => e.label);
+  }).text(e => e.label);
 
   // Helper function to draw paths
   const lineFunction = d3.svg.line()

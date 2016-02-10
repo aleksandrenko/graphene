@@ -113,6 +113,10 @@ html, body {
   stroke-width: 2px;
 }
 
+.graph-editor path .path-text {
+
+}
+
 .graph-editor .dragLine {
   stroke-dasharray: 2;
 }

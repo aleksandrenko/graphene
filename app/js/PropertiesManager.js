@@ -33,7 +33,7 @@ const _getMenuHTML = (entity) =>`
     </div><div class="property-edit"></div>
   </div>
   <div class="footer">
-    <button id="close-button">Cancel</button>
+    <button id="close-button">Close</button>
     <button id="save-button">Save</button>
   </div>
   `;
@@ -433,7 +433,6 @@ class PropertiesManager {
 
     d3.select('#save-button').on('click', () => {
       _saveHandlerFunction(_entity);
-      this.close();
     });
 
     // Add new Property

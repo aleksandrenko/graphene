@@ -183,8 +183,11 @@ class InteractionManager {
     instance.contextMenu.close();
     instance.propertiesManager.close();
 
+    const isEdgeText = d3.event.target.classList.contains('path-text');
+    const isNode = d3.event.target.nodeName === 'circle';
+
     // click on the root svg element
-    if (DataManager.isNodeSelected() && DataManager.isEdgeSelected()) {
+    if (!isEdgeText && !isNode) {
       DataManager.deselectAllEntities(true);
     }
 
