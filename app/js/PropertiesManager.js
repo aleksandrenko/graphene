@@ -15,7 +15,7 @@ let _saveHandlerFunction = () => null;
  * @returns {string}
  * @private
  */
-const _getMenuHTML = (entity) =>`
+const _getMenuHTML = (entity) => `
   <div class="header">
     <span class="color">
       <input id="entity-color" value="${entity.color}" type="color" />
@@ -74,6 +74,12 @@ class PropertiesManager {
     // Copy the entity so it's not updated when the user make changes
     _entity = Object.assign({}, entity);
     _entity.properties = Array.from(entity.properties);
+
+    if (entity.isEdge) {
+      this.propertiesMenu.classList.add('edge-properties');
+    } else {
+      this.propertiesMenu.classList.remove('edge-properties');
+    }
 
     this.propertiesMenu.classList.add('opened');
     this.propertiesMenu.style.left = `${position[0]}px`;

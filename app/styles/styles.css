@@ -129,7 +129,7 @@ html, body {
 /* Context menu styles */
 /* ============================================================================ */
 
-.context-menuLayer {
+.context-menu-layer {
   bottom: 0;
   left: 0;
   pointer-events: none;
@@ -174,6 +174,10 @@ html, body {
   color: #fff;
 }
 
+.context-menu li b {
+  pointer-events: none;
+}
+
 /* ============================================================================ */
 /* Properties menu styles */
 /* ============================================================================ */
@@ -198,6 +202,14 @@ html, body {
   pointer-events: none;
   transition: opacity 0.2s;
   overflow: hidden;
+}
+
+.property-menu.edge-properties .header .color {
+  display: none;
+}
+
+.property-menu.edge-properties .header .label {
+  margin-left: 0;
 }
 
 .property-menu.opened {
@@ -229,7 +241,6 @@ html, body {
 .property-menu .header .label input {
   font-size: 16px;
   font-weight: bold;
-  text-transform: capitalize;
   line-height: 24px;
   width: 150px;
 }
