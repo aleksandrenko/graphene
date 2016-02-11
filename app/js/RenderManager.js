@@ -80,7 +80,9 @@ function _renderNodes(d3Element, nodesData) {
 
   // create svg element on item enter
   const nodesGroups = nodes.enter()
-    .append('g').classed('node', true)
+    .append('g')
+    .classed('node', true)
+    .attr('tabindex', 0)
     .each(node => InteractionManager.bindEvents(node));
 
   const initialNodeAttr = {
@@ -144,7 +146,10 @@ function _renderEdges(d3Element, edgesData) {
   const initialEdgesAttr = { stroke: '#ebebeb' };
 
   edgesGroups.append('path').attr(initialEdgesAttr);
-  edgesGroups.append('text').classed('path-text', true).each(edge => InteractionManager.bindEvents(edge));
+  edgesGroups.append('text')
+    .classed('path-text', true)
+    .attr('tabindex', 0)
+    .each(edge => InteractionManager.bindEvents(edge));
 
   edges.exit()
     .transition()

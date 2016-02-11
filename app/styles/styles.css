@@ -93,6 +93,10 @@ html, body {
   fill-opacity: 1;
 }
 
+.graph-editor .node:focus {
+  outline-offset: 5px;
+}
+
 /* ============================================================================ */
 /* Edge styles */
 /* ============================================================================ */
@@ -107,6 +111,10 @@ html, body {
 
 .graph-editor .edge path {
   fill: none;
+}
+
+.graph-editor .edge text:focus {
+  outline-offset: 5px;
 }
 
 .graph-editor path {
