@@ -50,6 +50,9 @@ class ContextMenu {
     return instance;
   }
 
+  /**
+   * @param {function} fn
+   */
   onAction(fn) {
     onActionHandlerFunction = fn;
   }
@@ -80,24 +83,27 @@ class ContextMenu {
    * @returns {string} HTML
    */
   static getContextMenuHTML(entity) {
-    let html;
 
     if (entity.isNode) {
-      html = `
+      return `
         <li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>
         <li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>
-        <li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>
+        <li action="${ACTION.EDIT}">Edit Node <b>"${entity.label}"</b></li>
       `;
-    } else if (entity.isEdge) {
-      html = `
-        <li action="${ACTION.DELETE_EDGE}">Delete Edge <b>"${entity.label}"</b></li>
-        <li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>
-      `;
-    } else if (entity.id === CONST.SVGROOT_ID) {
-      html = `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
 
-    return html;
+    if (entity.isEdge) {
+      return `
+        <li action="${ACTION.DELETE_EDGE}">Delete Edge <b>"${entity.label}"</b></li>
+        <li action="${ACTION.EDIT}">Edit Edge <b>"${entity.label}"</b></li>
+      `;
+    }
+
+    if (entity.id === CONST.SVGROOT_ID) {
+      return `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
+    }
+
+    return '';
   }
 }
 

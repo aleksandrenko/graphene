@@ -7,7 +7,6 @@ import createDomElementInContainer from './utils/dom';
 import createSVGInContainer from './utils/svg';
 import createGroupInSVG from './utils/svgGroup';
 
-import PropertyManager from './PropertiesManager';
 import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
 

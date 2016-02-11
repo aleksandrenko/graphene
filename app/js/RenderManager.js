@@ -10,6 +10,10 @@ import InteractionManager from './InteractionManager';
 const TRANSITION_DURATION = 100;
 let instance = null;
 
+/**
+ * @param entity
+ * @returns {number}
+ */
 function getOpacityForEntity(entity) {
   if (entity.isNode) {
     const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
@@ -42,6 +46,9 @@ function getOpacityForEntity(entity) {
 
 // each edge need to have it's own arrow for pointing,
 // so you can set different colors and opacity when selecting nodes and the edge itself
+/**
+ * @param edge
+ */
 function createOrUpdateArrowForEdge(edge) {
   const edgeColor = DataManager.getNode(edge.startNodeID).color;
   const arrowId = `end-arrow-${edge.id}`;
@@ -70,7 +77,6 @@ function createOrUpdateArrowForEdge(edge) {
 }
 
 /**
- *
  * @param {object} d3Element
  * @param {array} nodesData
  * @private
@@ -133,7 +139,6 @@ function _renderNodes(d3Element, nodesData) {
 }
 
 /**
- *
  * @param {object} d3Element
  * @param {array} edgesData
  * @private
@@ -200,6 +205,11 @@ function _renderEdges(d3Element, edgesData) {
     });
 }
 
+/**
+ * @param d3Element
+ * @param options
+ * @private
+ */
 function _setZoomAndPosition(d3Element, options) {
   d3Element.attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
 }
@@ -272,6 +282,9 @@ class RenderManager {
     d3.select('body').classed('no-cursor', true);
   }
 
+  /**
+   * @param data
+   */
   static renderLine(data) {
     const start = [data.source.x, data.source.y];
     const end = data.end;
@@ -282,11 +295,17 @@ class RenderManager {
       });
   }
 
+  /**
+   *
+   */
   static removeTempLine() {
     d3.select('.dragLine').classed('hidden', true);
     d3.select('body').classed('no-cursor', false);
   }
 
+  /**
+   * @param data
+   */
   render(data) {
     console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
 

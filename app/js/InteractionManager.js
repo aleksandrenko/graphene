@@ -153,6 +153,9 @@ class InteractionManager {
     return instance;
   }
 
+  /**
+   * @param entity
+   */
   static bindEvents(entity) {
     // need to wait for the entity to enter the dom
     window.setTimeout(() => {
@@ -185,6 +188,9 @@ class InteractionManager {
     }, 0);
   }
 
+  /**
+   *
+   */
   svgClickHandler() {
     // close the context menu
     instance.contextMenu.close();
@@ -201,12 +207,16 @@ class InteractionManager {
     d3.event.preventDefault();
   }
 
+  /**
+   *
+   */
   contextClickHandler() {
     instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
     d3.event.preventDefault();
   }
 
   keydownHandler() {
+    // TODO enchance the keyboard handeling
     return;
 
     const escKey = 27;
@@ -270,12 +280,19 @@ class InteractionManager {
     }
   }
 
+  /**
+   * @param eventType
+   * @param eventData
+   */
   static dispatch(eventType, eventData) {
     if (instance._eventCallbackHandlers[eventType]) {
       instance._eventCallbackHandlers[eventType](eventData);
     }
   }
 
+  /**
+   *
+   */
   createEdgeMouseMove() {
     const startNode = instance.createEdgeMouseMove.startNode;
 
@@ -285,6 +302,9 @@ class InteractionManager {
     });
   }
 
+  /**
+   *
+   */
   createEdgeMouseDown() {
     const endNode = _getTarget(d3.event.target);
     const startNode = instance.createEdgeMouseMove.startNode;

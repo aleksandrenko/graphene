@@ -31,7 +31,16 @@ function _dispatchUpdate(eventType, target, data) {
   });
 }
 
+/**
+ * @param id
+ * @private
+ */
 const _getEdge = (id) => _edges.filter(edge => edge.id === id)[0];
+
+/**
+ * @param id
+ * @private
+ */
 const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
 
 /**
@@ -42,6 +51,9 @@ class DataManager {
     return _options;
   }
 
+  /**
+   * @param options
+   */
   static setOptions(options) {
     _options = options;
     _dispatchUpdate('update', 'options', options);
@@ -49,14 +61,24 @@ class DataManager {
     return DataManager;
   }
 
+  /**
+   * @returns {boolean}
+   */
   static isNodeSelected() {
     return !!_nodes.filter(n => n.isSelected).length;
   }
 
+  /**
+   * @returns {boolean}
+   */
   static isEdgeSelected() {
     return !!_edges.filter(e => e.isSelected).length;
   }
 
+  /**
+   *
+   * @param id
+   */
   static selectNode(id) {
     const node = _getNode(id);
 

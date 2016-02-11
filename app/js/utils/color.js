@@ -5,6 +5,9 @@
  * @returns {string}
  */
 
+/**
+ * @returns {string}
+ */
 function color() {
   const allColors = [
     '0048BA', 'B0BF1A', '7CB9E8', '00308F', 'AF002A', '84DE02', 'E32636', 'C46210', 'E52B50', 'AB274F', '3B7A57',
