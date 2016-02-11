@@ -22,8 +22,12 @@ function _getTarget(node) {
   const type = node.nodeName;
   let target = {};
 
-  if (type === 'circle' && node.parentNode.getAttribute('class')) {
+  if (type === 'circle') {
     target = DataManager.getNode(node.parentNode.id);
+  }
+
+  if (type === 'text') {
+    target = DataManager.getEdge(node.parentNode.id);
   }
 
   if (node.id === CONST.SVGROOT_ID) {
@@ -137,6 +141,9 @@ class InteractionManager {
 
           this._container.on('mousemove', this.createEdgeMouseMove);
           this._container.on('mouseup', this.createEdgeMouseDown);
+          break;
+        case ACTION.DELETE_EDGE:
+          InteractionManager.dispatch(EVENTS.DELETE_EDGE, action.target);
           break;
         default:
           console.log('Unhandeled context menu action', action);

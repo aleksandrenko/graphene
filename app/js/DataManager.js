@@ -165,7 +165,6 @@ class DataManager {
       return acc;
     }, []);
 
-
     _dispatchUpdate('delete', 'node', node);
     return DataManager;
   }
@@ -202,6 +201,23 @@ class DataManager {
   static updateEdge(edge) {
     _edges = _edges.map(_edge => _edge.id === edge.id ? edge : _edge);
     _dispatchUpdate('update', 'edge', edge);
+    return DataManager;
+  }
+
+  /**
+   * @param edge
+   * @return {Object}
+   */
+  static deleteEdge(edge) {
+    _edges = _edges.reduce((acc, _edge) => {
+      if (edge.id !== _edge.id) {
+        acc.push(_edge);
+      }
+
+      return acc;
+    }, []);
+
+    _dispatchUpdate('delete', 'edge', edge);
     return DataManager;
   }
 

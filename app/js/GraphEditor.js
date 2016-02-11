@@ -96,6 +96,10 @@ class GraphEditor {
       DataManager.deleteNode(node);
     });
 
+    interactionManager.on(EVENTS.DELETE_EDGE, edge => {
+      DataManager.deleteEdge(edge);
+    });
+
     interactionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
       DataManager.setOptions(options);
     });

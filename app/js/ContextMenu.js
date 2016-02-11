@@ -88,6 +88,11 @@ class ContextMenu {
         <li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>
         <li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>
       `;
+    } else if (entity.isEdge) {
+      html = `
+        <li action="${ACTION.DELETE_EDGE}">Delete Edge <b>"${entity.label}"</b></li>
+        <li action="${ACTION.EDIT}">Edit <b>"${entity.label}"</b></li>
+      `;
     } else if (entity.id === CONST.SVGROOT_ID) {
       html = `<li action="${ACTION.CREATE_NODE}">New Node</li>`;
     }
