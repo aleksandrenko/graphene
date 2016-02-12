@@ -69,8 +69,8 @@ const _edgeDragBehavior = d3.behavior.drag()
   })
   .on('drag', edge => {
     edge.middlePointOffset = [
-      Edge.getEdgeMiddlePoint(edge)[0] - d3.event.sourceEvent.x,
-      Edge.getEdgeMiddlePoint(edge)[1] - d3.event.sourceEvent.y
+      edge.middlePoint[0] - d3.event.sourceEvent.x,
+      edge.middlePoint[1] - d3.event.sourceEvent.y
     ];
     _dispatch(EVENTS.UPDATE_EDGE, edge);
   })
@@ -299,8 +299,8 @@ const IM = {
 
     if (endNode.isNode) {
       const newEdge = new Edge({
-        endNodeID: endNode.id,
-        startNodeID: startNode.id
+        endNodeId: endNode.id,
+        startNodeId: startNode.id
       });
 
       _dispatch(EVENTS.CREATE_EDGE, newEdge);

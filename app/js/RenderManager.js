@@ -18,7 +18,7 @@ const _getOpacityForEntity = (entity) => {
     const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
 
     for (let i = 0; i < allSelectedEdges.length; i++) {
-      const nodeIsConnectedToSelectedEdge = [allSelectedEdges[i].endNodeID, allSelectedEdges[i].startNodeID].indexOf(entity.id) !== -1;
+      const nodeIsConnectedToSelectedEdge = [allSelectedEdges[i].endNodeId, allSelectedEdges[i].startNodeId].indexOf(entity.id) !== -1;
 
       if (nodeIsConnectedToSelectedEdge) {
         return 1;
@@ -31,7 +31,7 @@ const _getOpacityForEntity = (entity) => {
   }
 
   // if the edge is starting from a selected node
-  if (entity.isEdge && DataManager.getNode(entity.startNodeID).isSelected) {
+  if (entity.isEdge && entity.startNode.isSelected) {
     return 1;
   }
 
@@ -49,7 +49,7 @@ const _getOpacityForEntity = (entity) => {
  * @param edge
  */
 const _createOrUpdateArrowForEdge = (edge) => {
-  const edgeColor = DataManager.getNode(edge.startNodeID).color;
+  const edgeColor = edge.color;
   const arrowId = `end-arrow-${edge.id}`;
 
   // create an arrow
@@ -165,9 +165,9 @@ const _renderEdges = (d3Element, edgesData) => {
   edges.attr({ id: data => data.id });
 
   edges.select('text').attr({
-    x: edge => Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + 10,
-    y: edge => Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1],
-    fill: edge => DataManager.getNode(edge.startNodeID).color,
+    x: edge => edge.middlePoint[0] - edge.middlePointOffset[0] + 10,
+    y: edge => edge.middlePoint[1] - edge.middlePointOffset[1],
+    fill: edge => edge.color,
     opacity: edge => _getOpacityForEntity(edge)
   }).text(e => e.label);
 
@@ -179,25 +179,18 @@ const _renderEdges = (d3Element, edgesData) => {
 
   edges.select('path')
     .attr({
-      d: (edge) => {
-        const startNode = DataManager.getNode(edge.startNodeID);
-        const endNode = DataManager.getNode(edge.endNodeID);
-        const midPoint = Edge.getEdgeMiddlePoint(edge);
-
-        return lineFunction([
-          [startNode.x, startNode.y],
-          [midPoint[0] - edge.middlePointOffset[0], midPoint[1] - edge.middlePointOffset[1]],
-          [endNode.x, endNode.y]
-        ]);
-      }
+      d: (edge) => lineFunction([
+          [edge.startNode.x, edge.startNode.y],
+          [edge.middlePoint[0] - edge.middlePointOffset[0], edge.middlePoint[1] - edge.middlePointOffset[1]],
+          [edge.endNode.x, edge.endNode.y]
+        ])
     })
     .transition()
     .duration(TRANSITION_DURATION)
     .attr({
       stroke: (edge) => {
         _createOrUpdateArrowForEdge(edge);
-        const startNode = DataManager.getNode(edge.startNodeID);
-        return startNode.color;
+        return edge.color;
       },
       'stroke-opacity': edge => _getOpacityForEntity(edge),
       style: (edge) => `marker-end: url(#end-arrow-${edge.id})`
