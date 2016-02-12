@@ -213,9 +213,9 @@ function _setZoomAndPosition(d3Element, options) {
   d3Element.attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
 }
 
-/**
+/** ====================================================================================================================
  * Render Manager Class
- */
+ ==================================================================================================================== */
 const RenderManager = {
   init: (d3Element) => {
     RenderManager.d3Element = d3Element;

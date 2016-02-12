@@ -43,43 +43,37 @@ const _getEdge = (id) => _edges.filter(edge => edge.id === id)[0];
  */
 const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
 
-/**
+/** ====================================================================================================================
  * @type {Object}
- */
-class DataManager {
-  static getOptions() {
-    return _options;
-  }
+ ==================================================================================================================== */
+const DataManager = {
+  getOptions: () => _options,
 
   /**
    * @param options
    */
-  static setOptions(options) {
+  setOptions: (options) => {
     _options = options;
     _dispatchUpdate('update', 'options', options);
 
     return DataManager;
-  }
+  },
 
   /**
    * @returns {boolean}
    */
-  static isNodeSelected() {
-    return !!_nodes.filter(n => n.isSelected).length;
-  }
+  isNodeSelected: () => !!_nodes.filter(n => n.isSelected).length,
 
   /**
    * @returns {boolean}
    */
-  static isEdgeSelected() {
-    return !!_edges.filter(e => e.isSelected).length;
-  }
+  isEdgeSelected: () => !!_edges.filter(e => e.isSelected).length,
 
   /**
    *
    * @param id
    */
-  static selectNode(id) {
+  selectNode: (id) => {
     const node = _getNode(id);
 
     if (node && !node.isSelected) {
@@ -89,12 +83,12 @@ class DataManager {
     }
 
     return DataManager;
-  }
+  },
 
   /**
    * @param id
    */
-  static selectEdge(id) {
+  selectEdge: (id) => {
     const edge = _getEdge(id);
 
     if (edge && !edge.isSelected) {
@@ -104,12 +98,12 @@ class DataManager {
     }
 
     return DataManager;
-  }
+  },
 
   /**
    * @param forceRender
    */
-  static deselectAllEntities(forceRender) {
+  deselectAllEntities: (forceRender) => {
     _nodes.forEach(_node => {
       if (_node.isSelected) {
         _node.isSelected = false;
@@ -127,23 +121,23 @@ class DataManager {
     }
 
     return DataManager;
-  }
+  },
 
   /**
    * @param node
    * @returns {Object}
    */
-  static addNode(node) {
+  addNode: (node) => {
     _nodes.push(node);
 
     _dispatchUpdate('add', 'node', node);
     return DataManager;
-  }
+  },
 
   /**
    * @param data
    */
-  static addData(data) {
+  addData: (data) => {
     if (!data) {
       return DataManager;
     }
@@ -153,24 +147,24 @@ class DataManager {
 
     _dispatchUpdate('add', 'nodes', data);
     return DataManager;
-  }
+  },
 
   /**
    * @param node
    * @returns {Object}
    */
-  static updateNode(node) {
+  updateNode: (node) => {
     _nodes = _nodes.map(_node => _node.id === node.id ? node : _node);
 
     _dispatchUpdate('update', 'node', node);
     return DataManager;
-  }
+  },
 
   /**
    * @param node
    * @returns {Object}
    */
-  static deleteNode(node) {
+  deleteNode: (node) => {
     _nodes = _nodes.reduce((acc, n) => {
       if (node.id !== n.id) {
         acc.push(n);
@@ -189,48 +183,39 @@ class DataManager {
 
     _dispatchUpdate('delete', 'node', node);
     return DataManager;
-  }
+  },
 
   /**
    * @param id
    * @returns {Object}
    */
-  static getNode(id) {
-    return Object.assign({}, _getNode(id));
-  }
-
-  /**
-   * @returns {Array}
-   */
-  static getAllNodes() {
-    return Array.from(_nodes);
-  }
+  getNode: (id) => Object.assign({}, _getNode(id)),
 
   /**
    * @param edge
    * @returns {Object}
    */
-  static addEdge(edge) {
+  addEdge: (edge) => {
     _edges.push(edge);
     _dispatchUpdate('add', 'edge', edge);
     return DataManager;
-  }
+  },
 
   /**
    * @param edge
    * @returns {Object}
    */
-  static updateEdge(edge) {
+  updateEdge: (edge) => {
     _edges = _edges.map(_edge => _edge.id === edge.id ? edge : _edge);
     _dispatchUpdate('update', 'edge', edge);
     return DataManager;
-  }
+  },
 
   /**
    * @param edge
    * @return {Object}
    */
-  static deleteEdge(edge) {
+  deleteEdge: (edge) => {
     _edges = _edges.reduce((acc, _edge) => {
       if (edge.id !== _edge.id) {
         acc.push(_edge);
@@ -241,29 +226,23 @@ class DataManager {
 
     _dispatchUpdate('delete', 'edge', edge);
     return DataManager;
-  }
+  },
 
   /**
    * @param id
    * @returns {Array}
    */
-  static getEdge(id) {
-    return Object.assign({}, _getEdge(id));
-  }
+  getEdge: (id) => Object.assign({}, _getEdge(id)),
 
   /**
    * @returns {Array}
    */
-  static getAllEdges() {
-    return Array.from(_edges);
-  }
+  getAllEdges: () => Array.from(_edges),
 
   /**
    * @param {function} fn
    */
-  static onChange(fn) {
-    _onUpdateCallbackHandler = fn;
-  }
-}
+  onChange: (fn) => _onUpdateCallbackHandler = fn
+};
 
 export default DataManager;
