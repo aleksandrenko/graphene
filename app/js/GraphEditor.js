@@ -1,7 +1,6 @@
 'use strict';
 
 import CONST from './enums/CONST';
-import EVENTS from './enums/EVENTS';
 
 import createDomElementInContainer from './utils/dom';
 import createSVGInContainer from './utils/svg';
@@ -70,18 +69,6 @@ class GraphEditor {
       RenderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
     });
-
-    InteractionManager.on(EVENTS.DRAW_LINE_START, RenderManager.prepareForRenderLine);
-    InteractionManager.on(EVENTS.DRAW_LINE, RenderManager.renderLine);
-    InteractionManager.on(EVENTS.REMOVE_DRAWN_LINE, RenderManager.removeTempLine);
-    InteractionManager.on(EVENTS.CREATE_EDGE, DataManager.addEdge);
-    InteractionManager.on(EVENTS.ADD_NODE, DataManager.addNode);
-    InteractionManager.on(EVENTS.UPDATE_NODE, DataManager.updateNode);
-    InteractionManager.on(EVENTS.UPDATE_EDGE, DataManager.updateEdge);
-    InteractionManager.on(EVENTS.DELETE_NODE, DataManager.deleteNode);
-    InteractionManager.on(EVENTS.DELETE_EDGE, DataManager.deleteEdge);
-    InteractionManager.on(EVENTS.ZOOM_AND_POSITION, DataManager.setOptions);
-    InteractionManager.on(EVENTS.SELECT_NODE, DataManager.selectNode);
   }
 
   onChange(fn) {

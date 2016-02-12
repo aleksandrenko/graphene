@@ -153,7 +153,7 @@ const DataManager = {
     }, []);
 
     _edges = _edges.reduce((acc, e) => {
-      if (e.startNodeID !== node.id && e.endNodeID !== node.id) {
+      if (e.startNodeId !== node.id && e.endNodeId !== node.id) {
         acc.push(e);
       }
 

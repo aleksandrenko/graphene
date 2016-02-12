@@ -1,7 +1,6 @@
 'use strict';
 
 import CONST from './enums/CONST';
-import EVENTS from './enums/EVENTS';
 import ACTION from './enums/ACTION';
 
 import Node from './do/Node';
@@ -10,16 +9,7 @@ import Edge from './do/Edge';
 import ContextMenu from './ContextMenu';
 import PropertiesManager from './PropertiesManager';
 import DataManager from './DataManager';
-
-/**
- * @param eventType
- * @param eventData
- */
-const _dispatch = (eventType, eventData) => {
-  if (IM._eventCallbackHandlers[eventType]) {
-    IM._eventCallbackHandlers[eventType](eventData);
-  }
-};
+import RenderManager from './RenderManager';
 
 /**
  *
@@ -55,7 +45,7 @@ const _nodeDragBehavior = d3.behavior.drag()
   .on('drag', node => {
     node.x = d3.event.x;
     node.y = d3.event.y;
-    _dispatch(EVENTS.UPDATE_NODE, node);
+    DataManager.updateNode(node);
   })
   .on('dragend', node => {
     d3.select(`#${node.id}`).classed('dragging', false);
@@ -72,11 +62,15 @@ const _edgeDragBehavior = d3.behavior.drag()
       edge.middlePoint[0] - d3.event.sourceEvent.x,
       edge.middlePoint[1] - d3.event.sourceEvent.y
     ];
-    _dispatch(EVENTS.UPDATE_EDGE, edge);
+    DataManager.updateEdge(edge);
   })
   .on('dragend', edge => {
     d3.select(`#${edge.id}`).select('text').classed('dragging', false);
   });
+
+const _updateZoomAndPosition = (options) => {
+  DataManager.setOptions(options);
+}
 
 const _zoomBehaviour = d3.behavior.zoom()
   .scaleExtent([0.5, 2])
@@ -88,7 +82,7 @@ const _zoomBehaviour = d3.behavior.zoom()
     existingPosition.top = d3.event.translate[1];
     existingOptions.zoom = d3.event.scale;
 
-    _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+    _updateZoomAndPosition(existingOptions);
   });
 
 /**
@@ -109,7 +103,6 @@ const IM = {
     }
 
     IM._container = d3Element;
-    IM._eventCallbackHandlers = {};
 
     // user keyboard handling
     d3.select('body').on('keydown', IM.keydownHandler);
@@ -133,10 +126,10 @@ const IM = {
             y: action.position.y
           });
 
-          _dispatch(EVENTS.ADD_NODE, node);
+          DataManager.addNode(node);
           break;
         case ACTION.DELETE_NODE:
-          _dispatch(EVENTS.DELETE_NODE, action.target);
+          DataManager.deleteNode(action.target);
           break;
         case ACTION.EDIT:
           IM.propertiesManager.open([action.position.x, action.position.y], action.target);
@@ -145,15 +138,13 @@ const IM = {
           IM.createEdgeMouseMove.startNode = action.target;
           IM.createEdgeMouseDown.startNode = action.target;
 
-          _dispatch(EVENTS.DRAW_LINE_START, {
-            source: action.target
-          });
+          RenderManager.prepareForRenderLine({ source: action.target });
 
           IM._container.on('mousemove', IM.createEdgeMouseMove);
           IM._container.on('mouseup', IM.createEdgeMouseDown);
           break;
         case ACTION.DELETE_EDGE:
-          _dispatch(EVENTS.DELETE_EDGE, action.target);
+          DataManager.deleteEdge(action.target);
           break;
         default:
           console.log('Unhandeled context menu action', action);
@@ -235,40 +226,36 @@ const IM = {
       case delKey:
         // const selectedNode = DataManager.getSelectedNode();
 
-        // if(selectedNode) {
-        //   _dispatch(EVENTS.DELETE_NODE, selectedNode);
-        // }
-
         break;
       case escKey:
         console.log('esc key');
         break;
       case leftKey:
         existingPosition.left -= keyMoveStep;
-        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _updateZoomAndPosition(existingOptions);
         break;
       case topKey:
         existingPosition.top -= keyMoveStep;
-        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _updateZoomAndPosition(existingOptions);
         break;
       case rightKey:
         existingPosition.left += keyMoveStep;
-        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _updateZoomAndPosition(existingOptions);
         break;
       case bottomKey:
         existingPosition.top += keyMoveStep;
-        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _updateZoomAndPosition(existingOptions);
         break;
       case plusKey:
         if (existingOptions.zoom < 1.8) {
           existingOptions.zoom += keyZoomStep;
-          _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+          _updateZoomAndPosition(existingOptions);
         }
         break;
       case minusKey:
         if (existingOptions.zoom > 0.6) {
           existingOptions.zoom -= keyZoomStep;
-          _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+          _updateZoomAndPosition(existingOptions);
         }
         break;
       default:
@@ -282,7 +269,7 @@ const IM = {
   createEdgeMouseMove: () => {
     const startNode = IM.createEdgeMouseMove.startNode;
 
-    _dispatch(EVENTS.DRAW_LINE, {
+    RenderManager.renderLine({
       source: startNode,
       end: [d3.event.x, d3.event.y]
     });
@@ -295,7 +282,7 @@ const IM = {
     const endNode = _getTarget(d3.event.target);
     const startNode = IM.createEdgeMouseMove.startNode;
 
-    _dispatch(EVENTS.REMOVE_DRAWN_LINE, {});
+    RenderManager.removeTempLine();
 
     if (endNode.isNode) {
       const newEdge = new Edge({
@@ -303,21 +290,12 @@ const IM = {
         startNodeId: startNode.id
       });
 
-      _dispatch(EVENTS.CREATE_EDGE, newEdge);
+      DataManager.addEdge(newEdge);
     }
 
     IM._container.on('mousemove', null);
     IM._container.on('mouseup', null);
     d3.event.preventDefault();
-  },
-
-  /**
-   *
-   * @param {string} eventType
-   * @param {function} callbackHandler
-   */
-  on: (eventType, callbackHandler) => {
-    IM._eventCallbackHandlers[eventType] = callbackHandler;
   }
 };
 

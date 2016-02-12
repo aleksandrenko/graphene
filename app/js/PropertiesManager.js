@@ -484,13 +484,8 @@ class PropertiesManager {
     });
 
     // Add new Property with increasing name-number
-    let propertyInc = 0;
-
     d3.select('.add-button').on('click', () => {
-      const newProperty = new Property({
-        key: `Property(${propertyInc++})`
-      });
-      _entity.properties.push(newProperty);
+      _entity.properties.push(new Property());
       _drawProperties();
     });
   }

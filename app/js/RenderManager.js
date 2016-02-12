@@ -209,24 +209,24 @@ const _setZoomAndPosition = (d3Element, options) => {
 /** ====================================================================================================================
  * Render Manager Class
  ==================================================================================================================== */
-const RenderManager = {
+const RM = {
   init: (d3Element) => {
-    RenderManager.d3Element = d3Element;
+    RM.d3Element = d3Element;
 
     // a wrapper for path arrows
-    RenderManager.d3Element.append('defs').classed('defs');
+    RM.d3Element.append('defs').classed('defs');
 
     // a wrapper for temporal drawed paths
-    RenderManager.d3Element.append('g').classed('tempPaths', true);
+    RM.d3Element.append('g').classed('tempPaths', true);
 
     // a wrapper for all paths
-    RenderManager.d3GroupForEdges = RenderManager.d3Element.append('g').classed('edges', true);
+    RM.d3GroupForEdges = RM.d3Element.append('g').classed('edges', true);
 
     // a wrapper for all nodes
-    RenderManager.d3GroupForNodes = RenderManager.d3Element.append('g').classed('nodes', true);
+    RM.d3GroupForNodes = RM.d3Element.append('g').classed('nodes', true);
 
     // define arrow marker for leading arrow when creating new rel;
-    RenderManager.d3Element.select('defs')
+    RM.d3Element.select('defs')
       .append('marker').attr({
         id: 'mark-end-arrow',
         viewBox: '0 -5 10 10',
@@ -240,7 +240,7 @@ const RenderManager = {
       });
 
     // drag line, add this svg to the parent svg so line can be drawen outside the global g
-    RenderManager.d3Element.select('.tempPaths').append('path')
+    RM.d3Element.select('.tempPaths').append('path')
       .attr('class', 'dragLine hidden')
       .attr({
         d: 'M0,0L0,0'
@@ -296,11 +296,11 @@ const RenderManager = {
   render: (data) => {
     console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
 
-    _setZoomAndPosition(RenderManager.d3Element, data.options);
+    _setZoomAndPosition(RM.d3Element, data.options);
 
-    _renderEdges(RenderManager.d3GroupForEdges, data.edges);
-    _renderNodes(RenderManager.d3GroupForNodes, data.nodes);
+    _renderEdges(RM.d3GroupForEdges, data.edges);
+    _renderNodes(RM.d3GroupForNodes, data.nodes);
   }
 };
 
-export default RenderManager;
+export default RM;

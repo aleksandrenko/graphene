@@ -7,7 +7,7 @@ class Property {
   constructor(options) {
     options = options || {};
 
-    this.key = options.key || '';
+    this.key = options.key || 'undefined';
     this.type = options.type || '';
     this.hasDefaultValue = options.hasDefaultValue || false;
     this.defaultValue = options.defaultValue || '';
