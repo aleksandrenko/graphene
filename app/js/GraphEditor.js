@@ -35,7 +35,7 @@ class GraphEditor {
 
     this.svg = d3.select(svgElement);
     this.entitiesGroup = d3.select(entitiesGroupElement);
-    this.renderManager = new RenderManager(this.entitiesGroup);
+    RenderManager.init(this.entitiesGroup);
 
     // Create help icon and helper menu
     const help = createDomElementInContainer(`#${parentDomContainer.id}`, 'div', CONST.HELP_ID, CONST.HELP_CLASS);
@@ -59,7 +59,7 @@ class GraphEditor {
      * On update re-render the content
      */
     DataManager.onChange(updateEvent => {
-      this.renderManager.render(updateEvent.data);
+      RenderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
     });
 

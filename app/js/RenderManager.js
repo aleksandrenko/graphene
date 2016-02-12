@@ -8,7 +8,6 @@ import InteractionManager from './InteractionManager';
  * Private variables/consts
  */
 const TRANSITION_DURATION = 100;
-let instance = null;
 
 /**
  * @param entity
@@ -217,29 +216,24 @@ function _setZoomAndPosition(d3Element, options) {
 /**
  * Render Manager Class
  */
-class RenderManager {
-  constructor(d3Element) {
-    if (!instance) {
-      instance = this;
-    }
-
-    this.d3Element = d3Element;
+const RenderManager = {
+  init: (d3Element) => {
+    RenderManager.d3Element = d3Element;
 
     // a wrapper for path arrows
-    this.d3Element.append('defs').classed('defs');
+    RenderManager.d3Element.append('defs').classed('defs');
 
     // a wrapper for temporal drawed paths
-    this.d3Element.append('g').classed('tempPaths', true);
+    RenderManager.d3Element.append('g').classed('tempPaths', true);
 
     // a wrapper for all paths
-    this.d3GroupForEdges = this.d3Element.append('g').classed('edges', true);
+    RenderManager.d3GroupForEdges = RenderManager.d3Element.append('g').classed('edges', true);
 
     // a wrapper for all nodes
-    this.d3GroupForNodes = this.d3Element.append('g').classed('nodes', true);
-
+    RenderManager.d3GroupForNodes = RenderManager.d3Element.append('g').classed('nodes', true);
 
     // define arrow marker for leading arrow when creating new rel;
-    this.d3Element.select('defs')
+    RenderManager.d3Element.select('defs')
       .append('marker').attr({
         id: 'mark-end-arrow',
         viewBox: '0 -5 10 10',
@@ -253,19 +247,19 @@ class RenderManager {
       });
 
     // drag line, add this svg to the parent svg so line can be drawen outside the global g
-    this.d3Element.select('.tempPaths').append('path')
+    RenderManager.d3Element.select('.tempPaths').append('path')
       .attr('class', 'dragLine hidden')
       .attr({
         d: 'M0,0L0,0'
       })
       .style('marker-end', 'url(#mark-end-arrow)');
-  }
+  },
 
   /**
    *
    * @param data
    */
-  static prepareForRenderLine(data) {
+  prepareForRenderLine: (data) => {
     const source = data.source;
 
     d3.select('#mark-end-arrow').select('path').attr({
@@ -280,12 +274,12 @@ class RenderManager {
       });
 
     d3.select('body').classed('no-cursor', true);
-  }
+  },
 
   /**
    * @param data
    */
-  static renderLine(data) {
+  renderLine: (data) => {
     const start = [data.source.x, data.source.y];
     const end = data.end;
 
@@ -293,27 +287,27 @@ class RenderManager {
       .attr({
         d: () => `M${start[0]},${start[1]}L${end[0]},${end[1]}`
       });
-  }
+  },
 
   /**
    *
    */
-  static removeTempLine() {
+  removeTempLine: () => {
     d3.select('.dragLine').classed('hidden', true);
     d3.select('body').classed('no-cursor', false);
-  }
+  },
 
   /**
    * @param data
    */
-  render(data) {
+  render: (data) => {
     console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
 
-    _setZoomAndPosition(this.d3Element, data.options);
+    _setZoomAndPosition(RenderManager.d3Element, data.options);
 
-    _renderEdges(this.d3GroupForEdges, data.edges);
-    _renderNodes(this.d3GroupForNodes, data.nodes);
+    _renderEdges(RenderManager.d3GroupForEdges, data.edges);
+    _renderNodes(RenderManager.d3GroupForNodes, data.nodes);
   }
-}
+};
 
 export default RenderManager;
