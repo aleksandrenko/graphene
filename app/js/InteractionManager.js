@@ -11,7 +11,15 @@ import ContextMenu from './ContextMenu';
 import PropertiesManager from './PropertiesManager';
 import DataManager from './DataManager';
 
-let instance;
+/**
+ * @param eventType
+ * @param eventData
+ */
+const _dispatch = (eventType, eventData) => {
+  if (IM._eventCallbackHandlers[eventType]) {
+    IM._eventCallbackHandlers[eventType](eventData);
+  }
+};
 
 /**
  *
@@ -47,7 +55,7 @@ const _nodeDragBehavior = d3.behavior.drag()
   .on('drag', node => {
     node.x = d3.event.x;
     node.y = d3.event.y;
-    InteractionManager.dispatch(EVENTS.UPDATE_NODE, node);
+    _dispatch(EVENTS.UPDATE_NODE, node);
   })
   .on('dragend', node => {
     d3.select(`#${node.id}`).classed('dragging', false);
@@ -64,7 +72,7 @@ const _edgeDragBehavior = d3.behavior.drag()
       Edge.getEdgeMiddlePoint(edge)[0] - d3.event.sourceEvent.x,
       Edge.getEdgeMiddlePoint(edge)[1] - d3.event.sourceEvent.y
     ];
-    InteractionManager.dispatch(EVENTS.UPDATE_EDGE, edge);
+    _dispatch(EVENTS.UPDATE_EDGE, edge);
   })
   .on('dragend', edge => {
     d3.select(`#${edge.id}`).select('text').classed('dragging', false);
@@ -80,7 +88,7 @@ const _zoomBehaviour = d3.behavior.zoom()
     existingPosition.top = d3.event.translate[1];
     existingOptions.zoom = d3.event.scale;
 
-    InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+    _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
   });
 
 /**
@@ -89,33 +97,34 @@ const _zoomBehaviour = d3.behavior.zoom()
  * @param {Element} rootDivElement
  * @constructor
  */
-class InteractionManager {
-  constructor(d3Element, rootDivElement) {
+const IM = {
+  /**
+   * @param d3Element
+   * @param rootDivElement
+   * @returns {*}
+   */
+  init: (d3Element, rootDivElement) => {
     if (d3Element === undefined) {
       throw new Error('The EventManager needs a "container" to attach and listen for events.');
     }
 
-    if (!instance) {
-      instance = this;
-    }
-
-    this._container = d3Element;
-    this._eventCallbackHandlers = {};
+    IM._container = d3Element;
+    IM._eventCallbackHandlers = {};
 
     // user keyboard handling
-    d3.select('body').on('keydown', this.keydownHandler);
+    d3.select('body').on('keydown', IM.keydownHandler);
 
-    this._container.call(_zoomBehaviour);
-    this._container.on('dblclick.zoom', null);
-    this._container.on('click', this.svgClickHandler);
-    this._container.on('contextmenu', this.contextClickHandler);
+    IM._container.call(_zoomBehaviour);
+    IM._container.on('dblclick.zoom', null);
+    IM._container.on('click', IM.svgClickHandler);
+    IM._container.on('contextmenu', IM.contextClickHandler);
 
-    this.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
-    this.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
+    IM.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
+    IM.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
-    this.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
+    IM.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
-    this.contextMenu.onAction((action) => {
+    IM.contextMenu.onAction((action) => {
       switch (action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
@@ -123,64 +132,64 @@ class InteractionManager {
             y: action.position.y
           });
 
-          InteractionManager.dispatch(EVENTS.ADD_NODE, node);
+          _dispatch(EVENTS.ADD_NODE, node);
           break;
         case ACTION.DELETE_NODE:
-          InteractionManager.dispatch(EVENTS.DELETE_NODE, action.target);
+          _dispatch(EVENTS.DELETE_NODE, action.target);
           break;
         case ACTION.EDIT:
-          instance.propertiesManager.open([action.position.x, action.position.y], action.target);
+          IM.propertiesManager.open([action.position.x, action.position.y], action.target);
           break;
         case ACTION.CREATE_EDGE:
-          this.createEdgeMouseMove.startNode = action.target;
-          this.createEdgeMouseDown.startNode = action.target;
+          IM.createEdgeMouseMove.startNode = action.target;
+          IM.createEdgeMouseDown.startNode = action.target;
 
-          InteractionManager.dispatch(EVENTS.DRAW_LINE_START, {
+          _dispatch(EVENTS.DRAW_LINE_START, {
             source: action.target
           });
 
-          this._container.on('mousemove', this.createEdgeMouseMove);
-          this._container.on('mouseup', this.createEdgeMouseDown);
+          IM._container.on('mousemove', IM.createEdgeMouseMove);
+          IM._container.on('mouseup', IM.createEdgeMouseDown);
           break;
         case ACTION.DELETE_EDGE:
-          InteractionManager.dispatch(EVENTS.DELETE_EDGE, action.target);
+          _dispatch(EVENTS.DELETE_EDGE, action.target);
           break;
         default:
           console.log('Unhandeled context menu action', action);
       }
     });
 
-    return instance;
-  }
+    return IM;
+  },
 
   /**
    * @param entity
    */
-  static bindEvents(entity) {
+  bindEvents: (entity) => {
     // need to wait for the entity to enter the dom
     window.setTimeout(() => {
       const selection = entity.isNode ? d3.select(`#${entity.id}`) : d3.select(`#${entity.id}`).select('text');
 
       selection
         .on('dblclick', _entity => {
-          instance.propertiesManager.open([d3.event.x, d3.event.y], _entity);
+          IM.propertiesManager.open([d3.event.x, d3.event.y], _entity);
           d3.event.preventDefault();
         })
         .on('mousedown', _entity => {
           DataManager.selectEntity(_entity.id);
           d3.event.preventDefault();
         })
-        .call(_nodeDragBehavior);
+        .call(entity.isNode ? _nodeDragBehavior : _edgeDragBehavior);
     }, 0);
-  }
+  },
 
   /**
    *
    */
-  svgClickHandler() {
+  svgClickHandler: () => {
     // close the context menu
-    instance.contextMenu.close();
-    instance.propertiesManager.close();
+    IM.contextMenu.close();
+    IM.propertiesManager.close();
 
     const isEdgeText = d3.event.target.classList.contains('path-text');
     const isNode = d3.event.target.nodeName === 'circle';
@@ -191,17 +200,17 @@ class InteractionManager {
     }
 
     d3.event.preventDefault();
-  }
+  },
 
   /**
    *
    */
-  contextClickHandler() {
-    instance.contextMenu.open(d3.mouse(this), _getTarget(d3.event.target));
+  contextClickHandler: () => {
+    IM.contextMenu.open([d3.event.x, d3.event.y], _getTarget(d3.event.target));
     d3.event.preventDefault();
-  }
+  },
 
-  keydownHandler() {
+  keydownHandler: () => {
     // TODO enchance the keyboard handeling
     return;
 
@@ -226,7 +235,7 @@ class InteractionManager {
         // const selectedNode = DataManager.getSelectedNode();
 
         // if(selectedNode) {
-        //   InteractionManager.dispatch(EVENTS.DELETE_NODE, selectedNode);
+        //   _dispatch(EVENTS.DELETE_NODE, selectedNode);
         // }
 
         break;
@@ -235,67 +244,57 @@ class InteractionManager {
         break;
       case leftKey:
         existingPosition.left -= keyMoveStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case topKey:
         existingPosition.top -= keyMoveStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case rightKey:
         existingPosition.left += keyMoveStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case bottomKey:
         existingPosition.top += keyMoveStep;
-        InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+        _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         break;
       case plusKey:
         if (existingOptions.zoom < 1.8) {
           existingOptions.zoom += keyZoomStep;
-          InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+          _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         }
         break;
       case minusKey:
         if (existingOptions.zoom > 0.6) {
           existingOptions.zoom -= keyZoomStep;
-          InteractionManager.dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
+          _dispatch(EVENTS.ZOOM_AND_POSITION, existingOptions);
         }
         break;
       default:
         break;
     }
-  }
-
-  /**
-   * @param eventType
-   * @param eventData
-   */
-  static dispatch(eventType, eventData) {
-    if (instance._eventCallbackHandlers[eventType]) {
-      instance._eventCallbackHandlers[eventType](eventData);
-    }
-  }
+  },
 
   /**
    *
    */
-  createEdgeMouseMove() {
-    const startNode = instance.createEdgeMouseMove.startNode;
+  createEdgeMouseMove: () => {
+    const startNode = IM.createEdgeMouseMove.startNode;
 
-    InteractionManager.dispatch(EVENTS.DRAW_LINE, {
+    _dispatch(EVENTS.DRAW_LINE, {
       source: startNode,
       end: [d3.event.x, d3.event.y]
     });
-  }
+  },
 
   /**
    *
    */
-  createEdgeMouseDown() {
+  createEdgeMouseDown: () => {
     const endNode = _getTarget(d3.event.target);
-    const startNode = instance.createEdgeMouseMove.startNode;
+    const startNode = IM.createEdgeMouseMove.startNode;
 
-    InteractionManager.dispatch(EVENTS.REMOVE_DRAWN_LINE, {});
+    _dispatch(EVENTS.REMOVE_DRAWN_LINE, {});
 
     if (endNode.isNode) {
       const newEdge = new Edge({
@@ -303,23 +302,22 @@ class InteractionManager {
         startNodeID: startNode.id
       });
 
-      InteractionManager.dispatch(EVENTS.CREATE_EDGE, newEdge);
+      _dispatch(EVENTS.CREATE_EDGE, newEdge);
     }
 
-    instance._container.on('mousemove', null);
-    instance._container.on('mouseup', null);
+    IM._container.on('mousemove', null);
+    IM._container.on('mouseup', null);
     d3.event.preventDefault();
-  }
+  },
 
   /**
    *
    * @param {string} eventType
    * @param {function} callbackHandler
    */
-  on(eventType, callbackHandler) {
-    this._eventCallbackHandlers[eventType] = callbackHandler;
+  on: (eventType, callbackHandler) => {
+    IM._eventCallbackHandlers[eventType] = callbackHandler;
   }
-}
+};
 
-
-export default InteractionManager;
+export default IM;

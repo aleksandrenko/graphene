@@ -62,12 +62,7 @@ const DataManager = {
   /**
    * @returns {boolean}
    */
-  isNodeSelected: () => !!_nodes.filter(n => n.isSelected).length,
-
-  /**
-   * @returns {boolean}
-   */
-  isEdgeSelected: () => !!_edges.filter(e => e.isSelected).length,
+  isEntitySelected: () => (!!_nodes.filter(n => n.isSelected).length || !!_edges.filter(e => e.isSelected).length),
 
   /**
    *

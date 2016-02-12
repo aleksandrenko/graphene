@@ -36,7 +36,7 @@ function getOpacityForEntity(entity) {
   }
 
   // if there is no selected node nor edge
-  if (!DataManager.isNodeSelected() && !DataManager.isEdgeSelected()) {
+  if (!DataManager.isEntitySelected()) {
     return 1;
   }
 

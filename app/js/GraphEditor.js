@@ -53,7 +53,8 @@ class GraphEditor {
       3. You can move the middle points of the edges to make the connection between the nodes more visible.
     `;
 
-    const interactionManager = new InteractionManager(this.svg, parentDomContainer);
+    // initialize the Interaction manager
+    InteractionManager.init(this.svg, parentDomContainer);
 
     /**
      * On update re-render the content
@@ -63,47 +64,47 @@ class GraphEditor {
       _onUpdateCallbackHandler(updateEvent);
     });
 
-    interactionManager.on(EVENTS.DRAW_LINE_START, data => {
+    InteractionManager.on(EVENTS.DRAW_LINE_START, data => {
       RenderManager.prepareForRenderLine(data);
     });
 
-    interactionManager.on(EVENTS.DRAW_LINE, data => {
+    InteractionManager.on(EVENTS.DRAW_LINE, data => {
       RenderManager.renderLine(data);
     });
 
-    interactionManager.on(EVENTS.REMOVE_DRAWN_LINE, () => {
+    InteractionManager.on(EVENTS.REMOVE_DRAWN_LINE, () => {
       RenderManager.removeTempLine();
     });
 
-    interactionManager.on(EVENTS.CREATE_EDGE, edge => {
+    InteractionManager.on(EVENTS.CREATE_EDGE, edge => {
       DataManager.addEdge(edge);
     });
 
-    interactionManager.on(EVENTS.ADD_NODE, node => {
+    InteractionManager.on(EVENTS.ADD_NODE, node => {
       DataManager.addNode(node);
     });
 
-    interactionManager.on(EVENTS.UPDATE_NODE, node => {
+    InteractionManager.on(EVENTS.UPDATE_NODE, node => {
       DataManager.updateNode(node);
     });
 
-    interactionManager.on(EVENTS.UPDATE_EDGE, edge => {
+    InteractionManager.on(EVENTS.UPDATE_EDGE, edge => {
       DataManager.updateEdge(edge);
     });
 
-    interactionManager.on(EVENTS.DELETE_NODE, node => {
+    InteractionManager.on(EVENTS.DELETE_NODE, node => {
       DataManager.deleteNode(node);
     });
 
-    interactionManager.on(EVENTS.DELETE_EDGE, edge => {
+    InteractionManager.on(EVENTS.DELETE_EDGE, edge => {
       DataManager.deleteEdge(edge);
     });
 
-    interactionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
+    InteractionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
       DataManager.setOptions(options);
     });
 
-    interactionManager.on(EVENTS.SELECT_NODE, nodeId => DataManager.selectNode(nodeId));
+    InteractionManager.on(EVENTS.SELECT_NODE, nodeId => DataManager.selectNode(nodeId));
   }
 
   onChange(fn) {
