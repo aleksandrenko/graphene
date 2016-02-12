@@ -1,7 +1,7 @@
 'use strict';
 
 import DataManager from '../DataManager';
-import getID from '../utils/id.js';
+import createId from '../utils/id.js';
 
 class Edge {
   /**
@@ -18,7 +18,7 @@ class Edge {
     this.middlePointOffset = options.middlePointOffset || [0, 0];
     this.properties = [];
     this.label = options.label || '...';
-    this.id = getID();
+    this.id = createId();
     this.isSelected = false;
     this.isEdge = true;
   }

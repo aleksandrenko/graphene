@@ -73,28 +73,13 @@ const DataManager = {
    *
    * @param id
    */
-  selectNode: (id) => {
-    const node = _getNode(id);
+  selectEntity: (id) => {
+    const entity = _getNode(id) || _getEdge(id);
 
-    if (node && !node.isSelected) {
+    if (entity && !entity.isSelected) {
       DataManager.deselectAllEntities();
-      node.isSelected = true;
-      _dispatchUpdate('update', 'node', node);
-    }
-
-    return DataManager;
-  },
-
-  /**
-   * @param id
-   */
-  selectEdge: (id) => {
-    const edge = _getEdge(id);
-
-    if (edge && !edge.isSelected) {
-      DataManager.deselectAllEntities();
-      edge.isSelected = true;
-      _dispatchUpdate('update', 'edge', edge);
+      entity.isSelected = true;
+      _dispatchUpdate('update', entity.isNode ? 'node' : 'edge', entity);
     }
 
     return DataManager;

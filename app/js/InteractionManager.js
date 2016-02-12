@@ -159,32 +159,18 @@ class InteractionManager {
   static bindEvents(entity) {
     // need to wait for the entity to enter the dom
     window.setTimeout(() => {
-      if (entity.isNode) {
-        d3.select(`#${entity.id}`)
-          .on('dblclick', node => {
-            instance.propertiesManager.open([d3.event.x, d3.event.y], node);
-            d3.event.preventDefault();
-          })
-          .on('mousedown', node => {
-            DataManager.selectNode(node.id);
-            d3.event.preventDefault();
-          })
-          .call(_nodeDragBehavior);
-      }
+      const selection = entity.isNode ? d3.select(`#${entity.id}`) : d3.select(`#${entity.id}`).select('text');
 
-      if (entity.isEdge) {
-        const selection = d3.select(`#${entity.id}`).select('text');
-
-        selection.on('dblclick', edge => {
-          instance.propertiesManager.open([d3.event.x, d3.event.y], edge);
+      selection
+        .on('dblclick', _entity => {
+          instance.propertiesManager.open([d3.event.x, d3.event.y], _entity);
           d3.event.preventDefault();
         })
-          .on('mousedown', edge => {
-            DataManager.selectEdge(edge.id);
-            d3.event.preventDefault();
-          })
-          .call(_edgeDragBehavior);
-      }
+        .on('mousedown', _entity => {
+          DataManager.selectEntity(_entity.id);
+          d3.event.preventDefault();
+        })
+        .call(_nodeDragBehavior);
     }, 0);
   }
 
