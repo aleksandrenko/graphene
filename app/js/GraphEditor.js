@@ -12,8 +12,15 @@ import DataManager from './DataManager';
 
 import RenderManager from './RenderManager';
 
+/**
+ * @param event
+ * @private
+ */
 let _onUpdateCallbackHandler = (event) => event;
 
+/**
+ *
+ */
 class GraphEditor {
   /**
    *
@@ -64,47 +71,17 @@ class GraphEditor {
       _onUpdateCallbackHandler(updateEvent);
     });
 
-    InteractionManager.on(EVENTS.DRAW_LINE_START, data => {
-      RenderManager.prepareForRenderLine(data);
-    });
-
-    InteractionManager.on(EVENTS.DRAW_LINE, data => {
-      RenderManager.renderLine(data);
-    });
-
-    InteractionManager.on(EVENTS.REMOVE_DRAWN_LINE, () => {
-      RenderManager.removeTempLine();
-    });
-
-    InteractionManager.on(EVENTS.CREATE_EDGE, edge => {
-      DataManager.addEdge(edge);
-    });
-
-    InteractionManager.on(EVENTS.ADD_NODE, node => {
-      DataManager.addNode(node);
-    });
-
-    InteractionManager.on(EVENTS.UPDATE_NODE, node => {
-      DataManager.updateNode(node);
-    });
-
-    InteractionManager.on(EVENTS.UPDATE_EDGE, edge => {
-      DataManager.updateEdge(edge);
-    });
-
-    InteractionManager.on(EVENTS.DELETE_NODE, node => {
-      DataManager.deleteNode(node);
-    });
-
-    InteractionManager.on(EVENTS.DELETE_EDGE, edge => {
-      DataManager.deleteEdge(edge);
-    });
-
-    InteractionManager.on(EVENTS.ZOOM_AND_POSITION, options => {
-      DataManager.setOptions(options);
-    });
-
-    InteractionManager.on(EVENTS.SELECT_NODE, nodeId => DataManager.selectNode(nodeId));
+    InteractionManager.on(EVENTS.DRAW_LINE_START, RenderManager.prepareForRenderLine);
+    InteractionManager.on(EVENTS.DRAW_LINE, RenderManager.renderLine);
+    InteractionManager.on(EVENTS.REMOVE_DRAWN_LINE, RenderManager.removeTempLine);
+    InteractionManager.on(EVENTS.CREATE_EDGE, DataManager.addEdge);
+    InteractionManager.on(EVENTS.ADD_NODE, DataManager.addNode);
+    InteractionManager.on(EVENTS.UPDATE_NODE, DataManager.updateNode);
+    InteractionManager.on(EVENTS.UPDATE_EDGE, DataManager.updateEdge);
+    InteractionManager.on(EVENTS.DELETE_NODE, DataManager.deleteNode);
+    InteractionManager.on(EVENTS.DELETE_EDGE, DataManager.deleteEdge);
+    InteractionManager.on(EVENTS.ZOOM_AND_POSITION, DataManager.setOptions);
+    InteractionManager.on(EVENTS.SELECT_NODE, DataManager.selectNode);
   }
 
   onChange(fn) {

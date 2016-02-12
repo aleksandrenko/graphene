@@ -65,7 +65,6 @@ const DataManager = {
   isEntitySelected: () => (!!_nodes.filter(n => n.isSelected).length || !!_edges.filter(e => e.isSelected).length),
 
   /**
-   *
    * @param id
    */
   selectEntity: (id) => {

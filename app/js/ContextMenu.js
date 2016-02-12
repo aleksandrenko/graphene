@@ -4,86 +4,81 @@ import CONST from './enums/CONST';
 import ACTION from './enums/ACTION';
 import createDomElementInContainer from './utils/dom';
 
-let instance = null;
 let onActionHandlerFunction = () => null;
 
-class ContextMenu {
+/**
+ * @type {{init: CM.init, onAction: CM.onAction, open: CM.open, close: CM.close, getContextMenuHTML: CM.getContextMenuHTML}}
+ */
+const CM = {
   /**
-   * @param {string} containerSelector
-   * @returns {*}
+   * @param containerSelector
+   * @returns {Object}
    */
-  constructor(containerSelector) {
-    if (!instance) {
-      instance = this;
-    }
-
+  init: (containerSelector) => {
     // create and attach a contextMenuLayer
     const contextMenuLayer = createDomElementInContainer(containerSelector, 'div', CONST.CONTEXT_MENU_LAYER_ID, CONST.CONTEXT_MENU_LAYER_CLASS);
 
     // create a context menu
-    this.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', CONST.CONTEXT_MENU_ID, CONST.CONTEXT_MENU_CLASS);
+    CM.contextMenuElement = createDomElementInContainer(`#${contextMenuLayer.id}`, 'ul', CONST.CONTEXT_MENU_ID, CONST.CONTEXT_MENU_CLASS);
 
-    this.openedPosition = {};
-    this.targetedEntity = {};
+    CM.openedPosition = {};
+    CM.targetedEntity = {};
 
     /**
      * @param e
      */
-    this.contextMenuElement.onclick = (e) => {
+    CM.contextMenuElement.onclick = (e) => {
       const action = e.target.attributes.action.value;
 
       if (action) {
         onActionHandlerFunction({
           position: {
-            x: this.openedPosition[0],
-            y: this.openedPosition[1]
+            x: CM.openedPosition[0],
+            y: CM.openedPosition[1]
           },
           type: action,
-          target: this.targetedEntity
+          target: CM.targetedEntity
         });
       }
 
       // close the menu once an action is fired
-      this.close();
+      CM.close();
     };
 
-    return instance;
-  }
+    return CM;
+  },
 
   /**
    * @param {function} fn
    */
-  onAction(fn) {
-    onActionHandlerFunction = fn;
-  }
+  onAction: (fn) => onActionHandlerFunction = fn,
 
   /**
    * @param position
    * @param entity
    */
-  open(position, entity) {
-    this.contextMenuElement.innerHTML = ContextMenu.getContextMenuHTML(entity);
+  open: (position, entity) => {
+    CM.contextMenuElement.innerHTML = CM.getContextMenuHTML(entity);
 
-    this.openedPosition = position;
-    this.targetedEntity = entity;
+    CM.openedPosition = position;
+    CM.targetedEntity = entity;
 
-    this.contextMenuElement.style.left = `${position[0]}px`;
-    this.contextMenuElement.style.top = `${position[1]}px`;
-    this.contextMenuElement.classList.add('opened');
-  }
+    CM.contextMenuElement.style.left = `${position[0]}px`;
+    CM.contextMenuElement.style.top = `${position[1]}px`;
+    CM.contextMenuElement.classList.add('opened');
+  },
 
   /**
    */
-  close() {
-    this.contextMenuElement.classList.remove('opened');
-  }
+  close: () => {
+    CM.contextMenuElement.classList.remove('opened');
+  },
 
   /**
    * @param {Object} entity
    * @returns {string} HTML
    */
-  static getContextMenuHTML(entity) {
-
+  getContextMenuHTML: (entity) => {
     if (entity.isNode) {
       return `
         <li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>
@@ -105,6 +100,6 @@ class ContextMenu {
 
     return '';
   }
-}
+};
 
-export default ContextMenu;
+export default CM;

@@ -13,7 +13,7 @@ const TRANSITION_DURATION = 100;
  * @param entity
  * @returns {number}
  */
-function getOpacityForEntity(entity) {
+const _getOpacityForEntity = (entity) => {
   if (entity.isNode) {
     const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
 
@@ -41,14 +41,14 @@ function getOpacityForEntity(entity) {
   }
 
   return 0.2;
-}
+};
 
 // each edge need to have it's own arrow for pointing,
 // so you can set different colors and opacity when selecting nodes and the edge itself
 /**
  * @param edge
  */
-function createOrUpdateArrowForEdge(edge) {
+const _createOrUpdateArrowForEdge = (edge) => {
   const edgeColor = DataManager.getNode(edge.startNodeID).color;
   const arrowId = `end-arrow-${edge.id}`;
 
@@ -71,16 +71,16 @@ function createOrUpdateArrowForEdge(edge) {
     markerWidth: 6,
     markerHeight: 6,
     orient: 'auto',
-    opacity: getOpacityForEntity(edge)
+    opacity: _getOpacityForEntity(edge)
   });
-}
+};
 
 /**
  * @param {object} d3Element
  * @param {array} nodesData
  * @private
  */
-function _renderNodes(d3Element, nodesData) {
+const _renderNodes = (d3Element, nodesData) => {
   const nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
 
   // create svg element on item enter
@@ -120,7 +120,7 @@ function _renderNodes(d3Element, nodesData) {
       r: 12,
       stroke: node => node.color,
       fill: node => node.isSelected ? node.color : '#ebebeb',
-      'stroke-opacity': (node) => getOpacityForEntity(node)
+      'stroke-opacity': (node) => _getOpacityForEntity(node)
     });
 
   nodes.select('text')
@@ -133,16 +133,16 @@ function _renderNodes(d3Element, nodesData) {
     .text(node => node.label)
     .attr({
       fill: node => node.color,
-      opacity: (node) => getOpacityForEntity(node)
+      opacity: (node) => _getOpacityForEntity(node)
     });
-}
+};
 
 /**
  * @param {object} d3Element
  * @param {array} edgesData
  * @private
  */
-function _renderEdges(d3Element, edgesData) {
+const _renderEdges = (d3Element, edgesData) => {
   const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
@@ -168,7 +168,7 @@ function _renderEdges(d3Element, edgesData) {
     x: edge => Edge.getEdgeMiddlePoint(edge)[0] - edge.middlePointOffset[0] + 10,
     y: edge => Edge.getEdgeMiddlePoint(edge)[1] - edge.middlePointOffset[1],
     fill: edge => DataManager.getNode(edge.startNodeID).color,
-    opacity: edge => getOpacityForEntity(edge)
+    opacity: edge => _getOpacityForEntity(edge)
   }).text(e => e.label);
 
   // Helper function to draw paths
@@ -195,23 +195,23 @@ function _renderEdges(d3Element, edgesData) {
     .duration(TRANSITION_DURATION)
     .attr({
       stroke: (edge) => {
-        createOrUpdateArrowForEdge(edge);
+        _createOrUpdateArrowForEdge(edge);
         const startNode = DataManager.getNode(edge.startNodeID);
         return startNode.color;
       },
-      'stroke-opacity': edge => getOpacityForEntity(edge),
+      'stroke-opacity': edge => _getOpacityForEntity(edge),
       style: (edge) => `marker-end: url(#end-arrow-${edge.id})`
     });
-}
+};
 
 /**
  * @param d3Element
  * @param options
  * @private
  */
-function _setZoomAndPosition(d3Element, options) {
+const _setZoomAndPosition = (d3Element, options) => {
   d3Element.attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
-}
+};
 
 /** ====================================================================================================================
  * Render Manager Class

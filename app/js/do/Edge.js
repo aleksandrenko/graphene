@@ -17,7 +17,7 @@ class Edge {
     this.endNodeID = options.endNodeID;
     this.middlePointOffset = options.middlePointOffset || [0, 0];
     this.properties = [];
-    this.label = options.label || '...';
+    this.label = options.label || 'undefined';
     this.id = createId();
     this.isSelected = false;
     this.isEdge = true;

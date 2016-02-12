@@ -119,12 +119,13 @@ const IM = {
     IM._container.on('click', IM.svgClickHandler);
     IM._container.on('contextmenu', IM.contextClickHandler);
 
-    IM.contextMenu = new ContextMenu(`#${rootDivElement.id}`);
+    // initialize the context menu
+    ContextMenu.init(`#${rootDivElement.id}`);
     IM.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
     IM.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
-    IM.contextMenu.onAction((action) => {
+    ContextMenu.onAction((action) => {
       switch (action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
@@ -188,7 +189,7 @@ const IM = {
    */
   svgClickHandler: () => {
     // close the context menu
-    IM.contextMenu.close();
+    ContextMenu.close();
     IM.propertiesManager.close();
 
     const isEdgeText = d3.event.target.classList.contains('path-text');
@@ -206,7 +207,7 @@ const IM = {
    *
    */
   contextClickHandler: () => {
-    IM.contextMenu.open([d3.event.x, d3.event.y], _getTarget(d3.event.target));
+    ContextMenu.open([d3.event.x, d3.event.y], _getTarget(d3.event.target));
     d3.event.preventDefault();
   },
 

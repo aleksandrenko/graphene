@@ -16,7 +16,7 @@ class Node {
     this.x = options.x;
     this.y = options.y;
     this.color = options.color || color();
-    this.label = options.label || '...';
+    this.label = options.label || 'undefined';
     this.properties = [];
     this.id = createId();
     this.isSelected = false;
