@@ -1,10 +1,9 @@
 'use strict';
 
+import reposition from './utils/reposition';
+
 let _nodes = [];
 let _edges = [];
-let _options = {
-  zoom: 1
-};
 
 let _onUpdateCallbackHandler = () => '';
 
@@ -21,7 +20,7 @@ function _dispatchUpdate(eventType, target, data) {
     change: data,
     data: {
       nodes: _nodes,
-      edges: _edges,
+      edges: _edges
     }
   });
 }
@@ -104,7 +103,8 @@ const DataManager = {
       return DataManager;
     }
 
-    _nodes = _nodes.concat(data.nodes) || _nodes;
+    // reposition nodes if some of them is outside of the visible area
+    _nodes = _nodes.concat(reposition(data.nodes)) || _nodes;
     _edges = _edges.concat(data.edges) || _edges;
 
     _dispatchUpdate('add', 'nodes', data);

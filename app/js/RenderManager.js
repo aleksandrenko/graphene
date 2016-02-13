@@ -180,10 +180,10 @@ const _renderEdges = (d3Element, edgesData) => {
   edges.select('path')
     .attr({
       d: (edge) => lineFunction([
-          [edge.startNode.x, edge.startNode.y],
-          [edge.middlePoint[0] - edge.middlePointOffset[0], edge.middlePoint[1] - edge.middlePointOffset[1]],
-          [edge.endNode.x, edge.endNode.y]
-        ])
+        [edge.startNode.x, edge.startNode.y],
+        [edge.middlePoint[0] - edge.middlePointOffset[0], edge.middlePoint[1] - edge.middlePointOffset[1]],
+        [edge.endNode.x, edge.endNode.y]
+      ])
     })
     .transition()
     .duration(TRANSITION_DURATION)

@@ -80,7 +80,7 @@ const _updatePosition = (direction) => {
   DataManager.setAllNodes(movedNodes);
 };
 
-const _zoomBehaviour = d3.behavior.zoom()
+const _zoomAndDragBehaviour = d3.behavior.zoom()
   .scaleExtent([0.5, 2])
   .on('zoom', () => {
     const direction = d3.event.sourceEvent;
@@ -110,7 +110,7 @@ const IM = {
     // user keyboard handling
     d3.select('body').on('keydown', IM.keydownHandler);
 
-    IM._container.call(_zoomBehaviour);
+    IM._container.call(_zoomAndDragBehaviour);
     IM._container.on('click', IM.svgClickHandler);
     IM._container.on('contextmenu', IM.contextClickHandler);
 
