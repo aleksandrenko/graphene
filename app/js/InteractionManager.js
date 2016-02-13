@@ -182,6 +182,9 @@ const IM = {
    *
    */
   svgClickHandler: () => {
+    // blur the focus
+    document.activeElement.blur();
+
     // close the context menu
     ContextMenu.close();
     IM.propertiesManager.close();
@@ -208,6 +211,8 @@ const IM = {
   keydownHandler: () => {
     const escKey = 27;
     const delKey = 46;
+    const spaceKey = 32;
+    const enterKey = 13;
 
     const leftKey = 37;
     const topKey = 38;
@@ -216,12 +221,58 @@ const IM = {
 
     const keyMoveStep = 10;
 
+    const focusedElement = document.activeElement;
+
     switch (d3.event.keyCode) {
       case delKey:
         // const selectedNode = DataManager.getSelectedNode();
         break;
       case escKey:
-        console.log('esc key');
+        DataManager.deselectAllEntities(true);
+        IM.propertiesManager.close();
+        break;
+      case enterKey: {
+        const selectedEntity = DataManager.getSelectedEntity();
+
+        /**
+         * @param entity
+         */
+        const fnSelectAndOpen = (entity) => {
+          DataManager.selectEntity(entity.id);
+
+          if (entity.isNode) {
+            IM.propertiesManager.open([entity.x, entity.y], entity);
+          }
+
+          if (entity.isEdge) {
+            IM.propertiesManager.open([entity.middlePoint[0] - entity.middlePointOffset[0], entity.middlePoint[1] - entity.middlePointOffset[1]], entity);
+          }
+        };
+
+        if (selectedEntity) {
+          fnSelectAndOpen(selectedEntity);
+        }
+
+        if (focusedElement.classList.contains('path-text')) {
+          const edgeElement = focusedElement.parentElement;
+          fnSelectAndOpen(DataManager.getEdge(edgeElement.id));
+        }
+
+        if (focusedElement.classList.contains('node')) {
+          fnSelectAndOpen(DataManager.getNode(focusedElement.id));
+        }
+
+        break;
+      }
+      case spaceKey:
+        if (focusedElement.classList.contains('path-text')) {
+          const edgeElement = focusedElement.parentElement;
+          DataManager.selectEntity(edgeElement.id);
+        }
+
+        if (focusedElement.classList.contains('node')) {
+          DataManager.selectEntity(focusedElement.id);
+        }
         break;
       case leftKey:
         _updatePosition([-keyMoveStep, 0]);

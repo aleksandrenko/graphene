@@ -51,6 +51,17 @@ const DataManager = {
   isEntitySelected: () => (!!_nodes.filter(n => n.isSelected).length || !!_edges.filter(e => e.isSelected).length),
 
   /**
+   * @returns {Object}
+   */
+  getSelectedEntity: () => {
+    const selectedEntity = _nodes.filter(n => n.isSelected)[0] || _edges.filter(e => e.isSelected)[0];
+
+    if (selectedEntity && selectedEntity.id) {
+      return DataManager.getNode(selectedEntity.id) || DataManager.getEdge(selectedEntity.id);
+    }
+  },
+
+  /**
    * @param id
    */
   selectEntity: (id) => {
@@ -224,7 +235,7 @@ const DataManager = {
    * @param id
    * @returns {Array}
    */
-  getEdge: (id) => Object.assign({}, _getEdge(id)),
+  getEdge: (id) => Object.assign(new Edge(0, 0), _getEdge(id)), // create edge from edge class to keep the methods
 
   /**
    * @returns {Array}

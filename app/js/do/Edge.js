@@ -37,6 +37,9 @@ class Edge {
     return this.startNode.color;
   }
 
+  /**
+   * @returns {array}
+   */
   get middlePoint() {
     return [
       (this.startNode.x + this.endNode.x) / 2,
