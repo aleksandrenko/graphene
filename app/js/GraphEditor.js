@@ -43,7 +43,22 @@ class GraphEditor {
     this.entitiesGroup = d3.select(entitiesGroupElement);
     RenderManager.init(this.entitiesGroup);
 
-    // Create help icon and helper menu
+    /**
+     * Info icon and panel
+     * @type {Element}
+     */
+    const info = createDomElementInContainer(`#${parentDomContainer.id}`, 'div', CONST.INFO_ID, CONST.INFO_CLASS);
+    // make it focusable so the help panel is toggable when the dom element is in focus
+    info.setAttribute('tabindex', 0);
+    info.setAttribute('title', 'Summary Information.');
+
+    const infoPanel = createDomElementInContainer(`#${info.id}`, 'div', CONST.INFO_PANEL_ID, CONST.INFO_PANEL_CLASS);
+
+
+    /**
+     * Create help icon and helper menu
+     * @type {Element}
+     */
     const help = createDomElementInContainer(`#${parentDomContainer.id}`, 'div', CONST.HELP_ID, CONST.HELP_CLASS);
     // make it focusable so the help panel is toggable when the dom element is in focus
     help.setAttribute('tabindex', 0);
@@ -59,6 +74,8 @@ class GraphEditor {
       3. You can move the middle points of the edges to make the connection between the nodes more visible.
     `;
 
+
+
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
 
@@ -68,6 +85,45 @@ class GraphEditor {
     DataManager.onChange(updateEvent => {
       RenderManager.render(updateEvent.data);
       _onUpdateCallbackHandler(updateEvent);
+
+
+      /**
+       * Create Info panel HTML
+       */
+
+      let infoPanelHTML = ``;
+      const nodes = DataManager.getAllNodes();
+      const edges = DataManager.getAllEdges();
+
+      function _generateColHTML(entities) {
+        if (entities.length === 0) {
+          return;
+        }
+
+        infoPanelHTML += `<div class='col'><h1>${entities.length} ${entities[0].isNode ? 'Nodes' : 'Edges'}</h1>`;
+        entities.forEach(e => {
+          infoPanelHTML += `<strong> <span style="background-color: ${e.color}"></span> ${e.label} (${e.properties.length})</strong><br/>`;
+
+          if (e.properties.length) {
+            infoPanelHTML += `<ul>`;
+            e.properties.forEach(p => {
+              infoPanelHTML += `
+                <li>
+                  <b>${p.key}</b> (${p.type.toLowerCase()}${p.isRequired ? ', required' : ''}${p.defaultValue ? ', with Default Value' : ''}${p.hasLimit ? ', limited' : ''})
+                </li>
+              `;
+            });
+            infoPanelHTML += `</ul>`;
+          }
+        });
+        infoPanelHTML += '</div>';
+      }
+
+      _generateColHTML(nodes);
+      _generateColHTML(edges);
+
+
+      infoPanel.innerHTML = infoPanelHTML;
     });
   }
 

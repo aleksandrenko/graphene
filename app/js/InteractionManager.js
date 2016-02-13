@@ -81,10 +81,11 @@ const _updatePosition = (direction) => {
 };
 
 const _zoomAndDragBehaviour = d3.behavior.zoom()
-  .scaleExtent([0.5, 2])
   .on('zoom', () => {
     const direction = d3.event.sourceEvent;
-    _updatePosition([direction.movementX, direction.movementY]);
+    if (direction) {
+      _updatePosition([direction.movementX, direction.movementY]);
+    }
   });
 
 

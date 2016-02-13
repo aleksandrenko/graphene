@@ -1,5 +1,7 @@
 'use strict';
 
+import createId from '../utils/id';
+
 class Property {
   /**
    * @constructor
@@ -7,6 +9,7 @@ class Property {
   constructor(options) {
     options = options || {};
 
+    this.id = options.id || createId();
     this.key = options.key || 'undefined';
     this.type = options.type || '';
     this.hasDefaultValue = options.hasDefaultValue || false;

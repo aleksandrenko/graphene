@@ -21,5 +21,9 @@ export default {
   HELP_ID: 'help',
   HELP_CLASS: 'help',
   HELP_PANEL_ID: 'help-panel',
-  HELP_PANEL_CLASS: 'help-panel'
+  HELP_PANEL_CLASS: 'help-panel',
+  INFO_ID: 'info',
+  INFO_CLASS: 'info',
+  INFO_PANEL_ID: 'info-panel',
+  INFO_PANEL_CLASS: 'info-panel'
 };

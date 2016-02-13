@@ -392,7 +392,7 @@ class PropertiesManager {
       // clear before render
       const list = d3.select('#properties-list').html('');
 
-      const properties = list.selectAll('.property').data(_entity.properties, e => e.key);
+      const properties = list.selectAll('.property').data(_entity.properties, e => e.id);
 
       const property = properties.enter()
         .append('li')

@@ -130,7 +130,7 @@ const _renderNodes = (d3Element, nodesData) => {
     })
     .transition()
     .duration(TRANSITION_DURATION)
-    .text(node => node.label)
+    .text(node => `${node.label} (${node.properties.length})`)
     .attr({
       fill: node => node.color,
       opacity: (node) => _getOpacityForEntity(node)
@@ -169,7 +169,7 @@ const _renderEdges = (d3Element, edgesData) => {
     y: edge => edge.middlePoint[1] - edge.middlePointOffset[1],
     fill: edge => edge.color,
     opacity: edge => _getOpacityForEntity(edge)
-  }).text(e => e.label);
+  }).text(e => `${e.label} (${e.properties.length})`);
 
   // Helper function to draw paths
   const lineFunction = d3.svg.line()
