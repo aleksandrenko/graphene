@@ -10,6 +10,8 @@ class Node {
    * @param {number} options.y
    * @param {string} options.color
    * @param {string} options.label
+   * @param {array} options.properties
+   * @param {string} options.id
    * @constructor
    */
   constructor(options) {
@@ -17,8 +19,8 @@ class Node {
     this.y = options.y;
     this.color = options.color || color();
     this.label = options.label || 'undefined';
-    this.properties = [];
-    this.id = createId();
+    this.properties = options.properties || [];
+    this.id = options.id || createId();
     this.isSelected = false;
     this.isNode = true;
   }

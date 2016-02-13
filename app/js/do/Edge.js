@@ -10,15 +10,17 @@ class Edge {
    * @param {number} options.endNodeId
    * @param {array} options.middlePointOffset
    * @param {string} options.label
+   * @param {array} options.properties
+   * @param {string} options.id
    * @constructor
    */
   constructor(options) {
     this.startNodeId = options.startNodeId;
     this.endNodeId = options.endNodeId;
     this.middlePointOffset = options.middlePointOffset || [0, 0];
-    this.properties = [];
+    this.properties = options.properties || [];
     this.label = options.label || 'undefined';
-    this.id = createId();
+    this.id = options.id || createId();
     this.isSelected = false;
     this.isEdge = true;
   }

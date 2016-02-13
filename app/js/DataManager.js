@@ -1,5 +1,9 @@
 'use strict';
 
+import Edge from './do/Edge';
+import Node from './do/Node';
+import Property from './do/Property';
+
 import reposition from './utils/reposition';
 
 let _nodes = [];
@@ -96,12 +100,25 @@ const DataManager = {
   },
 
   /**
-   * @param data
+   * @param rawData
    */
-  addData: (data) => {
-    if (!data) {
+  insertData: (rawData) => {
+    if (!rawData) {
       return DataManager;
     }
+
+    const data = {
+      nodes: rawData.nodes.map(nodeData => {
+        const node = new Node(nodeData);
+        node.properties = node.properties.map(data => new Property(data));
+        return node;
+      }),
+      edges: rawData.edges.map(edgeData => {
+        const edge = new Edge(edgeData);
+        edge.properties = edge.properties.map(data => new Property(data));
+        return edge;
+      })
+    };
 
     // reposition nodes if some of them is outside of the visible area
     _nodes = _nodes.concat(reposition(data.nodes)) || _nodes;
