@@ -68,22 +68,25 @@ const _edgeDragBehavior = d3.behavior.drag()
     d3.select(`#${edge.id}`).select('text').classed('dragging', false);
   });
 
-const _updateZoomAndPosition = (options) => {
-  DataManager.setOptions(options);
-}
+const _updatePosition = (direction) => {
+  const allNodes = DataManager.getAllNodes();
+
+  let movedNodes = allNodes.map(node => {
+    node.x += direction[0];
+    node.y += direction[1];
+    return node;
+  });
+
+  DataManager.setAllNodes(movedNodes);
+};
 
 const _zoomBehaviour = d3.behavior.zoom()
   .scaleExtent([0.5, 2])
   .on('zoom', () => {
-    const existingOptions = DataManager.getOptions();
-    const existingPosition = existingOptions.position;
-
-    existingPosition.left = d3.event.translate[0];
-    existingPosition.top = d3.event.translate[1];
-    existingOptions.zoom = d3.event.scale;
-
-    _updateZoomAndPosition(existingOptions);
+    const direction = d3.event.sourceEvent;
+    _updatePosition([direction.movementX, direction.movementY]);
   });
+
 
 /**
  *
@@ -108,7 +111,6 @@ const IM = {
     d3.select('body').on('keydown', IM.keydownHandler);
 
     IM._container.call(_zoomBehaviour);
-    IM._container.on('dblclick.zoom', null);
     IM._container.on('click', IM.svgClickHandler);
     IM._container.on('contextmenu', IM.contextClickHandler);
 
@@ -203,9 +205,6 @@ const IM = {
   },
 
   keydownHandler: () => {
-    // TODO enchance the keyboard handeling
-    return;
-
     const escKey = 27;
     const delKey = 46;
 
@@ -213,50 +212,27 @@ const IM = {
     const topKey = 38;
     const rightKey = 39;
     const bottomKey = 40;
-    const plusKey = 187;
-    const minusKey = 189;
 
     const keyMoveStep = 10;
-    const keyZoomStep = 0.05;
-
-    const existingOptions = DataManager.getOptions();
-    const existingPosition = existingOptions.position;
 
     switch (d3.event.keyCode) {
       case delKey:
         // const selectedNode = DataManager.getSelectedNode();
-
         break;
       case escKey:
         console.log('esc key');
         break;
       case leftKey:
-        existingPosition.left -= keyMoveStep;
-        _updateZoomAndPosition(existingOptions);
+        _updatePosition([-keyMoveStep, 0]);
         break;
       case topKey:
-        existingPosition.top -= keyMoveStep;
-        _updateZoomAndPosition(existingOptions);
+        _updatePosition([0, -keyMoveStep]);
         break;
       case rightKey:
-        existingPosition.left += keyMoveStep;
-        _updateZoomAndPosition(existingOptions);
+        _updatePosition([keyMoveStep, 0]);
         break;
       case bottomKey:
-        existingPosition.top += keyMoveStep;
-        _updateZoomAndPosition(existingOptions);
-        break;
-      case plusKey:
-        if (existingOptions.zoom < 1.8) {
-          existingOptions.zoom += keyZoomStep;
-          _updateZoomAndPosition(existingOptions);
-        }
-        break;
-      case minusKey:
-        if (existingOptions.zoom > 0.6) {
-          existingOptions.zoom -= keyZoomStep;
-          _updateZoomAndPosition(existingOptions);
-        }
+        _updatePosition([0, keyMoveStep]);
         break;
       default:
         break;

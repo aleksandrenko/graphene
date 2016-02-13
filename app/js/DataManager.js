@@ -3,10 +3,6 @@
 let _nodes = [];
 let _edges = [];
 let _options = {
-  position: {
-    top: 0,
-    left: 0
-  },
   zoom: 1
 };
 
@@ -26,7 +22,6 @@ function _dispatchUpdate(eventType, target, data) {
     data: {
       nodes: _nodes,
       edges: _edges,
-      options: _options
     }
   });
 }
@@ -47,18 +42,6 @@ const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
  * @type {Object}
  ==================================================================================================================== */
 const DataManager = {
-  getOptions: () => _options,
-
-  /**
-   * @param options
-   */
-  setOptions: (options) => {
-    _options = options;
-    _dispatchUpdate('update', 'options', options);
-
-    return DataManager;
-  },
-
   /**
    * @returns {boolean}
    */
@@ -169,6 +152,19 @@ const DataManager = {
    * @returns {Object}
    */
   getNode: (id) => Object.assign({}, _getNode(id)),
+
+  /**
+   * @returns {Array}
+   */
+  getAllNodes: () => Array.from(_nodes),
+
+  /**
+   * @param nodes
+   */
+  setAllNodes: (nodes) => {
+    _nodes = nodes;
+    _dispatchUpdate('update', 'node', _nodes);
+  },
 
   /**
    * @param edge

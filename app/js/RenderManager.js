@@ -197,15 +197,6 @@ const _renderEdges = (d3Element, edgesData) => {
     });
 };
 
-/**
- * @param d3Element
- * @param options
- * @private
- */
-const _setZoomAndPosition = (d3Element, options) => {
-  d3Element.attr('transform', `translate(${options.position.left}, ${options.position.top}), scale(${options.zoom})`);
-};
-
 /** ====================================================================================================================
  * Render Manager Class
  ==================================================================================================================== */
@@ -294,10 +285,6 @@ const RM = {
    * @param data
    */
   render: (data) => {
-    console.log('%cRender', 'background: green; color: #fff; padding: 3px 5px; border-radius: 3px;');
-
-    _setZoomAndPosition(RM.d3Element, data.options);
-
     _renderEdges(RM.d3GroupForEdges, data.edges);
     _renderNodes(RM.d3GroupForNodes, data.nodes);
   }
