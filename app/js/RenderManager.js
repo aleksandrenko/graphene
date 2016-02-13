@@ -40,7 +40,7 @@ const _getOpacityForEntity = (entity) => {
     return 1;
   }
 
-  return 0.2;
+  return 0.15;
 };
 
 // each edge need to have it's own arrow for pointing,

@@ -492,7 +492,7 @@ html, body {
 }
 
 .info {
-  right: 50px;
+  right: 45px;
 }
 
 .help:hover,
@@ -579,12 +579,12 @@ html, body {
   margin: 0;
 }
 
-.info-panel .col span {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
+.info-panel .col .color {
+  width: 7px;
+  height: 10px;
+  border-radius: 5px;
   display: inline-block;
-  vertical-align: middle;
+  margin-left: 2px;
 }
 
 .info-panel .col ul {
@@ -597,9 +597,23 @@ html, body {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 90%;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .info-panel .col ul:last-child {
   margin-bottom: 0;
+}
+
+.info-panel .col .entity {
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.info-panel .col .entity * {
+  pointer-events: none;
+}
+
+.info-panel .col .entity:hover {
+  background: #eee;
 }

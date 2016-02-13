@@ -72,7 +72,7 @@ class PropertiesManager {
    */
   open(position, entity) {
     // Copy the entity so it's not updated when the user make changes
-    _entity = Object.assign({}, entity);
+    _entity = entity;
     _entity.properties = Array.from(entity.properties);
 
     if (entity.isEdge) {
@@ -82,6 +82,7 @@ class PropertiesManager {
     }
 
     this.propertiesMenu.classList.add('opened');
+    this.propertiesMenu.focus();
     this.propertiesMenu.style.left = `${position[0]}px`;
     this.propertiesMenu.style.top = `${position[1]}px`;
 

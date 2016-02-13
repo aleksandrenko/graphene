@@ -2,8 +2,13 @@
 
 import createDomElementInContainer from '../utils/dom';
 import CONST from '../enums/CONST';
+
 import DataManager from '../DataManager';
 
+/**
+ * @param parentDomContainer
+ * @constructor
+ */
 const UI = (parentDomContainer) => {
   const info = createDomElementInContainer(`#${parentDomContainer.id}`, 'div', CONST.INFO_ID, CONST.INFO_CLASS);
   // make it focusable so the help panel is toggable when the dom element is in focus
@@ -11,6 +16,16 @@ const UI = (parentDomContainer) => {
   info.setAttribute('title', 'Summary Information.');
 
   UI.infoPanel = createDomElementInContainer(`#${info.id}`, 'div', CONST.INFO_PANEL_ID, CONST.INFO_PANEL_CLASS);
+
+  d3.select(`#${info.id}`)
+    .on('mouseover', () => {
+      const element = d3.event.target;
+
+      if (element.classList.contains('entity')) {
+        const id = element.attributes['entity-id'].value;
+        DataManager.selectEntity(id);
+      }
+    });
 };
 
 UI.render = () => {
@@ -25,7 +40,7 @@ UI.render = () => {
 
     infoPanelHTML += `<div class='col'><h1>${entities.length} ${entities[0].isNode ? 'Nodes' : 'Edges'}</h1>`;
     entities.forEach(e => {
-      infoPanelHTML += `<strong> <span style="background-color: ${e.color}"></span> ${e.label} (${e.properties.length})</strong><br/>`;
+      infoPanelHTML += `<div class="entity" entity-id="${e.id}"><strong><span class="color" style="background-color: ${e.color}"></span> ${e.label} (${e.properties.length})</strong>`;
 
       if (e.properties.length) {
         infoPanelHTML += `<ul>`;
@@ -36,7 +51,7 @@ UI.render = () => {
                 </li>
               `;
         });
-        infoPanelHTML += `</ul>`;
+        infoPanelHTML += `</ul></div>`;
       }
     });
     infoPanelHTML += '</div>';
