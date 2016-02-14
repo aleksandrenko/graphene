@@ -51,8 +51,10 @@ UI.render = () => {
                 </li>
               `;
         });
-        infoPanelHTML += `</ul></div>`;
+        infoPanelHTML += `</ul>`;
       }
+
+      infoPanelHTML += `</div>`;
     });
     infoPanelHTML += '</div>';
   }

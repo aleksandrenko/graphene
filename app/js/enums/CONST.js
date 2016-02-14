@@ -25,5 +25,9 @@ export default {
   INFO_ID: 'info',
   INFO_CLASS: 'info',
   INFO_PANEL_ID: 'info-panel',
-  INFO_PANEL_CLASS: 'info-panel'
+  INFO_PANEL_CLASS: 'info-panel',
+  HISTORY_ID: 'history',
+  HISTORY_CLASS: 'history',
+  HISTORY_PANEL_ID: 'history-panel',
+  HISTORY_PANEL_CLASS: 'history-panel'
 };

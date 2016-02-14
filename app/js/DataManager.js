@@ -4,8 +4,11 @@ import Edge from './do/Edge';
 import Node from './do/Node';
 import Property from './do/Property';
 
+import createId from './utils/id';
 import reposition from './utils/reposition';
 
+const MAX_HISTORY_STEPS = 200;
+let _history = [];
 let _nodes = [];
 let _edges = [];
 
@@ -18,6 +21,21 @@ let _onUpdateCallbackHandler = () => '';
  * @private
  */
 function _dispatchUpdate(eventType, target, data) {
+  _history.push({
+    id: createId(),
+    date: Date.now(),
+    type: `${eventType} ${target}`,
+    data: {
+      nodes: _nodes,
+      edges: _edges
+    }
+  });
+
+  // limit the size of the history
+  if (_history.length >= MAX_HISTORY_STEPS) {
+    _history.pop();
+  }
+
   _onUpdateCallbackHandler({
     event: eventType,
     target,
@@ -45,6 +63,21 @@ const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
  * @type {Object}
  ==================================================================================================================== */
 const DataManager = {
+
+  /**
+   * {Array} history
+   */
+  getHistory: () => _history,
+
+  revertToHistoryEntry: (historyEntryId) => {
+    const historyEntry = _history.filter(e => e.id === historyEntryId)[0];
+
+    DataManager.setAllNodes(historyEntry.data.nodes);
+    DataManager.setAllEdges(historyEntry.data.edges);
+
+    _dispatchUpdate('revert history', 'data', historyEntry.data);
+  },
+
   /**
    * @returns {boolean}
    */
@@ -135,7 +168,7 @@ const DataManager = {
     _nodes = _nodes.concat(reposition(data.nodes)) || _nodes;
     _edges = _edges.concat(data.edges) || _edges;
 
-    _dispatchUpdate('add', 'nodes', data);
+    _dispatchUpdate('load', 'data', data);
     return DataManager;
   },
 
@@ -202,6 +235,13 @@ const DataManager = {
     _edges.push(edge);
     _dispatchUpdate('add', 'edge', edge);
     return DataManager;
+  },
+
+  /**
+   * @param edges
+   */
+  setAllEdges: (edges) => {
+    _edges = edges;
   },
 
   /**
