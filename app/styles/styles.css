@@ -62,7 +62,7 @@ html, body {
   border: solid 1px #bbb;
   background: #e6e6e6;
   color: #666;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transition: all 0.2s;
   outline: none;
 }
@@ -641,7 +641,7 @@ html, body {
 .keyboard-button {
   display: inline-block;
   background: #eee;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   padding: 1px 3px;
   min-width: 40px;
   text-align: center;
@@ -660,8 +660,92 @@ html, body {
   position: absolute;
   left: 20px;
   bottom: 20px;
+  display: flex;
+  pointer-events: all;
+}
+
+.history-panel {
+  display: none;
+  right: auto;
+  left: 0;
+  bottom: 50px;
+  width: auto;
+  position: absolute;
+  border-radius: 5px;
+  overflow: hidden;
+  border: solid 1px #aaa;
+}
+
+.history-panel.open {
+  display: block;
+}
+
+.history-panel ul {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.history-entry {
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  padding: 5px 10px;
+  border-bottom: solid 1px #aaa;
+  background: rgba(240, 240, 240, 0.9);
+}
+
+.history-entry:last-child {
+  border-bottom: none;
+}
+
+.history-entry:hover {
+  background: #fafafa;
+}
+
+.history-entry .date {
+  color: #aaa;
+  font-size: 10px;
 }
 
 .history-entry * {
   pointer-events: none;
+}
+
+.history-summary {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  white-space: nowrap;
+}
+
+.history-list-toggle-button {
+  position: relative;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-block;
+  margin: 0;
+}
+
+input:checked.history-list-toggle-button::after {
+  background: #ddd;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.history-list-toggle-button::after {
+  content: '≡';
+  border-radius: 3px;
+  border: solid 1px #bbb;
+  background: #e6e6e6;
+  color: #666;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);;
+  transition: all 0.2s;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 21px;
 }

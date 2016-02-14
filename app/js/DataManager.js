@@ -21,15 +21,18 @@ let _onUpdateCallbackHandler = () => '';
  * @private
  */
 function _dispatchUpdate(eventType, target, data) {
-  _history.push({
-    id: createId(),
-    date: Date.now(),
-    type: `${eventType} ${target}`,
-    data: {
-      nodes: _nodes,
-      edges: _edges
-    }
-  });
+  // prevent some updates
+  if (eventType !== 'history') {
+    _history.unshift({
+      id: createId(),
+      date: Date.now(),
+      type: `${eventType} ${target} (${_nodes.length} nodes, ${_edges.length} edges)`,
+      data: {
+        nodes: _nodes,
+        edges: _edges
+      }
+    });
+  }
 
   // limit the size of the history
   if (_history.length >= MAX_HISTORY_STEPS) {
@@ -69,13 +72,24 @@ const DataManager = {
    */
   getHistory: () => _history,
 
+  /**
+   *
+   */
+  clearHistory: () => {
+    _history = [];
+    _dispatchUpdate('history', 'clear', {});
+  },
+
+  /**
+   * @param {string} historyEntryId
+   */
   revertToHistoryEntry: (historyEntryId) => {
     const historyEntry = _history.filter(e => e.id === historyEntryId)[0];
 
     DataManager.setAllNodes(historyEntry.data.nodes);
     DataManager.setAllEdges(historyEntry.data.edges);
 
-    _dispatchUpdate('revert history', 'data', historyEntry.data);
+    _dispatchUpdate('history', 'revert', historyEntry.data);
   },
 
   /**

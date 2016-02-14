@@ -193,7 +193,7 @@ const IM = {
     const isNode = d3.event.target.nodeName === 'circle';
 
     // click on the root svg element
-    if (!isEdgeText && !isNode) {
+    if (!isEdgeText && !isNode && DataManager.isEntitySelected()) {
       DataManager.deselectAllEntities(true);
     }
 

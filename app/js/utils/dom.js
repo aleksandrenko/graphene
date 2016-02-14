@@ -11,8 +11,8 @@
 function createDomElementInContainer(containerSelector, domType, id, className) {
   const comElement = document.createElement(domType);
 
-  comElement.setAttribute('id', id);
-  comElement.setAttribute('class', className);
+  id && comElement.setAttribute('id', id);
+  className && comElement.setAttribute('class', className);
 
   document.querySelector(containerSelector).appendChild(comElement);
   return comElement;

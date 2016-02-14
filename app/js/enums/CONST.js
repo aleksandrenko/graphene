@@ -29,5 +29,7 @@ export default {
   HISTORY_ID: 'history',
   HISTORY_CLASS: 'history',
   HISTORY_PANEL_ID: 'history-panel',
-  HISTORY_PANEL_CLASS: 'history-panel'
+  HISTORY_PANEL_CLASS: 'history-panel',
+  HISTORY_SUMMARY_ID: 'history-summary',
+  HISTORY_SUMMARY_CLASS: 'history-summary'
 };
