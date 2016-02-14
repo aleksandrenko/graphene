@@ -214,6 +214,8 @@ const IM = {
     const spaceKey = 32;
     const enterKey = 13;
 
+    const infoKey = 192;
+
     const leftKey = 37;
     const topKey = 38;
     const rightKey = 39;
@@ -224,6 +226,10 @@ const IM = {
     const focusedElement = document.activeElement;
 
     switch (d3.event.keyCode) {
+      case infoKey:
+        // toggle the info panel
+        focusedElement.classList.contains(CONST.INFO_ID) ? focusedElement.blur() : document.querySelector(`#${CONST.INFO_ID}`).focus();
+        break;
       case delKey:
         // const selectedNode = DataManager.getSelectedNode();
         break;

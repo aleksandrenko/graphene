@@ -531,15 +531,19 @@ html, body {
 
 .help:focus .help-panel,
 .info:focus .info-panel {
-  display: flex;
+  display: block;
   pointer-events: all;
   max-height: 90vh;
   overflow: auto;
 }
 
+.info:focus .info-panel {
+  display: flex;
+}
+
 .help-panel,
 .info-panel {
-  width: 250px;
+  width: 450px;
   display: none;
   position: absolute;
   bottom: 30px;
@@ -568,7 +572,7 @@ html, body {
 }
 
 .info-panel .col {
-  width: 220px;
+  width: 250px;
   margin-right: 10px;
   padding-right: 10px;
   border-right: solid 1px #eee;
@@ -598,6 +602,11 @@ html, body {
   white-space: nowrap;
   font-size: 90%;
   line-height: 1.5;
+  color: #aaa;
+}
+
+.info-panel .col ul li b {
+  color: #617170;
 }
 
 .info-panel .col ul:last-child {
@@ -616,4 +625,20 @@ html, body {
 
 .info-panel .col .entity:hover {
   background: #eee;
+}
+
+.keyboard-button {
+  display: inline-block;
+  background: #eee;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  padding: 1px 3px;
+  min-width: 40px;
+  text-align: center;
+  font-size: 10px;
+  margin: 3px 0;
+}
+
+.keyboard-button.big-text {
+  font-weight: bold;
+  font-size: 14px;
 }
