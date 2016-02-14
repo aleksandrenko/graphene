@@ -527,6 +527,11 @@ html, body {
 .info:focus {
   opacity: 1;
   background-color: dodgerblue;
+  box-shadow: none;
+  border-radius: 0 0 5px 5px;
+  border-top: solid 20px;
+  box-sizing: content-box;
+  border-color: dodgerblue;
 }
 
 .help:focus .help-panel,
@@ -555,6 +560,11 @@ html, body {
   cursor: default;
   pointer-events: none;
   z-index: 1000;
+  border-bottom: solid 3px dodgerblue;
+}
+
+.info-panel {
+  right: -29px;
 }
 
 .info-panel {
@@ -572,7 +582,7 @@ html, body {
 }
 
 .info-panel .col {
-  width: 250px;
+  width: 210px;
   margin-right: 10px;
   padding-right: 10px;
   border-right: solid 1px #eee;
@@ -581,6 +591,7 @@ html, body {
 .info-panel .col:last-child {
   border: none;
   margin: 0;
+  padding: 0;
 }
 
 .info-panel .col .color {
