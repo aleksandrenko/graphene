@@ -28,9 +28,9 @@ const HistoryUI = (parentElement) => {
 
   $historyActionButtons.innerHTML = `
     <input type="checkbox" class="history-list-toggle-button" title="Toggle the history records list." />
-    <button class="reset-button" title="Reset History">&#8634;</button>
     <button class="back-button" title="Undo">&#8678;</button>
     <button class="forward-button" title="Redo">&#8680;</button>
+    <button class="delete-all-button" title="Redo">Delete all</button>
   `;
 
   d3.select($historyActionButtons).on('click', () => {
@@ -41,16 +41,16 @@ const HistoryUI = (parentElement) => {
       d3.select(HistoryUI.$historyPanel).classed('open', checked);
     }
 
-    if (target.classList.contains('reset-button')) {
-      DataManager.clearHistory();
-    }
-
     if (target.classList.contains('back-button')) {
       console.log('history back-button');
     }
 
     if (target.classList.contains('forward-button')) {
       console.log('forward back-button');
+    }
+
+    if (target.classList.contains('delete-all-button')) {
+      DataManager.clear();
     }
   });
 

@@ -197,11 +197,10 @@ const _renderEdges = (d3Element, edgesData) => {
     });
 };
 
-/** ====================================================================================================================
- * Render Manager Class
- ==================================================================================================================== */
-const RM = {
-  init: (d3Element) => {
+const _init = (d3Element) => {
+  if (!_init.isDown) {
+    _init.isDown = true;
+
     RM.d3Element = d3Element;
 
     // a wrapper for path arrows
@@ -224,6 +223,12 @@ const RM = {
         d: 'M0,-5L10,0L0,5'
       });
 
+    // a wrapper for all paths
+    RM.d3GroupForEdges = RM.d3Element.append('g').classed('edges', true);
+
+    // a wrapper for all nodes
+    RM.d3GroupForNodes = RM.d3Element.append('g').classed('nodes', true);
+
     // drag line, add this svg to the parent svg so line can be drawen outside the global g
     RM.d3Element.select('.tempPaths').append('path')
       .attr('class', 'dragLine hidden')
@@ -231,8 +236,13 @@ const RM = {
         d: 'M0,0L0,0'
       })
       .style('marker-end', 'url(#mark-end-arrow)');
-  },
+  }
+};
 
+/** ====================================================================================================================
+ * Render Manager Class
+ ==================================================================================================================== */
+const RM = {
   /**
    *
    * @param data
@@ -278,9 +288,11 @@ const RM = {
   /**
    * @param data
    */
-  render: (data) => {
-    _renderEdges(RM.d3Element, data.edges);
-    _renderNodes(RM.d3Element, data.nodes);
+  render: (data, container) => {
+    _init(container);
+
+    _renderEdges(RM.d3GroupForEdges, data.edges);
+    _renderNodes(RM.d3GroupForNodes, data.nodes);
   }
 };
 

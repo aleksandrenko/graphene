@@ -26,7 +26,6 @@ let _onUpdateCallbackHandler = (event) => event;
  */
 class GraphEditor {
   /**
-   *
    * @param containerSelector
    * @returns {GraphEditor}
    * @constructor
@@ -42,10 +41,9 @@ class GraphEditor {
     // get a d3 reference for further use
     const svgElement = createSVGInContainer(`#${parentDomContainer.id}`, CONST.SVGROOT_ID, CONST.SVGROOT_CLASS);
     const entitiesGroupElement = createGroupInSVG(`#${svgElement.id}`, CONST.ENTITIES_GROUP_ID, CONST.ENTITIES_GROUP_CLASS);
+    const $$entitiesGroupElement = d3.select(entitiesGroupElement);
 
     this.svg = d3.select(svgElement);
-    this.entitiesGroup = d3.select(entitiesGroupElement);
-    RenderManager.init(this.entitiesGroup);
 
     /** Info icon and panel */
     infoUI(parentDomContainer);
@@ -64,14 +62,15 @@ class GraphEditor {
      * On update re-render the content
      */
     DataManager.onChange(updateEvent => {
-      RenderManager.render(updateEvent.data);
-      _onUpdateCallbackHandler(updateEvent);
+      RenderManager.render(updateEvent.data, $$entitiesGroupElement);
 
       // fill the info ui
       infoUI.render();
 
       // refresh the history ui
       historyUI.render();
+
+      _onUpdateCallbackHandler(updateEvent);
     });
   }
 

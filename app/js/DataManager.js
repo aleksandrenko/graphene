@@ -114,14 +114,6 @@ const DataManager = {
   getHistory: () => _history,
 
   /**
-   *
-   */
-  clearHistory: () => {
-    _history = [];
-    _dispatchUpdate('history', 'clear', {});
-  },
-
-  /**
    * @param {string} historyEntryId
    */
   revertToHistoryEntry: (historyEntryId) => {
@@ -205,6 +197,15 @@ const DataManager = {
 
     _dispatchUpdate('load', 'data', data);
     return DataManager;
+  },
+
+  /**
+   *
+   */
+  clear: () => {
+    _edges = [];
+    _nodes = [];
+    _dispatchUpdate('clear', 'data', []);
   },
 
   /**
