@@ -17,7 +17,6 @@ export default {
   ENTITIES_GROUP_CLASS: 'entities-group',
   PROPERTIES_GROUP_ID: 'properties-group',
   PROPERTIES_GROUP_CLASS: 'properties-group',
-  ROOT_GROUP_CLASS: 'root-group',
   HELP_ID: 'help',
   HELP_CLASS: 'help',
   HELP_PANEL_ID: 'help-panel',

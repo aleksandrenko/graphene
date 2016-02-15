@@ -117,9 +117,8 @@ const IM = {
 
     // initialize the context menu
     ContextMenu.init(`#${rootDivElement.id}`);
-    IM.propertiesManager = new PropertiesManager(`#${rootDivElement.id}`);
 
-    IM.propertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
+    PropertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     ContextMenu.onAction((action) => {
       switch (action.type) {
@@ -135,7 +134,7 @@ const IM = {
           DataManager.deleteNode(action.target);
           break;
         case ACTION.EDIT:
-          IM.propertiesManager.open([action.position.x, action.position.y], action.target);
+          PropertiesManager.open([action.position.x, action.position.y], action.target);
           break;
         case ACTION.CREATE_EDGE:
           IM.createEdgeMouseMove.startNode = action.target;
@@ -167,7 +166,7 @@ const IM = {
 
       selection
         .on('dblclick', _entity => {
-          IM.propertiesManager.open([d3.event.x, d3.event.y], _entity);
+          PropertiesManager.open([d3.event.x, d3.event.y], _entity);
           d3.event.preventDefault();
         })
         .on('mousedown', _entity => {
@@ -187,7 +186,7 @@ const IM = {
 
     // close the context menu
     ContextMenu.close();
-    IM.propertiesManager.close();
+    PropertiesManager.close();
 
     const isEdgeText = d3.event.target.classList.contains('path-text');
     const isNode = d3.event.target.nodeName === 'circle';
@@ -235,7 +234,7 @@ const IM = {
         break;
       case escKey:
         DataManager.deselectAllEntities(true);
-        IM.propertiesManager.close();
+        PropertiesManager.close();
         break;
       case enterKey: {
         const selectedEntity = DataManager.getSelectedEntity();
@@ -247,11 +246,11 @@ const IM = {
           DataManager.selectEntity(entity.id);
 
           if (entity.isNode) {
-            IM.propertiesManager.open([entity.x, entity.y], entity);
+            PropertiesManager.open([entity.x, entity.y], entity);
           }
 
           if (entity.isEdge) {
-            IM.propertiesManager.open([entity.middlePoint[0] - entity.middlePointOffset[0], entity.middlePoint[1] - entity.middlePointOffset[1]], entity);
+            PropertiesManager.open([entity.middlePoint[0] - entity.middlePointOffset[0], entity.middlePoint[1] - entity.middlePointOffset[1]], entity);
           }
         };
 

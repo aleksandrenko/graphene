@@ -5,7 +5,6 @@ import PROPERTY_TYPES from './enums/PROPERTY_TYPES';
 import Property from './do/Property';
 import createDomElementInContainer from './utils/dom';
 
-let instance;
 let _entity;
 let _saveHandlerFunction = () => null;
 
@@ -38,55 +37,50 @@ const _getMenuHTML = (entity) => `
   </div>
   `;
 
-
-class PropertiesManager {
-  /**
-   * @param {string} containerSelector
-   */
-  constructor(containerSelector) {
-    if (!instance) {
-      instance = this;
-    }
-
+const _setupPropertyManager = () => {
+  if (!_setupPropertyManager.isDone) {
     // create e dom element layer for the properties menu
-    const propertiesLayer = createDomElementInContainer(containerSelector,
+    const propertiesLayer = createDomElementInContainer(`#${CONST.EDITOR_ID}`,
       'div',
       CONST.PROPERTIES_MENU_LAYER_ID,
       CONST.PROPERTIES_MENU_LAYER_CLASS
     );
 
     // create a properties menu dom element
-    this.propertiesMenu = createDomElementInContainer(`#${propertiesLayer.id}`,
+    PM.propertiesMenu = createDomElementInContainer(`#${propertiesLayer.id}`,
       'div',
       CONST.PROPERTY_MENU_ID,
       CONST.PROPERTY_MENU_CLASS
     );
 
-    return instance;
+    _setupPropertyManager.isDone = true;
   }
+};
 
+const PM = {
   /**
-   *
    * @param position
    * @param entity
    */
-  open(position, entity) {
+  open: (position, entity) => {
+    _setupPropertyManager();
+
     // Copy the entity so it's not updated when the user make changes
     _entity = entity;
     _entity.properties = Array.from(entity.properties);
 
     if (entity.isEdge) {
-      this.propertiesMenu.classList.add('edge-properties');
+      PM.propertiesMenu.classList.add('edge-properties');
     } else {
-      this.propertiesMenu.classList.remove('edge-properties');
+      PM.propertiesMenu.classList.remove('edge-properties');
     }
 
-    this.propertiesMenu.classList.add('opened');
-    this.propertiesMenu.focus();
-    this.propertiesMenu.style.left = `${position[0]}px`;
-    this.propertiesMenu.style.top = `${position[1]}px`;
+    PM.propertiesMenu.classList.add('opened');
+    PM.propertiesMenu.focus();
+    PM.propertiesMenu.style.left = `${position[0]}px`;
+    PM.propertiesMenu.style.top = `${position[1]}px`;
 
-    this.propertiesMenu.innerHTML = _getMenuHTML(_entity);
+    PM.propertiesMenu.innerHTML = _getMenuHTML(_entity);
 
     /**
      * @private
@@ -454,14 +448,14 @@ class PropertiesManager {
       })
       .on('drag', () => {
         if (isDraggedByTheHandler) {
-          d3.select(this.propertiesMenu).style({
+          d3.select(PM.propertiesMenu).style({
             left: `${d3.event.x - startDragOffset[0]}px`,
             top: `${d3.event.y - startDragOffset[1]}px`
           });
         }
       });
 
-    d3.select(this.propertiesMenu).call(drag);
+    d3.select(PM.propertiesMenu).call(drag);
 
     /** --------------------------
      * entity label and color, close and save buttons
@@ -477,7 +471,7 @@ class PropertiesManager {
     });
 
     d3.select('#close-button').on('click', () => {
-      this.close();
+      PM.close();
     });
 
     d3.select('#save-button').on('click', () => {
@@ -489,21 +483,21 @@ class PropertiesManager {
       _entity.properties.push(new Property());
       _drawProperties();
     });
-  }
+  },
 
   /**
    *
    */
-  close() {
-    this.propertiesMenu.classList.remove('opened');
-  }
+  close: () => {
+    PM.propertiesMenu.classList.remove('opened');
+  },
 
   /**
    * @param fn
    */
-  onSave(fn) {
+  onSave: (fn) => {
     _saveHandlerFunction = fn;
   }
-}
+};
 
-export default PropertiesManager;
+export default PM;
