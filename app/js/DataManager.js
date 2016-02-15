@@ -247,11 +247,15 @@ const DataManager = {
    * @param id
    * @returns {Object}
    */
-  getNode: (id) => Object.assign(new Node(), _getNode(id)),
+  getNode: (id) => {
+    if (_nodes.filter(n => n.id === id).length) {
+      return Object.assign(new Node(), _getNode(id));
+    }
+  },
 
-  /**
-   * @returns {Array}
-   */
+    /**
+     * @returns {Array}
+     */
   getAllNodes: () => _nodes.map(n => Object.assign(new Node, n)),
 
   // TODO The data is not copied deeply all properties will not be saved in history on in a save entry

@@ -4,6 +4,7 @@ import createDomElementInContainer from '../utils/dom';
 import CONST from '../enums/CONST';
 
 import DataManager from '../DataManager';
+import PropertiesManager from '../PropertiesManager';
 
 /**
  * @param parentDomContainer
@@ -24,6 +25,17 @@ const UI = (parentDomContainer) => {
       if (element.classList.contains('entity')) {
         const id = element.attributes['entity-id'].value;
         DataManager.selectEntity(id);
+      }
+    })
+    .on('click', () => {
+      const element = d3.event.target;
+
+      if (element.classList.contains('entity')) {
+        const id = element.attributes['entity-id'].value;
+        const entity = DataManager.getNode(id) || DataManager.getEdge(id);
+        const position = entity.isNode ? [entity.x + 20, entity.y + 15] : [entity.middlePointWithOffset[0] + 10, entity.middlePointWithOffset[1] + 10];
+
+        PropertiesManager.open(position, entity);
       }
     });
 };

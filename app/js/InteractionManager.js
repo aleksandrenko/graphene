@@ -250,7 +250,7 @@ const IM = {
           }
 
           if (entity.isEdge) {
-            PropertiesManager.open([entity.middlePoint[0] - entity.middlePointOffset[0], entity.middlePoint[1] - entity.middlePointOffset[1]], entity);
+            PropertiesManager.open(entity.middlePointWithOffset, entity);
           }
         };
 

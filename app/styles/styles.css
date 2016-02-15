@@ -565,6 +565,8 @@ html, body {
   pointer-events: none;
   z-index: 1000;
   border-bottom: solid 3px dodgerblue;
+  min-width: 80px;
+  min-height: 50px;
 }
 
 .info-panel {

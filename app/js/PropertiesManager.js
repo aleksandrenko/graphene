@@ -489,7 +489,7 @@ const PM = {
    *
    */
   close: () => {
-    PM.propertiesMenu.classList.remove('opened');
+    PM.propertiesMenu && PM.propertiesMenu.classList.remove('opened');
   },
 
   /**
