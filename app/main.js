@@ -9,4 +9,4 @@ graphEditor.onChange(updateEvent => {
 
 const dataFromLocalStorage = localStorage.getItem(localStorageItem);
 
-graphEditor.insertData(JSON.parse(dataFromLocalStorage));
+graphEditor.loadData(JSON.parse(dataFromLocalStorage));

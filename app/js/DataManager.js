@@ -15,31 +15,45 @@ let _edges = [];
 let _onUpdateCallbackHandler = () => '';
 
 /**
+ * @param {Object} rawData
+ * @private
+ */
+const _replaceData = (rawData) => {
+  if (!rawData) {
+    return DataManager;
+  }
+
+  const data = {
+    nodes: rawData.nodes.map(nodeData => {
+      const node = new Node(nodeData);
+      node.properties = node.properties.map(data => new Property(data));
+      return node;
+    }),
+    edges: rawData.edges.map(edgeData => {
+      const edge = new Edge(edgeData);
+      edge.properties = edge.properties.map(data => new Property(data));
+      return edge;
+    })
+  };
+
+  // reposition nodes if some of them is outside of the visible area
+  _nodes = reposition(data.nodes) || _nodes;
+  _edges = data.edges || _edges;
+
+  return data;
+};
+
+/**
  * @param {string} eventType
  * @param {string} target
  * @param {Object} data
  * @private
  */
-function _dispatchUpdate(eventType, target, data) {
+const _dispatchUpdate = (eventType, target, data) => {
   // prevent some updates
-  if (eventType !== 'history') {
-    _history.unshift({
-      id: createId(),
-      date: Date.now(),
-      type: `${eventType} ${target} (${_nodes.length} nodes, ${_edges.length} edges)`,
-      data: {
-        nodes: _nodes,
-        edges: _edges
-      }
-    });
-  }
-
-  // limit the size of the history
-  if (_history.length >= MAX_HISTORY_STEPS) {
-    _history.pop();
-  }
-
-  _onUpdateCallbackHandler({
+  // console.log(eventType, target, data, '');
+  const fn = _dispatchUpdate;
+  const updateEvent = {
     event: eventType,
     target,
     change: data,
@@ -47,8 +61,35 @@ function _dispatchUpdate(eventType, target, data) {
       nodes: _nodes,
       edges: _edges
     }
-  });
-}
+  };
+
+  // if node is updated
+  // last and current targets as strings with removed x and y properties
+  const lastTargetStr = JSON.stringify(fn.lastTarget || {}).replace(/\"x"\:.*,"y":.*,"color/, '"color,');
+  const currentTargetStr = JSON.stringify(data).replace(/\"x"\:.*,"y":.*,"color/, '"color,');
+
+  if (eventType === 'update' && target === 'node' && fn.lastTarget && fn.lastTarget.id === data.id && lastTargetStr === currentTargetStr) {
+    // skip all update if the node is just moved
+  } else {
+    if (eventType !== 'history') {
+      _history.unshift(Object.assign({
+        id: createId(),
+        date: Date.now(),
+        type: `${eventType} ${target} (${_nodes.length} nodes, ${_edges.length} edges)`
+      }, updateEvent));
+    }
+  }
+
+  // save the last target to be able to prevent multiple updates of the same kind. example: update
+  fn.lastTarget = data;
+
+  // limit the size of the history
+  if (_history.length >= MAX_HISTORY_STEPS) {
+    _history.pop();
+  }
+
+  _onUpdateCallbackHandler(updateEvent);
+};
 
 /**
  * @param id
@@ -86,10 +127,9 @@ const DataManager = {
   revertToHistoryEntry: (historyEntryId) => {
     const historyEntry = _history.filter(e => e.id === historyEntryId)[0];
 
-    DataManager.setAllNodes(historyEntry.data.nodes);
-    DataManager.setAllEdges(historyEntry.data.edges);
+    const data = _replaceData(historyEntry.data);
 
-    _dispatchUpdate('history', 'revert', historyEntry.data);
+    _dispatchUpdate('history', 'revert', data);
   },
 
   /**
@@ -117,7 +157,7 @@ const DataManager = {
     if (entity && !entity.isSelected) {
       DataManager.deselectAllEntities();
       entity.isSelected = true;
-      _dispatchUpdate('update', entity.isNode ? 'node' : 'edge', entity);
+      _dispatchUpdate('select', entity.isNode ? 'node' : 'edge', entity);
     }
 
     return DataManager;
@@ -140,7 +180,7 @@ const DataManager = {
     });
 
     if (forceRender) {
-      _dispatchUpdate('update', 'nodes', {});
+      _dispatchUpdate('deselect', 'all', {});
     }
 
     return DataManager;
@@ -158,29 +198,10 @@ const DataManager = {
   },
 
   /**
-   * @param rawData
+   * @param {Object} rawData
    */
-  insertData: (rawData) => {
-    if (!rawData) {
-      return DataManager;
-    }
-
-    const data = {
-      nodes: rawData.nodes.map(nodeData => {
-        const node = new Node(nodeData);
-        node.properties = node.properties.map(data => new Property(data));
-        return node;
-      }),
-      edges: rawData.edges.map(edgeData => {
-        const edge = new Edge(edgeData);
-        edge.properties = edge.properties.map(data => new Property(data));
-        return edge;
-      })
-    };
-
-    // reposition nodes if some of them is outside of the visible area
-    _nodes = _nodes.concat(reposition(data.nodes)) || _nodes;
-    _edges = _edges.concat(data.edges) || _edges;
+  loadData: (rawData) => {
+    const data = _replaceData(rawData);
 
     _dispatchUpdate('load', 'data', data);
     return DataManager;
@@ -226,19 +247,21 @@ const DataManager = {
    * @param id
    * @returns {Object}
    */
-  getNode: (id) => Object.assign({}, _getNode(id)),
+  getNode: (id) => Object.assign(new Node(), _getNode(id)),
 
   /**
    * @returns {Array}
    */
-  getAllNodes: () => Array.from(_nodes),
+  getAllNodes: () => _nodes.map(n => Object.assign(new Node, n)),
+
+  // TODO The data is not copied deeply all properties will not be saved in history on in a save entry
 
   /**
    * @param nodes
    */
   setAllNodes: (nodes) => {
     _nodes = nodes;
-    _dispatchUpdate('update', 'node', _nodes);
+    _dispatchUpdate('set', 'nodes', _nodes);
   },
 
   /**
@@ -256,6 +279,7 @@ const DataManager = {
    */
   setAllEdges: (edges) => {
     _edges = edges;
+    _dispatchUpdate('set', 'edges', _edges);
   },
 
   /**
@@ -294,7 +318,7 @@ const DataManager = {
   /**
    * @returns {Array}
    */
-  getAllEdges: () => Array.from(_edges),
+  getAllEdges: () => _edges.map(e => Object.assign(new Edge, e)),
 
   /**
    * @param {function} fn

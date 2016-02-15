@@ -79,8 +79,8 @@ class GraphEditor {
     _onUpdateCallbackHandler = fn;
   }
 
-  insertData(rawData) {
-    DataManager.insertData(rawData);
+  loadData(rawData) {
+    DataManager.loadData(rawData);
   }
 }
 

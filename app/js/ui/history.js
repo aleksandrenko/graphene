@@ -4,6 +4,18 @@ import createDomElementInContainer from '../utils/dom';
 import CONST from '../enums/CONST';
 import DataManager from '../DataManager';
 
+function _formatDate(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? (`0 ${minutes}`) : minutes;
+  seconds = seconds < 10 ? (`0 ${seconds}`) : seconds;
+  return `${hours}:${minutes}:${seconds} ${ampm}`;
+}
+
 /**
  * @param parentElement
  */
@@ -12,7 +24,7 @@ const HistoryUI = (parentElement) => {
 
   HistoryUI.$historySummary = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div', CONST.HISTORY_SUMMARY_ID, CONST.HISTORY_SUMMARY_CLASS);
   HistoryUI.$historyPanel = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div', CONST.HISTORY_PANEL_ID, CONST.HISTORY_PANEL_CLASS);
-  const $historyActionButtons = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div');
+  const $historyActionButtons = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div', '', '');
 
   $historyActionButtons.innerHTML = `
     <input type="checkbox" class="history-list-toggle-button" title="Toggle the history records list." />
@@ -58,8 +70,12 @@ HistoryUI.render = () => {
 
   let panelHTML = '<ul>';
 
-  history.forEach(entry => {
-    panelHTML += `<li class="history-entry" id="${entry.id}"><b>${entry.type}</b> <span class="date">(${Date(entry.date)})</span></li>`;
+  history.forEach((entry, index) => {
+    panelHTML += `<li class="history-entry" id="${entry.id}">
+                    ${index + 1}.
+                    <b>${entry.type}</b>
+                    <span class="date">(${_formatDate(new Date(entry.date))})</span>
+                  </li>`;
   });
 
   panelHTML += '</ul>';

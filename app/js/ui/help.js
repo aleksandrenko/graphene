@@ -26,9 +26,9 @@ export default (parentElement) => {
       <span class="keyboard-button">tab</span> - Focus nodes, edges, info or help panels <br />
       <span class="keyboard-button">space</span>  - Select the focused node or edge <br />
       <span class="keyboard-button">enter</span> - Open the properties panel for the focused node or edge <br />
-      <span class="keyboard-button big-text">&#65513;</span> - Move all nodes and edges left<br />
-      <span class="keyboard-button big-text">&#65515;</span> - Move all nodes and edges right<br />
-      <span class="keyboard-button big-text">&#65514;</span> - Move all nodes and edges up<br />
-      <span class="keyboard-button big-text">&#65516;</span> - Move all nodes and edges down<br />
+      <span class="keyboard-button big-text">&#8678;</span> - Move all nodes and edges left<br />
+      <span class="keyboard-button big-text">&#8680;</span> - Move all nodes and edges right<br />
+      <span class="keyboard-button big-text">&#8679;</span> - Move all nodes and edges up<br />
+      <span class="keyboard-button big-text">&#8681;</span> - Move all nodes and edges down<br />
     `;
 };
