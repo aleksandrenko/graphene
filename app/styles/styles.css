@@ -91,6 +91,7 @@ html, body {
 .graph-editor .node text {
   white-space: nowrap;
   fill-opacity: 1;
+  text-transform: capitalize;
 }
 
 .graph-editor .node:focus {
@@ -103,6 +104,7 @@ html, body {
 
 .graph-editor .edge text {
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .graph-editor .edge text.dragging {
@@ -328,6 +330,7 @@ html, body {
   cursor: pointer;
   padding: 6px 15px 6px 10px;
   border-bottom: solid 1px #eee;
+  text-transform: capitalize;
 }
 
 .property-menu .main #properties-list li .property .type {
@@ -425,6 +428,7 @@ html, body {
 .property-menu .main .property-edit input[type="text"],
 .property-menu .main .property-edit select {
   width: 100%;
+  text-transform: capitalize;
 }
 
 .property-menu .main .property-edit .actions {
@@ -628,6 +632,7 @@ html, body {
   padding: 5px;
   border-radius: 5px;
   transition: background 0.2s;
+  text-transform: capitalize;
 }
 
 .info-panel .col .entity * {

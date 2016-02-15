@@ -289,7 +289,7 @@ const DataManager = {
    * @param id
    * @returns {Array}
    */
-  getEdge: (id) => Object.assign(new Edge(0, 0), _getEdge(id)), // create edge from edge class to keep the methods
+  getEdge: (id) => Object.assign(new Edge(), _getEdge(id)), // create edge from edge class to keep the methods
 
   /**
    * @returns {Array}

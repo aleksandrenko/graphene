@@ -6,12 +6,10 @@ class Property {
   /**
    * @constructor
    */
-  constructor(options) {
-    options = options || {};
-
+  constructor(options = {}) {
     this.id = options.id || createId();
-    this.key = options.key || 'undefined';
-    this.type = options.type || '';
+    this.key = (options.key || '-').toLowerCase();
+    this.type = (options.type || '').toLowerCase();
     this.hasDefaultValue = options.hasDefaultValue || false;
     this.defaultValue = options.defaultValue || '';
     this.hasLimit = options.hasLimit || false;
