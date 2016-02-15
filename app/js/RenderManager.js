@@ -210,12 +210,6 @@ const RM = {
     // a wrapper for temporal drawed paths
     RM.d3Element.append('g').classed('tempPaths', true);
 
-    // a wrapper for all paths
-    RM.d3GroupForEdges = RM.d3Element.append('g').classed('edges', true);
-
-    // a wrapper for all nodes
-    RM.d3GroupForNodes = RM.d3Element.append('g').classed('nodes', true);
-
     // define arrow marker for leading arrow when creating new rel;
     RM.d3Element.select('defs')
       .append('marker').attr({
@@ -285,8 +279,8 @@ const RM = {
    * @param data
    */
   render: (data) => {
-    _renderEdges(RM.d3GroupForEdges, data.edges);
-    _renderNodes(RM.d3GroupForNodes, data.nodes);
+    _renderEdges(RM.d3Element, data.edges);
+    _renderNodes(RM.d3Element, data.nodes);
   }
 };
 
