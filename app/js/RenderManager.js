@@ -165,25 +165,42 @@ const _renderEdges = (d3Element, edgesData) => {
   edges.attr({ id: data => data.id });
 
   edges.select('text').attr({
-    x: edge => edge.middlePoint[0] - edge.middlePointOffset[0] + 10,
-    y: edge => edge.middlePoint[1] - edge.middlePointOffset[1],
+    x: edge => edge.middlePointWithOffset[0] + 10,
+    y: edge => edge.middlePointWithOffset[1],
     fill: edge => edge.color,
     opacity: edge => _getOpacityForEntity(edge)
   }).text(e => `${e.label} (${e.properties.length})`);
 
   // Helper function to draw paths
-  const lineFunction = d3.svg.line()
-    .x(d => d[0])
-    .y(d => d[1])
-    .interpolate('cardinal');
+  const __lineFunction = (edge) => {
+    let points;
+    const line = d3.svg.line()
+      .x(d => d[0])
+      .y(d => d[1])
+      .interpolate(edge.startNodeId === edge.endNodeId ? 'basis' : 'cardinal');
+
+    if (edge.startNodeId === edge.endNodeId) {
+      points = [
+        [edge.startNode.x, edge.startNode.y],
+        [edge.middlePointWithOffset[0] - 20, edge.middlePointWithOffset[1] + 20],
+        edge.middlePointWithOffset,
+        [edge.middlePointWithOffset[0] + 10, edge.middlePointWithOffset[1] - 10],
+        [edge.endNode.x, edge.endNode.y]
+      ];
+    } else {
+      points = [
+        [edge.startNode.x, edge.startNode.y],
+        edge.middlePointWithOffset,
+        [edge.endNode.x, edge.endNode.y]
+      ];
+    }
+
+    return line(points);
+  };
 
   edges.select('path')
     .attr({
-      d: (edge) => lineFunction([
-        [edge.startNode.x, edge.startNode.y],
-        [edge.middlePoint[0] - edge.middlePointOffset[0], edge.middlePoint[1] - edge.middlePointOffset[1]],
-        [edge.endNode.x, edge.endNode.y]
-      ])
+      d: (edge) => __lineFunction(edge)
     })
     .transition()
     .duration(TRANSITION_DURATION)

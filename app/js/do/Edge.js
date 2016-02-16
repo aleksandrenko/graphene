@@ -38,7 +38,7 @@ class Edge {
   }
 
   /**
-   * @returns {array}
+   * @returns {Array}
    */
   get middlePoint() {
     return [
@@ -48,6 +48,10 @@ class Edge {
   }
 
   get middlePointWithOffset() {
+    if (this.startNodeId === this.endNodeId && this.middlePointOffset[0] === 0 && this.middlePointOffset[1] === 0) {
+      this.middlePointOffset = [100, 100];
+    }
+
     return [
       (this.startNode.x + this.endNode.x) / 2 - this.middlePointOffset[0],
       (this.startNode.y + this.endNode.y) / 2 - this.middlePointOffset[1]
