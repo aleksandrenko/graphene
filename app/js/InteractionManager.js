@@ -208,12 +208,13 @@ const IM = {
   },
 
   keydownHandler: () => {
+    const backKey = 8;
     const escKey = 27;
     const delKey = 46;
     const spaceKey = 32;
     const enterKey = 13;
 
-    const infoKey = 192;
+    const infoKey = 192; // '`'
 
     const leftKey = 37;
     const topKey = 38;
@@ -222,11 +223,32 @@ const IM = {
 
     const keyMoveStep = 10;
 
+    const sKey = 83;
+    const lKey = 76;
+
     const focusedElement = document.activeElement;
 
     switch (d3.event.keyCode) {
+      case backKey:
+        // prevent returning - history back, when the back button is pressed
+        if (focusedElement.nodeName !== 'INPUT') {
+          d3.event.preventDefault();
+        }
+        break;
+      case lKey:
+        if (d3.event.ctrlKey || d3.event.metaKey) {
+          console.log('load');
+          d3.event.preventDefault();
+        }
+        break;
+      case sKey:
+        if (d3.event.ctrlKey || d3.event.metaKey) {
+          console.log('save');
+          d3.event.preventDefault();
+        }
+        break;
       case infoKey:
-        // toggle the info panel
+        // toggle the info panel `
         focusedElement.classList.contains(CONST.INFO_ID) ? focusedElement.blur() : document.querySelector(`#${CONST.INFO_ID}`).focus();
         break;
       case delKey:
