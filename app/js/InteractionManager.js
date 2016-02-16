@@ -208,6 +208,9 @@ const IM = {
   },
 
   keydownHandler: () => {
+    const focusedElement = document.activeElement;
+    const focusedElementType = focusedElement.nodeName; // upppercase
+
     const backKey = 8;
     const escKey = 27;
     const delKey = 46;
@@ -226,12 +229,10 @@ const IM = {
     const sKey = 83;
     const lKey = 76;
 
-    const focusedElement = document.activeElement;
-
     switch (d3.event.keyCode) {
       case backKey:
-        // prevent returning - history back, when the back button is pressed
-        if (focusedElement.nodeName !== 'INPUT') {
+        if (focusedElementType === 'INPUT') {
+          // prevent returning - history back, when the back button is pressed
           d3.event.preventDefault();
         }
         break;
@@ -302,16 +303,28 @@ const IM = {
         }
         break;
       case leftKey:
-        _updatePosition([-keyMoveStep, 0]);
+        if (focusedElementType !== 'INPUT') {
+          _updatePosition([-keyMoveStep, 0]);
+          d3.event.preventDefault();
+        }
         break;
       case topKey:
-        _updatePosition([0, -keyMoveStep]);
+        if (focusedElementType !== 'INPUT') {
+          _updatePosition([0, -keyMoveStep]);
+          d3.event.preventDefault();
+        }
         break;
       case rightKey:
-        _updatePosition([keyMoveStep, 0]);
+        if (focusedElementType !== 'INPUT') {
+          _updatePosition([keyMoveStep, 0]);
+          d3.event.preventDefault();
+        }
         break;
       case bottomKey:
-        _updatePosition([0, keyMoveStep]);
+        if (focusedElementType !== 'INPUT') {
+          _updatePosition([0, keyMoveStep]);
+          d3.event.preventDefault();
+        }
         break;
       default:
         break;
