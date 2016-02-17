@@ -9,6 +9,7 @@ import createGroupInSVG from './utils/svgGroup';
 import helpUI from './ui/help';
 import infoUI from './ui/info';
 import historyUI from './ui/history';
+import menuUI from './ui/menu';
 
 import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
@@ -54,6 +55,8 @@ class GraphEditor {
     /** Create history ui */
     historyUI(parentDomContainer);
 
+    /** Create menu ui */
+    menuUI(parentDomContainer);
 
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
