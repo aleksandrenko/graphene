@@ -402,7 +402,7 @@ const PM = {
       property.append('div')
         .classed('remove-property-button', true)
         .attr('title', 'Delete')
-        .text('x');
+        .text('✕');
 
       properties.exit().remove();
 

@@ -304,6 +304,7 @@ const RM = {
 
   /**
    * @param data
+   * @param container
    */
   render: (data, container) => {
     _init(container);

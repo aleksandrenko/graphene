@@ -352,8 +352,15 @@ html, body {
   border-radius: 3px;
   cursor: pointer;
   line-height: 13px;
+  font-size: 11px;
   text-align: center;
   color: #eee;
+  transition: all .2s;
+}
+
+.property-menu .main #properties-list li .remove-property-button:hover {
+  background-color: #de4041;
+  color: #fff;
 }
 
 .property-menu .main #properties-list li:hover {
