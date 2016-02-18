@@ -7,11 +7,11 @@ export default (parentElement) => {
 
   const html = `
     <menu class="top-menu" id="top-menu">
-      <span tabindex="0" class="toggle-button">&#9776;</span>
+      <span class="toggle-button">&#9776;</span>
       <section class="drop-down-menu">
         <ul>
-          <li>&#128190; Save <small>(ctrl+s)</small></li>
-          <li>&#128194; Load <small>(ctrl+l)</small></li>
+          <li id="save-btn">&#128190; Save <small>(ctrl+s)</small></li>
+          <li id="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
           <li>&#8617; Undo <small>(ctrl+z)</small></li>
           <li>&#8618; Redo <small>(ctrl+y)</small></li>
         </ul>
@@ -76,11 +76,45 @@ export default (parentElement) => {
 
   $menu.innerHTML = html;
 
-  document.querySelector('#top-menu').addEventListener('click', () => {
+  d3.select('body').on('keydown.menu', () => {
+    const esc = 27;
+
+    if (d3.event.keyCode === esc) {
+      document.querySelector('#top-menu').classList.remove('opened');
+      document.querySelector('.overlay-dialog').classList.remove('opened');
+      document.querySelector('#info').classList.remove('blurred');
+      document.querySelector('#help').classList.remove('blurred');
+      document.querySelector('#rootSVG').classList.remove('blurred');
+    }
+
+    console.log(d3.event.keyCode);
+  });
+
+  document.querySelector('.toggle-button').addEventListener('click', () => {
+    document.querySelector('#top-menu').classList.toggle('opened');
+  });
+
+  document.querySelector('#save-btn').addEventListener('click', () => {
+    document.querySelector('#top-menu').classList.remove('opened');
     document.querySelector('.overlay-dialog').classList.add('opened');
+    document.querySelector('#info').classList.add('blurred');
+    document.querySelector('#help').classList.add('blurred');
+    document.querySelector('#rootSVG').classList.add('blurred');
+  });
+
+  document.querySelector('#load-btn').addEventListener('click', () => {
+    document.querySelector('#top-menu').classList.remove('opened');
+    document.querySelector('.overlay-dialog').classList.add('opened');
+    document.querySelector('#info').classList.add('blurred');
+    document.querySelector('#help').classList.add('blurred');
+    document.querySelector('#rootSVG').classList.add('blurred');
   });
 
   document.querySelector('.close-dialog-btn').addEventListener('click', () => {
+    document.querySelector('#top-menu').classList.remove('opened');
     document.querySelector('.overlay-dialog').classList.remove('opened');
+    document.querySelector('#info').classList.remove('blurred');
+    document.querySelector('#help').classList.remove('blurred');
+    document.querySelector('#rootSVG').classList.remove('blurred');
   });
 }
