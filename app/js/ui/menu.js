@@ -12,8 +12,8 @@ export default (parentElement) => {
         <ul>
           <li>&#128190; Save <small>(ctrl+s)</small></li>
           <li>&#128194; Load <small>(ctrl+l)</small></li>
-          <li>&#8634; Undo <small>(ctrl+z)</small></li>
-          <li>&#8635; Redo <small>(ctrl+y)</small></li>
+          <li>&#8617; Undo <small>(ctrl+z)</small></li>
+          <li>&#8618; Redo <small>(ctrl+y)</small></li>
         </ul>
       </section>
     </menu>
