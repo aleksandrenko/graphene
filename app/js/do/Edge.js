@@ -2,6 +2,7 @@
 
 import DataManager from '../DataManager';
 import createId from '../utils/id.js';
+import geometry from '../utils/geometry';
 
 class Edge {
   /**
@@ -41,10 +42,7 @@ class Edge {
    * @returns {Array}
    */
   get middlePoint() {
-    return [
-      (this.startNode.x + this.endNode.x) / 2,
-      (this.startNode.y + this.endNode.y) / 2
-    ];
+    return geometry.middlePoint(this.startNode, this.endNode);
   }
 
   get middlePointWithOffset() {
@@ -53,8 +51,8 @@ class Edge {
     }
 
     return [
-      (this.startNode.x + this.endNode.x) / 2 - this.middlePointOffset[0],
-      (this.startNode.y + this.endNode.y) / 2 - this.middlePointOffset[1]
+      this.middlePoint[0] - this.middlePointOffset[0],
+      this.middlePoint[1] - this.middlePointOffset[1]
     ];
   }
 }

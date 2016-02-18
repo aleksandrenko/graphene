@@ -3,6 +3,7 @@
 import Edge from './do/Edge';
 import DataManager from './DataManager';
 import InteractionManager from './InteractionManager';
+import geometry from './utils/geometry';
 
 /**
  * Private variables/consts
@@ -173,7 +174,6 @@ const _renderEdges = (d3Element, edgesData) => {
 
   // Helper function to draw paths
   const __lineFunction = (edge) => {
-    let points;
     const line = d3.svg.line()
       .x(d => d[0])
       .y(d => d[1])
@@ -182,29 +182,21 @@ const _renderEdges = (d3Element, edgesData) => {
     if (edge.startNodeId === edge.endNodeId) {
       const node = edge.startNode;
 
-      const rotationCenter = [node.x - edge.middlePointWithOffset[0], node.y - edge.middlePointWithOffset[1]];
-      const rotatedLeft = [-rotationCenter[1] + edge.middlePointWithOffset[0], rotationCenter[0] + edge.middlePointWithOffset[1]];
-      const rotatedRight = [rotationCenter[1] + edge.middlePointWithOffset[0], -rotationCenter[0] + edge.middlePointWithOffset[1]];
+      const rotatedLeft = geometry.quadWay(geometry.rotatePoint(node, edge.middlePointWithOffset, true), edge.middlePointWithOffset);
+      const rotatedRight = geometry.quadWay(geometry.rotatePoint(node, edge.middlePointWithOffset, false), edge.middlePointWithOffset);
 
-      const halfRotatedLeft = [(rotatedLeft[0] + edge.middlePointWithOffset[0]) / 2, (rotatedLeft[1] + edge.middlePointWithOffset[1]) / 2];
-      const halfRotatedRight = [(rotatedRight[0] + edge.middlePointWithOffset[0]) / 2, (rotatedRight[1] + edge.middlePointWithOffset[1]) / 2];
-
-      points = [
-        [node.x, node.y],
-        halfRotatedLeft,
-        edge.middlePointWithOffset,
-        halfRotatedRight,
-        [node.x, node.y]
-      ];
+      return `M ${node.x} ${node.y}
+        Q ${rotatedLeft[0]} ${rotatedLeft[1]}
+        ${edge.middlePointWithOffset[0]} ${edge.middlePointWithOffset[1]}
+        Q ${rotatedRight[0]} ${rotatedRight[1]}
+        ${node.x} ${node.y}`;
     } else {
-      points = [
+      return line([
         [edge.startNode.x, edge.startNode.y],
         edge.middlePointWithOffset,
         [edge.endNode.x, edge.endNode.y]
-      ];
+      ]);
     }
-
-    return line(points);
   };
 
   edges.select('path')
