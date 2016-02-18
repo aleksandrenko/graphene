@@ -180,12 +180,21 @@ const _renderEdges = (d3Element, edgesData) => {
       .interpolate(edge.startNodeId === edge.endNodeId ? 'basis' : 'cardinal');
 
     if (edge.startNodeId === edge.endNodeId) {
+      const node = edge.startNode;
+
+      const rotationCenter = [node.x - edge.middlePointWithOffset[0], node.y - edge.middlePointWithOffset[1]];
+      const rotatedLeft = [-rotationCenter[1] + edge.middlePointWithOffset[0], rotationCenter[0] + edge.middlePointWithOffset[1]];
+      const rotatedRight = [rotationCenter[1] + edge.middlePointWithOffset[0], -rotationCenter[0] + edge.middlePointWithOffset[1]];
+
+      const halfRotatedLeft = [(rotatedLeft[0] + edge.middlePointWithOffset[0]) / 2, (rotatedLeft[1] + edge.middlePointWithOffset[1]) / 2];
+      const halfRotatedRight = [(rotatedRight[0] + edge.middlePointWithOffset[0]) / 2, (rotatedRight[1] + edge.middlePointWithOffset[1]) / 2];
+
       points = [
-        [edge.startNode.x, edge.startNode.y],
-        [edge.middlePointWithOffset[0] - 20, edge.middlePointWithOffset[1] + 20],
+        [node.x, node.y],
+        halfRotatedLeft,
         edge.middlePointWithOffset,
-        [edge.middlePointWithOffset[0] + 10, edge.middlePointWithOffset[1] - 10],
-        [edge.endNode.x, edge.endNode.y]
+        halfRotatedRight,
+        [node.x, node.y]
       ];
     } else {
       points = [
