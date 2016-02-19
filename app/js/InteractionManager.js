@@ -226,25 +226,10 @@ const IM = {
 
     const keyMoveStep = 10;
 
-    const sKey = 83;
-    const lKey = 76;
-
     switch (d3.event.keyCode) {
       case backKey:
         if (focusedElementType === 'INPUT') {
           // prevent returning - history back, when the back button is pressed
-          d3.event.preventDefault();
-        }
-        break;
-      case lKey:
-        if (d3.event.ctrlKey || d3.event.metaKey) {
-          console.log('load');
-          d3.event.preventDefault();
-        }
-        break;
-      case sKey:
-        if (d3.event.ctrlKey || d3.event.metaKey) {
-          console.log('save');
           d3.event.preventDefault();
         }
         break;

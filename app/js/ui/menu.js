@@ -7,18 +7,20 @@ export default (parentElement) => {
   const $menu = createDomElementInContainer(`#${parentElement.id}`, 'div');
 
   const html = `
-    <menu class="top-menu" id="top-menu">
-      <span class="toggle-button">&#9776;</span>
-      <section class="drop-down-menu">
-        <ul>
-          <li id="save-btn">&#128190; Save <small>(ctrl+s)</small></li>
-          <li id="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
-          <li>&#8617; Undo <small>(ctrl+z)</small></li>
-          <li>&#8618; Redo <small>(ctrl+y)</small></li>
-          <li id="delete-all-btn">&#10005; Delete all</li>
-        </ul>
-      </section>
-    </menu>
+    <div class="menu-overlay">
+      <menu class="top-menu" id="top-menu">
+        <span class="toggle-button">&#9776;</span>
+        <section class="drop-down-menu">
+          <ul>
+            <li id="save-btn">&#128190; Save <small>(ctrl+s)</small></li>
+            <li id="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
+            <li id="undo-btn">&#8617; Undo <small>(ctrl+z)</small></li>
+            <li id="redo-btn">&#8618; Redo <small>(ctrl+y)</small></li>
+            <li id="delete-all-btn">&#10005; Delete all</li>
+          </ul>
+        </section>
+      </menu>
+    </div>
 
     <div class="overlay-dialog">
       <div class="dialog">
@@ -80,16 +82,42 @@ export default (parentElement) => {
 
   d3.select('body').on('keydown.menu', () => {
     const esc = 27;
+    const l = 76;
+    const s = 83;
+    const y = 89;
+    const z = 90;
+
+    if (d3.event.ctrlKey || d3.event.metaKey) {
+      switch (d3.event.keyCode) {
+        case s:
+          console.log('save');
+          d3.event.preventDefault();
+          break;
+        case l:
+          console.log('load');
+          d3.event.preventDefault();
+          break;
+        case z:
+          console.log('undo');
+          d3.event.preventDefault();
+          break;
+        case y:
+          console.log('redo');
+          d3.event.preventDefault();
+          break;
+        default:
+          break;
+      }
+    }
+
 
     if (d3.event.keyCode === esc) {
-      document.querySelector('#top-menu').classList.remove('opened');
+      document.querySelector('.menu-overlay').classList.remove('opened');
       document.querySelector('.overlay-dialog').classList.remove('opened');
       document.querySelector('#info').classList.remove('blurred');
       document.querySelector('#help').classList.remove('blurred');
       document.querySelector('#rootSVG').classList.remove('blurred');
     }
-
-    console.log(d3.event.keyCode);
   });
 
 
@@ -97,12 +125,19 @@ export default (parentElement) => {
     DataManager.clear();
   });
 
-  document.querySelector('.toggle-button').addEventListener('click', () => {
-    document.querySelector('#top-menu').classList.toggle('opened');
+
+  document.querySelector('.menu-overlay').addEventListener('click', (e) => {
+    document.querySelector('.menu-overlay').classList.remove('opened');
+  });
+
+  document.querySelector('.toggle-button').addEventListener('click', (e) => {
+    document.querySelector('.menu-overlay').classList.toggle('opened');
+    e.stopPropagation();
+    e.preventDefault();
   });
 
   document.querySelector('#save-btn').addEventListener('click', () => {
-    document.querySelector('#top-menu').classList.remove('opened');
+    document.querySelector('.menu-overlay').classList.remove('opened');
     document.querySelector('.overlay-dialog').classList.add('opened');
     document.querySelector('#info').classList.add('blurred');
     document.querySelector('#help').classList.add('blurred');
@@ -110,7 +145,7 @@ export default (parentElement) => {
   });
 
   document.querySelector('#load-btn').addEventListener('click', () => {
-    document.querySelector('#top-menu').classList.remove('opened');
+    document.querySelector('.menu-overlay').classList.remove('opened');
     document.querySelector('.overlay-dialog').classList.add('opened');
     document.querySelector('#info').classList.add('blurred');
     document.querySelector('#help').classList.add('blurred');
@@ -118,7 +153,7 @@ export default (parentElement) => {
   });
 
   document.querySelector('.close-dialog-btn').addEventListener('click', () => {
-    document.querySelector('#top-menu').classList.remove('opened');
+    document.querySelector('.menu-overlay').classList.remove('opened');
     document.querySelector('.overlay-dialog').classList.remove('opened');
     document.querySelector('#info').classList.remove('blurred');
     document.querySelector('#help').classList.remove('blurred');
