@@ -25,7 +25,7 @@ class Node {
     this.isNode = true;
   }
 
-  copy() {
+  get copy() {
     return new Node((JSON.parse(JSON.stringify(this))));
   }
 }

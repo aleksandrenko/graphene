@@ -17,7 +17,7 @@ class Property {
     this.isRequired = options.isRequired || false;
   }
 
-  copy() {
+  get copy() {
     return new Property((JSON.parse(JSON.stringify(this))));
   }
 }

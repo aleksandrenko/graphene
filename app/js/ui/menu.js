@@ -1,6 +1,7 @@
 'use strict';
 
 import createDomElementInContainer from '../utils/dom';
+import DataManager from '../DataManager';
 
 export default (parentElement) => {
   const $menu = createDomElementInContainer(`#${parentElement.id}`, 'div');
@@ -14,6 +15,7 @@ export default (parentElement) => {
           <li id="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
           <li>&#8617; Undo <small>(ctrl+z)</small></li>
           <li>&#8618; Redo <small>(ctrl+y)</small></li>
+          <li id="delete-all-btn">&#10005; Delete all</li>
         </ul>
       </section>
     </menu>
@@ -88,6 +90,11 @@ export default (parentElement) => {
     }
 
     console.log(d3.event.keyCode);
+  });
+
+
+  document.querySelector('#delete-all-btn').addEventListener('click', () => {
+    DataManager.clear();
   });
 
   document.querySelector('.toggle-button').addEventListener('click', () => {

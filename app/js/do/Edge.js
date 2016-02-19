@@ -26,7 +26,7 @@ class Edge {
     this.isEdge = true;
   }
 
-  copy() {
+  get copy() {
     return new Edge((JSON.parse(JSON.stringify(this))));
   }
 
