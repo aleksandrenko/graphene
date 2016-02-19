@@ -26,6 +26,10 @@ class Edge {
     this.isEdge = true;
   }
 
+  copy() {
+    return new Edge((JSON.parse(JSON.stringify(this))));
+  }
+
   get startNode() {
     return DataManager.getNode(this.startNodeId);
   }

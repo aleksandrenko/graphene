@@ -16,6 +16,10 @@ class Property {
     this.limit = options.limit || ['', ''];
     this.isRequired = options.isRequired || false;
   }
+
+  copy() {
+    return new Property((JSON.parse(JSON.stringify(this))));
+  }
 }
 
 export default Property;

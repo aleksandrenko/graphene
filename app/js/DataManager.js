@@ -14,6 +14,8 @@ let _edges = [];
 
 let _onUpdateCallbackHandler = () => '';
 
+const _copyData = (data) => JSON.parse(JSON.stringify(data));
+
 /**
  * @param {Object} rawData
  * @private
@@ -53,7 +55,7 @@ const _dispatchUpdate = (eventType, target, data) => {
   // prevent some updates
   // console.log(eventType, target, data, '');
   const fn = _dispatchUpdate;
-  const updateEvent = {
+  let updateEvent = {
     event: eventType,
     target,
     change: data,
@@ -62,6 +64,9 @@ const _dispatchUpdate = (eventType, target, data) => {
       edges: _edges
     }
   };
+
+  // copy the data
+  updateEvent = _copyData(updateEvent);
 
   // if node is updated
   // last and current targets as strings with removed x and y properties
@@ -250,14 +255,14 @@ const DataManager = {
    */
   getNode: (id) => {
     if (_nodes.filter(n => n.id === id).length) {
-      return Object.assign(new Node(), _getNode(id));
+      return _getNode(id).copy();
     }
   },
 
     /**
      * @returns {Array}
      */
-  getAllNodes: () => _nodes.map(n => Object.assign(new Node, n)),
+  getAllNodes: () => _nodes.map(n => n.copy()),
 
   // TODO The data is not copied deeply all properties will not be saved in history on in a save entry
 
@@ -318,12 +323,12 @@ const DataManager = {
    * @param id
    * @returns {Array}
    */
-  getEdge: (id) => Object.assign(new Edge(), _getEdge(id)), // create edge from edge class to keep the methods
+  getEdge: (id) => _getEdge(id).copy(), // create edge from edge class to keep the methods
 
   /**
    * @returns {Array}
    */
-  getAllEdges: () => _edges.map(e => Object.assign(new Edge, e)),
+  getAllEdges: () => _edges.map(e => e.copy()),
 
   /**
    * @param {function} fn

@@ -24,6 +24,10 @@ class Node {
     this.isSelected = false;
     this.isNode = true;
   }
+
+  copy() {
+    return new Node((JSON.parse(JSON.stringify(this))));
+  }
 }
 
 export default Node;
