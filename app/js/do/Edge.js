@@ -22,7 +22,7 @@ class Edge {
     this.properties = options.properties || [];
     this.label = (options.label || 'no name').toLowerCase();
     this.id = options.id || createId();
-    this.isSelected = false;
+    this.isSelected = options.isSelected || false;
     this.isEdge = true;
   }
 

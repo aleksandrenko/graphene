@@ -21,7 +21,7 @@ class Node {
     this.label = (options.label || 'no name').toLowerCase();
     this.properties = options.properties || [];
     this.id = options.id || createId();
-    this.isSelected = false;
+    this.isSelected = options.isSelected || false;
     this.isNode = true;
   }
 

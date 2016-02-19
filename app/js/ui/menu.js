@@ -3,6 +3,22 @@
 import createDomElementInContainer from '../utils/dom';
 import DataManager from '../DataManager';
 
+const _openSaveLoadDialog = () => {
+  document.querySelector('.menu-overlay').classList.remove('opened');
+  document.querySelector('.overlay-dialog').classList.add('opened');
+  document.querySelector('#info').classList.add('blurred');
+  document.querySelector('#help').classList.add('blurred');
+  document.querySelector('#rootSVG').classList.add('blurred');
+};
+
+const _closeSaveLoadDialog = () => {
+  document.querySelector('.menu-overlay').classList.remove('opened');
+  document.querySelector('.overlay-dialog').classList.remove('opened');
+  document.querySelector('#info').classList.remove('blurred');
+  document.querySelector('#help').classList.remove('blurred');
+  document.querySelector('#rootSVG').classList.remove('blurred');
+};
+
 export default (parentElement) => {
   const $menu = createDomElementInContainer(`#${parentElement.id}`, 'div');
 
@@ -38,36 +54,6 @@ export default (parentElement) => {
                 <small>Feb 17 2016 17:44:16</small>
               </div>
             </li>
-            <li class="save-entry" title="8 nodes & 12 edges" tabindex="0" id="save2">
-              <div class="icon">&#128196;</div>
-              <div class="name">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, sint.
-                <small>Feb 17 2016 17:44:16</small>
-              </div>
-            </li>
-            <li class="save-entry" title="8 nodes & 12 edges" tabindex="0" id="save3">
-              <div class="icon">&#128196;</div>
-              <div class="name">Save 001
-                <small>Feb 17 2016 17:44:16</small>
-              </div>
-            </li>
-            <li class="save-entry" title="8 nodes & 12 edges" tabindex="0" id="save4">
-              <div class="icon">&#128196;</div>
-              <div class="name">Save 001
-                <small>Feb 17 2016 17:44:16</small>
-              </div>
-            </li>
-            <li class="save-entry" title="8 nodes & 12 edges" tabindex="0" id="save5">
-              <div class="icon">&#128196;</div>
-              <div class="name">Save 001
-                <small>Feb 17 2016 17:44:16</small>
-              </div>
-            </li>
-            <li class="save-entry" title="8 nodes & 12 edges" tabindex="0" id="save6">
-              <div class="icon">&#128196;</div>
-              <div class="name">Save 001
-                <small>Feb 17 2016 17:44:16</small>
-              </div>
-            </li>
           </ul>
         </div>
         <div class="footer">
@@ -91,10 +77,12 @@ export default (parentElement) => {
       switch (d3.event.keyCode) {
         case s:
           console.log('save');
+          _openSaveLoadDialog();
           d3.event.preventDefault();
           break;
         case l:
           console.log('load');
+          _openSaveLoadDialog();
           d3.event.preventDefault();
           break;
         case z:
@@ -112,17 +100,13 @@ export default (parentElement) => {
 
 
     if (d3.event.keyCode === esc) {
-      document.querySelector('.menu-overlay').classList.remove('opened');
-      document.querySelector('.overlay-dialog').classList.remove('opened');
-      document.querySelector('#info').classList.remove('blurred');
-      document.querySelector('#help').classList.remove('blurred');
-      document.querySelector('#rootSVG').classList.remove('blurred');
+      _closeSaveLoadPanel();
     }
   });
 
 
   document.querySelector('#delete-all-btn').addEventListener('click', () => {
-    DataManager.clear();
+    window.confirm('Are you sure you want to delete all nodes and edges?') && DataManager.clear();
   });
 
 
@@ -137,19 +121,11 @@ export default (parentElement) => {
   });
 
   document.querySelector('#save-btn').addEventListener('click', () => {
-    document.querySelector('.menu-overlay').classList.remove('opened');
-    document.querySelector('.overlay-dialog').classList.add('opened');
-    document.querySelector('#info').classList.add('blurred');
-    document.querySelector('#help').classList.add('blurred');
-    document.querySelector('#rootSVG').classList.add('blurred');
+    _openSaveLoadDialog();
   });
 
   document.querySelector('#load-btn').addEventListener('click', () => {
-    document.querySelector('.menu-overlay').classList.remove('opened');
-    document.querySelector('.overlay-dialog').classList.add('opened');
-    document.querySelector('#info').classList.add('blurred');
-    document.querySelector('#help').classList.add('blurred');
-    document.querySelector('#rootSVG').classList.add('blurred');
+    _openSaveLoadDialog();
   });
 
   document.querySelector('.close-dialog-btn').addEventListener('click', () => {
