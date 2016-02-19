@@ -51,7 +51,7 @@ class Edge {
 
   get middlePointWithOffset() {
     if (this.startNodeId === this.endNodeId && this.middlePointOffset[0] === 0 && this.middlePointOffset[1] === 0) {
-      this.middlePointOffset = [100, 100];
+      this.middlePointOffset = [-50, 50];
     }
 
     return [

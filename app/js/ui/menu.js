@@ -100,15 +100,14 @@ export default (parentElement) => {
 
 
     if (d3.event.keyCode === esc) {
-      _closeSaveLoadPanel();
+      _closeSaveLoadDialog();
     }
   });
 
 
   document.querySelector('#delete-all-btn').addEventListener('click', () => {
-    window.confirm('Are you sure you want to delete all nodes and edges?') && DataManager.clear();
+    confirm('Are you sure you want to delete all nodes and edges?') && DataManager.clear();
   });
-
 
   document.querySelector('.menu-overlay').addEventListener('click', (e) => {
     document.querySelector('.menu-overlay').classList.remove('opened');
@@ -120,19 +119,9 @@ export default (parentElement) => {
     e.preventDefault();
   });
 
-  document.querySelector('#save-btn').addEventListener('click', () => {
-    _openSaveLoadDialog();
-  });
+  document.querySelector('#save-btn').addEventListener('click', _openSaveLoadDialog);
 
-  document.querySelector('#load-btn').addEventListener('click', () => {
-    _openSaveLoadDialog();
-  });
+  document.querySelector('#load-btn').addEventListener('click', _openSaveLoadDialog);
 
-  document.querySelector('.close-dialog-btn').addEventListener('click', () => {
-    document.querySelector('.menu-overlay').classList.remove('opened');
-    document.querySelector('.overlay-dialog').classList.remove('opened');
-    document.querySelector('#info').classList.remove('blurred');
-    document.querySelector('#help').classList.remove('blurred');
-    document.querySelector('#rootSVG').classList.remove('blurred');
-  });
+  document.querySelector('.close-dialog-btn').addEventListener('click', _closeSaveLoadDialog);
 }

@@ -217,7 +217,7 @@ const IM = {
     const spaceKey = 32;
     const enterKey = 13;
 
-    const infoKey = 192; // '`'
+    const infoKey = 192; // '`' button
 
     const leftKey = 37;
     const topKey = 38;
@@ -228,7 +228,7 @@ const IM = {
 
     switch (d3.event.keyCode) {
       case backKey:
-        if (focusedElementType === 'INPUT') {
+        if (focusedElementType !== 'INPUT') {
           // prevent returning - history back, when the back button is pressed
           d3.event.preventDefault();
         }
