@@ -26,11 +26,7 @@ const HistoryUI = (parentElement) => {
   HistoryUI.$historyPanel = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div', CONST.HISTORY_PANEL_ID, CONST.HISTORY_PANEL_CLASS);
   const $historyActionButtons = createDomElementInContainer(`#${HistoryUI.$history.id}`, 'div', '', '');
 
-  $historyActionButtons.innerHTML = `
-    <input type="checkbox" class="history-list-toggle-button" title="Toggle the history records list." />
-    <button class="back-button" title="Undo">&#8678;</button>
-    <button class="forward-button" title="Redo">&#8680;</button>
-  `;
+  $historyActionButtons.innerHTML = ``;
 
   d3.select($historyActionButtons).on('click', () => {
     const target = d3.event.target;
@@ -59,19 +55,19 @@ const HistoryUI = (parentElement) => {
 };
 
 HistoryUI.render = () => {
-  const history = DataManager.getHistory();
+  //const history = DataManager.getHistory();
 
-  HistoryUI.$historySummary.innerHTML = `history states: ${history.length}`;
+  //HistoryUI.$historySummary.innerHTML = `history states: ${history.length}`;
 
   let panelHTML = '<ul>';
 
-  history.forEach((entry, index) => {
-    panelHTML += `<li class="history-entry" id="${entry.id}">
-                    ${index + 1}.
-                    <b>${entry.type}</b>
-                    <span class="date">(${_formatDate(new Date(entry.date))})</span>
-                  </li>`;
-  });
+  //history.forEach((entry, index) => {
+  //  panelHTML += `<li class="history-entry" id="${entry.id}">
+  //                  ${index + 1}.
+  //                  <b>${entry.type}</b>
+  //                  <span class="date">(${_formatDate(new Date(entry.date))})</span>
+  //                </li>`;
+  //});
 
   panelHTML += '</ul>';
 

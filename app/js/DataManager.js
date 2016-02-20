@@ -7,8 +7,6 @@ import Property from './do/Property';
 import createId from './utils/id';
 import reposition from './utils/reposition';
 
-const MAX_HISTORY_STEPS = 200;
-let _history = [];
 let _nodes = [];
 let _edges = [];
 
@@ -72,21 +70,12 @@ const _dispatchUpdate = (eventType, target, data) => {
     // skip all update if the node is just moved
   } else {
     if (eventType !== 'history') {
-      _history.unshift(Object.assign({
-        id: createId(),
-        date: Date.now(),
-        type: `${eventType} ${target} (${_nodes.length} nodes, ${_edges.length} edges)`
-      }, updateEvent));
+
     }
   }
 
   // save the last target to be able to prevent multiple updates of the same kind. example: update
   fn.lastTarget = data;
-
-  // limit the size of the history
-  if (_history.length >= MAX_HISTORY_STEPS) {
-    _history.pop();
-  }
 
   _onUpdateCallbackHandler(updateEvent);
 };
@@ -107,22 +96,6 @@ const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
  * @type {Object}
  ==================================================================================================================== */
 const DataManager = {
-
-  /**
-   * {Array} history
-   */
-  getHistory: () => _history,
-
-  /**
-   * @param {string} historyEntryId
-   */
-  revertToHistoryEntry: (historyEntryId) => {
-    const historyEntry = _history.filter(e => e.id === historyEntryId)[0];
-
-    const data = _replaceData(historyEntry.data);
-
-    _dispatchUpdate('history', 'revert', data);
-  },
 
   /**
    * @returns {boolean}
