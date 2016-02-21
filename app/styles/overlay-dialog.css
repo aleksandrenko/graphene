@@ -1,0 +1,126 @@
+
+.overlay-dialog.opened {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlay-dialog.opened .dialog {
+  margin-top: 0;
+}
+
+.overlay-dialog {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+.dialog {
+  border-radius: 5px;
+  background: #fff;
+  margin-top: -150px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: margin .2s;
+}
+
+.dialog .header,
+.dialog .footer,
+.dialog .body,
+.dialog .sub-header {
+  padding: 10px;
+}
+
+.dialog .header,
+.dialog .footer {
+  background: #efefef;
+}
+
+.dialog .header,
+.dialog .sub-header {
+  border-bottom: solid 1px #ddd;
+}
+
+.dialog .sub-header {
+  background: #eee;
+  display: flex;
+  line-height: 24px;
+}
+
+.dialog .sub-header input[type="text"] {
+  flex: 1;
+  margin: 0 8px;
+}
+
+.dialog .sub-header button {
+  width: 100px;
+}
+
+.dialog .footer {
+  border-top: solid 1px #ddd;
+  text-align: right;
+}
+
+.dialog .body {
+  min-height: 50px;
+  max-height: 50vh;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 536px;
+  max-width: 50vw;
+  overflow: auto;
+}
+
+.save-entry {
+  width: 100px;
+  flex: 1;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+  transition: all .2s;
+  padding: 10px;
+  border: solid 1px transparent;
+}
+
+.save-entry:hover,
+.save-entry:focus {
+  background: #fafafa;
+  border-color: #ddd;
+  outline: none;
+}
+
+.save-entry .icon {
+  display: inline-block;
+  height: 55px;
+  width: 48px;
+  font-size: 48px;
+  line-height: 54px;
+  vertical-align: middle;
+}
+
+.save-entry .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.save-entry small {
+  opacity: .3;
+  display: block;
+  font-size: 70%;
+  padding: 0 10px;
+  line-height: 1;
+  white-space: normal;
+}

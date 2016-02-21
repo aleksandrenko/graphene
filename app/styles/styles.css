@@ -1,4 +1,5 @@
 @import './top-menu.css';
+@import './overlay-dialog.css';
 
 html, body {
   height: 100%;

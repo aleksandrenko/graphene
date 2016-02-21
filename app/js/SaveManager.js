@@ -20,7 +20,7 @@ function _formatDate(date) {
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? (`0 ${minutes}`) : minutes;
   seconds = seconds < 10 ? (`0 ${seconds}`) : seconds;
-  return `${hours}:${minutes}:${seconds} ${ampm}`;
+  return `${hours}:${minutes}:${seconds}${ampm}`;
 }
 
 const SM = {
@@ -30,12 +30,14 @@ const SM = {
   getSaves: () => _saves,
 
   /**
-   * @param data
+   * @param {Array} data
+   * @param {string} name
    */
-  save: (data) => {
+  save: (data, name) => {
     _saves.unshift(Object.assign({
       id: createId(),
-      date: Date
+      date: _formatDate(new Date()),
+      name
     }, data));
 
     _onUpdateCallbackHandler(_saves);
@@ -63,6 +65,9 @@ const SM = {
     _onUpdateCallbackHandler(_saves);
   },
 
+  /**
+   * @param fn
+   */
   onChange: (fn) => _onUpdateCallbackHandler = fn
 };
 
