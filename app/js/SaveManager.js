@@ -2,16 +2,17 @@
 
 import createId from './utils/id';
 import DataManager from './DataManager';
+import NotificationManager from './NotificationManager';
 
 let _saves = [];
-let _onUpdateCallbackHandler = () => null;
+const _onUpdateCallbackHandlers = [];
 
 /**
  * @param date
  * @returns {*}
  * @private
  */
-function _formatDate(date) {
+const _formatDate = (date) => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
@@ -24,9 +25,26 @@ function _formatDate(date) {
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? (`0${minutes}`) : minutes;
   return `${day}/${month}/${year} ${hours}:${minutes}${ampm}`;
-}
+};
 
+const _dispatchEvent = (payload) => {
+  _onUpdateCallbackHandlers.forEach(callbackHandler => {
+    callbackHandler(payload);
+  });
+};
+
+/**
+ * Save Manager Object
+ */
 const SM = {
+  /**
+   * @param data
+   */
+  loadSaves: (data) => {
+    _saves = data;
+    _dispatchEvent(_saves);
+  },
+
   /**
    * @returns {Array} saves
    */
@@ -45,7 +63,7 @@ const SM = {
       name
     }, data));
 
-    _onUpdateCallbackHandler(_saves);
+    _dispatchEvent(_saves);
   },
 
   /**
@@ -54,27 +72,30 @@ const SM = {
   load: (id) => {
     const save = _saves.filter(s => s.id === id)[0];
     DataManager.loadData(save.data);
+    NotificationManager.success('Save successfully loaded.');
   },
 
   /**
    * @param id
    */
-  delete: (id) => {
+  remove: (id) => {
     _saves = _saves.reduce((acc, s) => {
       if (s.id !== id) {
-        acc.push(n);
+        acc.push(s);
       }
 
       return acc;
     }, []);
 
-    _onUpdateCallbackHandler(_saves);
+    _dispatchEvent(_saves);
   },
 
   /**
    * @param fn
    */
-  onChange: (fn) => _onUpdateCallbackHandler = fn
+  onChange: (fn) => {
+    _onUpdateCallbackHandlers.push(fn);
+  }
 };
 
 export default SM;

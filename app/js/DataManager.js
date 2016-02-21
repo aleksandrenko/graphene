@@ -6,6 +6,8 @@ import Property from './do/Property';
 
 import HistoryManager from './HistoryManager';
 
+import SaveManager from './SaveManager';
+
 import createId from './utils/id';
 import reposition from './utils/reposition';
 
@@ -44,7 +46,7 @@ const _replaceData = (rawData) => {
 };
 
 /**
- * @param {string} eventType
+ * @param {string} eventType - is mostly use for loging
  * @param {string} target
  * @param {Object} data
  * @private
@@ -57,6 +59,7 @@ const _dispatchUpdate = (eventType, target, data) => {
     event: eventType,
     target,
     change: data,
+    saves: SaveManager.getSaves(),
     data: {
       nodes: _nodes,
       edges: _edges
@@ -91,6 +94,12 @@ const _getEdge = (id) => _edges.filter(edge => edge.id === id)[0];
  * @private
  */
 const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
+
+
+// On SaveChanges fire an update event so the external data can be updated
+SaveManager.onChange(data => {
+  _dispatchUpdate('saves updated', {}, data);
+});
 
 /** ====================================================================================================================
  * @type {Object}

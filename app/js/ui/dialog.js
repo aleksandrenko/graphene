@@ -91,6 +91,7 @@ const _setupDialog = () => {
   );
 
   SaveManager.onChange(data => {
+    _selectedSaveId = null;
     Dialog.render(data);
   });
 
@@ -128,9 +129,10 @@ const _setupDialog = () => {
         break;
       case 'load-btn':
         SaveManager.load(_selectedSaveId);
+        Dialog.close();
         break;
       case 'delete-btn':
-        SaveManager.delete(_selectedSaveId);
+        window.confirm('Are you sure you want to delete all saved nodes and edges?') && SaveManager.remove(_selectedSaveId);
         break;
       case 'save-entry':
         _selectSave(target.id);
@@ -148,6 +150,9 @@ const _setupDialog = () => {
  */
 const Dialog = {
 
+  /**
+   * render the dialog
+   */
   render: () => {
     const saves = SaveManager.getSaves();
     Dialog.dialogLayer.innerHTML = _getHTML(saves);

@@ -4,6 +4,7 @@ import createDomElementInContainer from '../utils/dom';
 import DataManager from '../DataManager';
 import HistoryManager from '../HistoryManager';
 import SaveManager from '../SaveManager';
+import NotificationManager from '../NotificationManager';
 
 import Dialog from './dialog';
 
@@ -77,7 +78,7 @@ export default (parentElement) => {
   });
 
   document.querySelector('.menu-load-btn').addEventListener('click', () => {
-    Dialog.open();
+    Dialog.open(false);
   });
 
   document.querySelector('.menu-undo-btn').addEventListener('click', e => {
@@ -91,6 +92,9 @@ export default (parentElement) => {
   });
 
   document.querySelector('.menu-delete-all-btn').addEventListener('click', () => {
-    window.confirm('Are you sure you want to delete all nodes and edges?') && DataManager.clear();
+    if (window.confirm('Are you sure you want to delete all nodes and edges?')) {
+      DataManager.clear();
+      NotificationManager.error('All nodes and edges have been deleted. (Hint: Ctrl+Z to undo)');
+    }
   });
-}
+};

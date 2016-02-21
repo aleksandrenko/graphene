@@ -10,8 +10,10 @@ import helpUI from './ui/help';
 import infoUI from './ui/info';
 import menuUI from './ui/menu';
 
+import NotificationManager from './NotificationManager';
 import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
+import SaveManager from './SaveManager';
 
 import RenderManager from './RenderManager';
 import Dialog from './ui/dialog';
@@ -58,9 +60,6 @@ class GraphEditor {
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
 
-    // TODO: testing
-    Dialog.open(true);
-
     /**
      * On update re-render the content
      */
@@ -74,12 +73,26 @@ class GraphEditor {
     });
   }
 
+  /**
+   * @param fn
+   */
   onChange(fn) {
     _onUpdateCallbackHandler = fn;
   }
 
-  loadData(rawData) {
-    DataManager.loadData(rawData);
+  /**
+   * @param data
+   */
+  loadData(data) {
+    if (data.data) {
+      DataManager.loadData(data.data);
+      NotificationManager.success(`${data.data.nodes.length} Nodes and ${data.data.edges.length} Edges Loaded.`);
+    }
+
+    if (data.saves && data.saves.length) {
+      SaveManager.loadSaves(data.saves);
+      NotificationManager.success(`${data.saves.length} Saves Loaded`);
+    }
   }
 }
 
