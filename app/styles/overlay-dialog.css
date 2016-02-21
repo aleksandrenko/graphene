@@ -51,7 +51,7 @@
 
 .dialog .sub-header {
   background: #eee;
-  display: flex;
+  display: none;
   line-height: 24px;
 }
 
@@ -67,6 +67,10 @@
 .dialog .footer {
   border-top: solid 1px #ddd;
   text-align: right;
+}
+
+.dialog .footer .left {
+  float: left;
 }
 
 .dialog .body {
@@ -93,11 +97,19 @@
   border: solid 1px transparent;
 }
 
+.save-entry * {
+  pointer-events: none;
+}
+
 .save-entry:hover,
 .save-entry:focus {
-  background: #fafafa;
-  border-color: #ddd;
+  border-color: #eee;
   outline: none;
+}
+
+.save-entry.selected {
+  background: #fafafa;
+  border-color: #eee;
 }
 
 .save-entry .icon {

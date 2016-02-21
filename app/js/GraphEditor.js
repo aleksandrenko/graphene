@@ -14,6 +14,7 @@ import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
 
 import RenderManager from './RenderManager';
+import Dialog from './ui/dialog';
 
 /**
  * @param event
@@ -56,6 +57,9 @@ class GraphEditor {
 
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
+
+    // TODO: testing
+    Dialog.open(true);
 
     /**
      * On update re-render the content

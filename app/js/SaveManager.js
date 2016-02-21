@@ -33,8 +33,10 @@ const SM = {
   getSaves: () => _saves,
 
   /**
-   * @param {Array} data
-   * @param {string} name
+   * @param {Object} data - data to be saved
+   * @param {Array} data.nodes - all nodes
+   * @param {Array} data.edges - all edges
+   * @param {string} name - the new save name
    */
   save: (data, name) => {
     _saves.unshift(Object.assign({
@@ -51,12 +53,13 @@ const SM = {
    */
   load: (id) => {
     const save = _saves.filter(s => s.id === id)[0];
+    DataManager.loadData(save.data);
   },
 
   /**
    * @param id
    */
-  deleteSave: (id) => {
+  delete: (id) => {
     _saves = _saves.reduce((acc, s) => {
       if (s.id !== id) {
         acc.push(n);
