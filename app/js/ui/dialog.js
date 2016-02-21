@@ -49,8 +49,8 @@ const _getHTML = (saves) => `
         </div>
         <div class="footer">
           <button class="new-save-btn left">New Save</button>
-          <button class="delete-btn" style="${!_selectedSaveId && 'display: none;'}">Delete Save</button>
-          <button class="load-btn" style="${!_selectedSaveId && 'display: none;'}">Load Save</button>
+          <button class="delete-btn" style="${!_selectedSaveId && 'display: none;'}">Delete</button>
+          <button class="load-btn" style="${!_selectedSaveId && 'display: none;'}">Load</button>
           <button class="close-dialog-btn">Close</button>
         </div>
       </div>`;

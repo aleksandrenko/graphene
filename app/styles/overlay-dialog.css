@@ -69,12 +69,16 @@
   text-align: right;
 }
 
+.dialog .footer button  {
+  min-width: 80px;
+}
+
 .dialog .footer .left {
   float: left;
 }
 
 .dialog .body {
-  min-height: 50px;
+  min-height: 240px;
   max-height: 50vh;
   display: flex;
   align-content: flex-start;

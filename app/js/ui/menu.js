@@ -60,7 +60,6 @@ export default (parentElement) => {
     }
   });
 
-
   // close the menu
   document.querySelector('.menu-overlay').addEventListener('click', (e) => {
     document.querySelector('.menu-overlay').classList.remove('opened');
