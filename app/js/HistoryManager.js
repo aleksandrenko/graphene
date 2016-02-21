@@ -1,25 +1,15 @@
 'use strict';
 
+import createId from './utils/id';
+import DataManager from './DataManager';
+
 const MAX_HISTORY_STEPS = 200;
 
 let _historyIndex;
 let _history = [];
 let _saves = [];
 
-/**
- * @param {string} id
- */
-const _revertToHistoryEntry = (id) => {
-  const historyEntry = _history.filter(e => e.id === id)[0];
 
-  //const data = _replaceData(historyEntry.data);
-
-  //_dispatchUpdate('history', 'revert', data);
-};
-
-/**
- * @type {{getSaves: Function, save: Function, load: Function, deleteSave: Function, getHistory: Function, pushState: Function, undo: Function, redo: Function}}
- */
 const History = {
   getSaves: () => _saves,
 
@@ -41,18 +31,22 @@ const History = {
     }, []);
   },
 
-  /* */
+  // ============================================================
+  // History methods
+  // ============================================================
 
-  getHistory: () => _history,
+  pushState: (updateData) => {
+    console.log(updateData);
 
-  pushState: (data) => {
-    console.log(data);
+    // prevent history events to be recorded again
+    if (updateData.event === 'history') {
+      return;
+    }
 
-    _history.unshift(Object.assign({
-      id: createId(),
-      date: Date.now(),
-      type: `${eventType} ${target} (${_nodes.length} nodes, ${_edges.length} edges)`
-    }, data));
+    _history.unshift(updateData);
+
+    // set the undo index to the last item in the history
+    _historyIndex = _history.length - 1;
 
     // limit the size of the history
     if (_history.length >= MAX_HISTORY_STEPS) {
@@ -61,11 +55,13 @@ const History = {
   },
 
   undo: () => {
-
+    const index = _historyIndex === 0 ? _historyIndex : --_historyIndex;
+    DataManager.loadData(_history[index].data, true);
   },
 
   redo: () => {
-
+    const index = _historyIndex === _history.length - 1 ? _historyIndex : ++_historyIndex;
+    DataManager.loadData(_history[index].data, true);
   }
 };
 

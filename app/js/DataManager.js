@@ -4,6 +4,8 @@ import Edge from './do/Edge';
 import Node from './do/Node';
 import Property from './do/Property';
 
+import HistoryManager from './HistoryManager';
+
 import createId from './utils/id';
 import reposition from './utils/reposition';
 
@@ -69,9 +71,7 @@ const _dispatchUpdate = (eventType, target, data) => {
   if (eventType === 'update' && target === 'node' && fn.lastTarget && fn.lastTarget.id === data.id && lastTargetStr === currentTargetStr) {
     // skip all update if the node is just moved
   } else {
-    if (eventType !== 'history') {
-
-    }
+    HistoryManager.pushState(updateEvent);
   }
 
   // save the last target to be able to prevent multiple updates of the same kind. example: update
@@ -164,11 +164,16 @@ const DataManager = {
 
   /**
    * @param {Object} rawData
+   * @param {array} rawData.nodes - An Array of nodes
+   * @param {array} rawData.edges - An Array of edges
+   * @param {boolean} isFromHistory - if the load is from history or save no savable event should be fired
+   * @returns {Object}
    */
-  loadData: (rawData) => {
+  loadData: (rawData, isFromHistory) => {
     const data = _replaceData(rawData);
+    const eventType = isFromHistory ? 'history' : 'load';
 
-    _dispatchUpdate('load', 'data', data);
+    _dispatchUpdate(eventType, 'data', data);
     return DataManager;
   },
 

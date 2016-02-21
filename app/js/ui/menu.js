@@ -2,6 +2,7 @@
 
 import createDomElementInContainer from '../utils/dom';
 import DataManager from '../DataManager';
+import HistoryManager from '../HistoryManager';
 
 const _openSaveLoadDialog = () => {
   document.querySelector('.menu-overlay').classList.remove('opened');
@@ -86,11 +87,11 @@ export default (parentElement) => {
           d3.event.preventDefault();
           break;
         case z:
-          console.log('undo');
+          HistoryManager.undo();
           d3.event.preventDefault();
           break;
         case y:
-          console.log('redo');
+          HistoryManager.redo();
           d3.event.preventDefault();
           break;
         default:
