@@ -3,13 +3,22 @@
 import createDomElementInContainer from '../utils/dom';
 import DataManager from '../DataManager';
 import HistoryManager from '../HistoryManager';
+import SaveManager from '../SaveManager';
 
-const _openSaveLoadDialog = () => {
+const _openSaveLoadDialog = (openForSaving) => {
   document.querySelector('.menu-overlay').classList.remove('opened');
   document.querySelector('.overlay-dialog').classList.add('opened');
+
   document.querySelector('#info').classList.add('blurred');
   document.querySelector('#help').classList.add('blurred');
   document.querySelector('#rootSVG').classList.add('blurred');
+
+  document.querySelector('.dialog .footer .load-btn').style.display = 'none';
+  document.querySelector('.dialog .sub-header').style.display = openForSaving ? 'block' : 'none';
+
+  if (openForSaving) {
+    document.querySelector('.new-save-name-input').focus();
+  }
 };
 
 const _closeSaveLoadDialog = () => {
@@ -29,11 +38,11 @@ export default (parentElement) => {
         <span class="toggle-button">&#9776;</span>
         <section class="drop-down-menu">
           <ul>
-            <li id="save-btn">&#128190; Save <small>(ctrl+s)</small></li>
-            <li id="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
-            <li id="undo-btn">&#8617; Undo <small>(ctrl+z)</small></li>
-            <li id="redo-btn">&#8618; Redo <small>(ctrl+y)</small></li>
-            <li id="delete-all-btn">&#10005; Delete all</li>
+            <li class="save-btn">&#128190; Save <small>(ctrl+s)</small></li>
+            <li class="load-btn">&#128194; Load <small>(ctrl+l)</small></li>
+            <li class="undo-btn">&#8617; Undo <small>(ctrl+z)</small></li>
+            <li class="redo-btn">&#8618; Redo <small>(ctrl+y)</small></li>
+            <li class="delete-all-btn">&#10005; Delete all</li>
           </ul>
         </section>
       </menu>
@@ -44,7 +53,7 @@ export default (parentElement) => {
         <div class="header">Saved graphs</div>
         <div class="sub-header">
           <span>Save graph as:</span>
-          <input type="text" placeholder="Name of the save you wanna save.">
+          <input type="text" placeholder="Name of the save you wanna save." class="new-save-name-input" />
           <button>Save</button>
         </div>
         <div class="body">
@@ -58,8 +67,8 @@ export default (parentElement) => {
           </ul>
         </div>
         <div class="footer">
-          <button>New Save</button>
-          <button>Load Save</button>
+          <button class="new-save-btn">New Save</button>
+          <button class="load-btn">Load Save</button>
           <button class="close-dialog-btn">Close</button>
         </div>
       </div>
@@ -77,12 +86,10 @@ export default (parentElement) => {
     if (d3.event.ctrlKey || d3.event.metaKey) {
       switch (d3.event.keyCode) {
         case s:
-          console.log('save');
-          _openSaveLoadDialog();
+          _openSaveLoadDialog(true);
           d3.event.preventDefault();
           break;
         case l:
-          console.log('load');
           _openSaveLoadDialog();
           d3.event.preventDefault();
           break;
@@ -105,8 +112,7 @@ export default (parentElement) => {
     }
   });
 
-
-  document.querySelector('#delete-all-btn').addEventListener('click', () => {
+  document.querySelector('.delete-all-btn').addEventListener('click', () => {
     confirm('Are you sure you want to delete all nodes and edges?') && DataManager.clear();
   });
 
@@ -120,9 +126,25 @@ export default (parentElement) => {
     e.preventDefault();
   });
 
-  document.querySelector('#save-btn').addEventListener('click', _openSaveLoadDialog);
+  document.querySelector('.new-save-btn').addEventListener('click', e => {
+    _openSaveLoadDialog(true);
+  });
 
-  document.querySelector('#load-btn').addEventListener('click', _openSaveLoadDialog);
+  document.querySelector('.save-btn').addEventListener('click', () => {
+    _openSaveLoadDialog(true);
+  });
+
+  document.querySelector('.load-btn').addEventListener('click', _openSaveLoadDialog);
+
+  document.querySelector('.undo-btn').addEventListener('click', e => {
+    HistoryManager.undo();
+    e.preventDefault();
+  });
+
+  document.querySelector('.redo-btn').addEventListener('click', e => {
+    HistoryManager.redo();
+    e.preventDefault();
+  });
 
   document.querySelector('.close-dialog-btn').addEventListener('click', _closeSaveLoadDialog);
 }
