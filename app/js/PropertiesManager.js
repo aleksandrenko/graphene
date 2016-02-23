@@ -227,7 +227,7 @@ const PM = {
               .append('li')
               .append('input')
               .attr({
-                placeholder: 'Default Value',
+                placeholder: (prop.type.toLowerCase() === PROPERTY_TYPES.DATE.toLowerCase()) ? 'Date, can be "now"' : 'Default Value',
                 type: 'text',
                 value: () => prop.defaultValue
               })
@@ -364,18 +364,6 @@ const PM = {
       if (prop.isRequired) {
         propIsRequiredCheckbox.attr({ checked: true });
       }
-
-      /** --------------------------
-       * close button
-       --------------------------- */
-
-      propertyParamsInEdit.append('li').classed('actions', true)
-        .append('button')
-        .text('Close')
-        .on('click', () => {
-          _drawPropertyInEdit.property = null;
-          _drawPropertyInEdit();
-        });
 
       _drawProperties();
     };
