@@ -14,10 +14,10 @@ html, body {
   cursor: none;
 }
 
-/*.blurred {*/
-  /*-webkit-filter: blur(15px) grayscale(85%);*/
-  /*filter: blur(10px) grayscale(80%);*/
-/*}*/
+.blurred {
+  -webkit-filter: blur(15px) grayscale(85%);
+  filter: blur(10px) grayscale(80%);
+}
 
 .graph-editor {
   background: #ebebeb;

@@ -100,10 +100,21 @@ const _setupDialog = () => {
     const esc = 27;
     const focusedElement = document.activeElement;
 
-    if (d3.event.keyCode === enterKey && focusedElement && focusedElement.classList.contains('new-save-name-input')) {
-      _createNewSave();
+    // load the selected save
+    if ((d3.event.keyCode === enterKey) && _selectedSaveId) {
+      SaveManager.load(_selectedSaveId);
+      Dialog.close();
       d3.event.preventDefault();
       d3.event.stopPropagation();
+    }
+
+    // create new save with the string in the input field
+    if (d3.event.keyCode === enterKey && focusedElement && focusedElement.classList.contains('new-save-name-input')) {
+      if (document.querySelector('.new-save-name-input').value.length > 0) {
+        _createNewSave();
+        d3.event.preventDefault();
+        d3.event.stopPropagation();
+      }
     }
 
     if (d3.event.keyCode === esc) {
@@ -112,6 +123,9 @@ const _setupDialog = () => {
       d3.event.stopPropagation();
     }
   });
+
+  var _lastClickedElementId;
+  const DOUBLE_CLICK_SPEED = 400; // in ms
 
   Dialog.dialogLayer.addEventListener('click', (e) => {
     const target = e.target;
@@ -136,10 +150,23 @@ const _setupDialog = () => {
         break;
       case 'save-entry':
         _selectSave(target.id);
+
+        // if the same element is clicked in the last DOUBLE_CLICK_SPEED ms
+        if (_lastClickedElementId === _selectedSaveId) {
+          SaveManager.load(_selectedSaveId);
+          Dialog.close();
+        }
         break;
       default:
         break;
     }
+
+    _lastClickedElementId = target.id;
+
+    // reset the last selected element so the dbclick click need to happen in DOUBLE_CLICK_SPEED ms
+    setTimeout(() => {
+      _lastClickedElementId = null;
+    }, DOUBLE_CLICK_SPEED);
   });
 
   _setupDialog.isDone = true;
@@ -172,6 +199,7 @@ const Dialog = {
     // hide header for just loading
     document.querySelector('.dialog .sub-header').style.display = forSave ? 'flex' : 'none';
     document.querySelector('.dialog .sub-header .new-save-name-input').focus();
+    document.querySelector(`#${CONST.SVGROOT_ID}`).classList.add('blurred');
 
     // set opened class later on so there will be open-transition
     setTimeout(() => {
@@ -184,6 +212,7 @@ const Dialog = {
    */
   close: () => {
     _setupDialog();
+    document.querySelector(`#${CONST.SVGROOT_ID}`).classList.remove('blurred');
     Dialog.dialogLayer.classList.remove('opened');
   }
 };
