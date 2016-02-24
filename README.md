@@ -8,4 +8,6 @@
 4. npm start
 5. open http://localhost:8080/app/
 
+project site: http://aleksandrenko.github.io/grad3ph
+
 (this is a lerning project with solely purpose of testing d3 and some ux ideas)
