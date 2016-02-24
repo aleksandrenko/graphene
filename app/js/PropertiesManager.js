@@ -223,12 +223,35 @@ const PM = {
               _drawPropertyInEdit();
             });
           } else {
-            propertyParamsInEdit
+            const isDate = prop.type.toLowerCase() === PROPERTY_TYPES.DATE.toLowerCase();
+            let dateDefaultValueNowCheckbox;
+
+            if (isDate) {
+              dateDefaultValueNowCheckbox = propertyParamsInEdit
+                .append('li')
+                .append('label')
+                .text('Default is "now"')
+                .append('input')
+                .attr({
+                  type: 'checkbox'
+                })
+                .on('change', () => {
+                  if (d3.event.target.checked) {
+                    prop.defaultValue = 'now';
+                  } else {
+                    prop.defaultValue = '';
+                  }
+
+                  _drawPropertyInEdit();
+                });
+            }
+
+            const defaultValueInput = propertyParamsInEdit
               .append('li')
               .append('input')
               .attr({
-                placeholder: (prop.type.toLowerCase() === PROPERTY_TYPES.DATE.toLowerCase()) ? 'Date, can be "now"' : 'Default Value',
-                type: 'text',
+                placeholder: 'Default Value',
+                type: isDate ? 'date' : 'text',
                 value: () => prop.defaultValue
               })
               .style({
@@ -238,6 +261,11 @@ const PM = {
                 prop.defaultValue = d3.event.target.value;
                 _drawPropertyInEdit();
               });
+
+            if (prop.defaultValue === 'now' && isDate) {
+              defaultValueInput.attr('disabled', true);
+              dateDefaultValueNowCheckbox.attr('checked', true);
+            }
           }
         }
       }
