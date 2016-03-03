@@ -71,7 +71,7 @@ const _dispatchUpdate = (eventType, target, data) => {
   const lastTargetStr = JSON.stringify(fn.lastTarget || {}).replace(/\"x"\:.*,"y":.*,"color/, '"color,');
   const currentTargetStr = JSON.stringify(data).replace(/\"x"\:.*,"y":.*,"color/, '"color,');
 
-  if (eventType === 'update' && target === 'node' && fn.lastTarget && fn.lastTarget.id === data.id && lastTargetStr === currentTargetStr) {
+  if (eventType === 'update' && target === 'node' && fn.lastTarget && fn.lastTarget.meta && fn.lastTarget.meta.id === data.meta.id && lastTargetStr === currentTargetStr) {
     // skip all update if the node is just moved
   } else {
     HistoryManager.pushState(updateEvent);
@@ -87,13 +87,13 @@ const _dispatchUpdate = (eventType, target, data) => {
  * @param id
  * @private
  */
-const _getEdge = (id) => _edges.filter(edge => edge.id === id)[0];
+const _getEdge = (id) => _edges.filter(edge => edge.meta.id === id)[0];
 
 /**
  * @param id
  * @private
  */
-const _getNode = (id) => _nodes.filter(node => node.id === id)[0];
+const _getNode = (id) => _nodes.filter(node => node.meta.id === id)[0];
 
 
 // On SaveChanges fire an update event so the external data can be updated
@@ -109,16 +109,16 @@ const DataManager = {
   /**
    * @returns {boolean}
    */
-  isEntitySelected: () => (!!_nodes.filter(n => n.isSelected).length || !!_edges.filter(e => e.isSelected).length),
+  isEntitySelected: () => (!!_nodes.filter(n => n.meta.isSelected).length || !!_edges.filter(e => e.meta.isSelected).length),
 
   /**
    * @returns {Object}
    */
   getSelectedEntity: () => {
-    const selectedEntity = _nodes.filter(n => n.isSelected)[0] || _edges.filter(e => e.isSelected)[0];
+    const selectedEntity = _nodes.filter(n => n.meta.isSelected)[0] || _edges.filter(e => e.meta.isSelected)[0];
 
-    if (selectedEntity && selectedEntity.id) {
-      return DataManager.getNode(selectedEntity.id) || DataManager.getEdge(selectedEntity.id);
+    if (selectedEntity && selectedEntity.meta.id) {
+      return DataManager.getNode(selectedEntity.meta.id) || DataManager.getEdge(selectedEntity.meta.id);
     }
   },
 
@@ -128,10 +128,10 @@ const DataManager = {
   selectEntity: (id) => {
     const entity = _getNode(id) || _getEdge(id);
 
-    if (entity && !entity.isSelected) {
+    if (entity && !entity.meta.isSelected) {
       DataManager.deselectAllEntities();
-      entity.isSelected = true;
-      _dispatchUpdate('select', entity.isNode ? 'node' : 'edge', entity);
+      entity.meta.isSelected = true;
+      _dispatchUpdate('select', entity.meta.isNode ? 'node' : 'edge', entity);
     }
 
     return DataManager;
@@ -142,14 +142,14 @@ const DataManager = {
    */
   deselectAllEntities: (forceRender) => {
     _nodes.forEach(_node => {
-      if (_node.isSelected) {
-        _node.isSelected = false;
+      if (_node.meta.isSelected) {
+        _node.meta.isSelected = false;
       }
     });
 
     _edges.forEach(_edge => {
-      if (_edge.isSelected) {
-        _edge.isSelected = false;
+      if (_edge.meta.isSelected) {
+        _edge.meta.isSelected = false;
       }
     });
 
@@ -173,8 +173,8 @@ const DataManager = {
 
   /**
    * @param {Object} rawData
-   * @param {array} rawData.nodes - An Array of nodes
-   * @param {array} rawData.edges - An Array of edges
+   * @param {Array} rawData.nodes - An Array of nodes
+   * @param {Array} rawData.edges - An Array of edges
    * @param {boolean} isFromHistory - if the load is from history or save no savable event should be fired
    * @returns {Object}
    */
@@ -200,7 +200,7 @@ const DataManager = {
    * @returns {Object}
    */
   updateNode: (node) => {
-    _nodes = _nodes.map(_node => _node.id === node.id ? node : _node);
+    _nodes = _nodes.map(_node => _node.meta.id === node.meta.id ? node : _node);
 
     _dispatchUpdate('update', 'node', node);
     return DataManager;
@@ -212,7 +212,7 @@ const DataManager = {
    */
   deleteNode: (node) => {
     _nodes = _nodes.reduce((acc, n) => {
-      if (node.id !== n.id) {
+      if (node.meta.id !== n.meta.id) {
         acc.push(n);
       }
 
@@ -220,7 +220,7 @@ const DataManager = {
     }, []);
 
     _edges = _edges.reduce((acc, e) => {
-      if (e.startNodeId !== node.id && e.endNodeId !== node.id) {
+      if (e.meta.startNodeId !== node.meta.id && e.endNodeId !== node.meta.id) {
         acc.push(e);
       }
 
@@ -236,7 +236,7 @@ const DataManager = {
    * @returns {Object}
    */
   getNode: (id) => {
-    if (_nodes.filter(n => n.id === id).length) {
+    if (_nodes.filter(n => n.meta.id === id).length) {
       return _getNode(id).copy;
     }
   },
@@ -279,7 +279,7 @@ const DataManager = {
    * @returns {Object}
    */
   updateEdge: (edge) => {
-    _edges = _edges.map(_edge => _edge.id === edge.id ? edge : _edge);
+    _edges = _edges.map(_edge => _edge.meta.id === edge.meta.id ? edge : _edge);
     _dispatchUpdate('update', 'edge', edge);
     return DataManager;
   },
@@ -290,7 +290,7 @@ const DataManager = {
    */
   deleteEdge: (edge) => {
     _edges = _edges.reduce((acc, _edge) => {
-      if (edge.id !== _edge.id) {
+      if (edge.meta.id !== _edge.meta.id) {
         acc.push(_edge);
       }
 

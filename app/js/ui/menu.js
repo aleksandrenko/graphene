@@ -61,7 +61,7 @@ export default (parentElement) => {
   });
 
   // close the menu
-  document.querySelector('.menu-overlay').addEventListener('click', (e) => {
+  document.querySelector('.menu-overlay').addEventListener('click', () => {
     document.querySelector('.menu-overlay').classList.remove('opened');
   });
 
@@ -80,12 +80,12 @@ export default (parentElement) => {
     Dialog.open(false);
   });
 
-  document.querySelector('.menu-undo-btn').addEventListener('click', e => {
+  document.querySelector('.menu-undo-btn').addEventListener('click', (e) => {
     HistoryManager.undo();
     e.preventDefault();
   });
 
-  document.querySelector('.menu-redo-btn').addEventListener('click', e => {
+  document.querySelector('.menu-redo-btn').addEventListener('click', (e) => {
     HistoryManager.redo();
     e.preventDefault();
   });

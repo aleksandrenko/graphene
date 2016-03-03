@@ -15,11 +15,11 @@ const TRANSITION_DURATION = 100;
  * @returns {number}
  */
 const _getOpacityForEntity = (entity) => {
-  if (entity.isNode) {
-    const allSelectedEdges = DataManager.getAllEdges().filter(e => e.isSelected);
+  if (entity.meta.isNode) {
+    const allSelectedEdges = DataManager.getAllEdges().filter(e => e.meta.isSelected);
 
     for (let i = 0; i < allSelectedEdges.length; i++) {
-      const nodeIsConnectedToSelectedEdge = [allSelectedEdges[i].endNodeId, allSelectedEdges[i].startNodeId].indexOf(entity.id) !== -1;
+      const nodeIsConnectedToSelectedEdge = [allSelectedEdges[i].meta.endNodeId, allSelectedEdges[i].meta.startNodeId].indexOf(entity.id) !== -1;
 
       if (nodeIsConnectedToSelectedEdge) {
         return 1;
@@ -27,12 +27,12 @@ const _getOpacityForEntity = (entity) => {
     }
   }
 
-  if (entity.isSelected) {
+  if (entity.meta.isSelected) {
     return 1;
   }
 
   // if the edge is starting from a selected node
-  if (entity.isEdge && entity.startNode.isSelected) {
+  if (entity.isEdge && entity.startNode.meta.isSelected) {
     return 1;
   }
 
@@ -50,8 +50,8 @@ const _getOpacityForEntity = (entity) => {
  * @param edge
  */
 const _createOrUpdateArrowForEdge = (edge) => {
-  const edgeColor = edge.color;
-  const arrowId = `end-arrow-${edge.id}`;
+  const edgeColor = edge.startNode.meta.color;
+  const arrowId = `end-arrow-${edge.meta.id}`;
 
   // create an arrow
   if (document.querySelector(`#${arrowId}`) === null) {
@@ -78,11 +78,11 @@ const _createOrUpdateArrowForEdge = (edge) => {
 
 /**
  * @param {object} d3Element
- * @param {array} nodesData
+ * @param {Array} nodesData
  * @private
  */
 const _renderNodes = (d3Element, nodesData) => {
-  const nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.id);
+  const nodes = d3Element.selectAll('.node').data(nodesData, (d) => d.meta.id);
 
   // create svg element on item enter
   const nodesGroups = nodes.enter()
@@ -108,43 +108,43 @@ const _renderNodes = (d3Element, nodesData) => {
     .attr(initialNodeAttr).remove();
 
   // update node groups
-  nodes.attr({ id: node => node.id });
+  nodes.attr({ id: node => node.meta.id });
 
   nodes.select('circle')
     .attr({
-      cx: node => node.x,
-      cy: node => node.y
+      cx: node => node.meta.x,
+      cy: node => node.meta.y
     })
     .transition()
     .duration(TRANSITION_DURATION)
     .attr({
       r: 12,
-      stroke: node => node.color,
-      fill: node => node.isSelected ? node.color : '#ebebeb',
+      stroke: node => node.meta.color,
+      fill: node => node.meta.isSelected ? node.meta.color : '#ebebeb',
       'stroke-opacity': (node) => _getOpacityForEntity(node)
     });
 
   nodes.select('text')
     .attr({
-      x: node => node.x + 20,
-      y: node => node.y + 5
+      x: node => node.meta.x + 20,
+      y: node => node.meta.y + 5
     })
     .transition()
     .duration(TRANSITION_DURATION)
     .text(node => `${node.label} (${node.properties.length})`)
     .attr({
-      fill: node => node.color,
+      fill: node => node.meta.color,
       opacity: (node) => _getOpacityForEntity(node)
     });
 };
 
 /**
  * @param {object} d3Element
- * @param {array} edgesData
+ * @param {Array} edgesData
  * @private
  */
 const _renderEdges = (d3Element, edgesData) => {
-  const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.id);
+  const edges = d3Element.selectAll('.edge').data(edgesData, (e) => e.meta.id);
 
   const edgesGroups = edges.enter().append('g').classed('edge', true);
 
@@ -163,12 +163,12 @@ const _renderEdges = (d3Element, edgesData) => {
     .remove();
 
   // set edges id
-  edges.attr({ id: data => data.id });
+  edges.attr({ id: e => e.meta.id });
 
   edges.select('text').attr({
     x: edge => edge.middlePointWithOffset[0] + 10,
     y: edge => edge.middlePointWithOffset[1],
-    fill: edge => edge.color,
+    fill: edge => edge.startNode.meta.color,
     opacity: edge => _getOpacityForEntity(edge)
   }).text(e => `${e.label} (${e.properties.length})`);
 
@@ -177,24 +177,24 @@ const _renderEdges = (d3Element, edgesData) => {
     const line = d3.svg.line()
       .x(d => d[0])
       .y(d => d[1])
-      .interpolate(edge.startNodeId === edge.endNodeId ? 'basis' : 'cardinal');
+      .interpolate(edge.meta.startNodeId === edge.meta.endNodeId ? 'basis' : 'cardinal');
 
-    if (edge.startNodeId === edge.endNodeId) {
+    if (edge.meta.startNodeId === edge.meta.endNodeId) {
       const node = edge.startNode;
 
       const rotatedLeft = geometry.quadWay(geometry.rotatePoint(node, edge.middlePointWithOffset, true), edge.middlePointWithOffset);
       const rotatedRight = geometry.quadWay(geometry.rotatePoint(node, edge.middlePointWithOffset, false), edge.middlePointWithOffset);
 
-      return `M ${node.x} ${node.y}
+      return `M ${node.meta.x} ${node.meta.y}
         Q ${rotatedLeft[0]} ${rotatedLeft[1]}
         ${edge.middlePointWithOffset[0]} ${edge.middlePointWithOffset[1]}
         Q ${rotatedRight[0]} ${rotatedRight[1]}
-        ${node.x} ${node.y}`;
+        ${node.meta.x} ${node.meta.y}`;
     } else {
       return line([
-        [edge.startNode.x, edge.startNode.y],
+        [edge.startNode.meta.x, edge.startNode.meta.y],
         edge.middlePointWithOffset,
-        [edge.endNode.x, edge.endNode.y]
+        [edge.endNode.meta.x, edge.endNode.meta.y]
       ]);
     }
   };
@@ -208,10 +208,10 @@ const _renderEdges = (d3Element, edgesData) => {
     .attr({
       stroke: (edge) => {
         _createOrUpdateArrowForEdge(edge);
-        return edge.color;
+        return edge.startNode.meta.color;
       },
       'stroke-opacity': edge => _getOpacityForEntity(edge),
-      style: (edge) => `marker-end: url(#end-arrow-${edge.id})`
+      style: (edge) => `marker-end: url(#end-arrow-${edge.meta.id})`
     });
 };
 
@@ -269,13 +269,13 @@ const RM = {
     const source = data.source;
 
     d3.select('#mark-end-arrow').select('path').attr({
-      fill: source.color
+      fill: source.meta.color
     });
 
     d3.select('.dragLine')
       .classed('hidden', false)
       .attr({
-        stroke: source.color,
+        stroke: source.meta.color,
         d: ''
       });
 
@@ -286,7 +286,8 @@ const RM = {
    * @param data
    */
   renderLine: (data) => {
-    const start = [data.source.x, data.source.y];
+    // data.source is a Node entity
+    const start = [data.source.meta.x, data.source.meta.y];
     const end = data.end;
 
     d3.select('.dragLine')
@@ -309,7 +310,6 @@ const RM = {
    */
   render: (data, container) => {
     _init(container);
-
     _renderEdges(RM.d3GroupForEdges, data.edges);
     _renderNodes(RM.d3GroupForNodes, data.nodes);
   }

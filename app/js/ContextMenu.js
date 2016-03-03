@@ -79,7 +79,7 @@ const CM = {
    * @returns {string} HTML
    */
   getContextMenuHTML: (entity) => {
-    if (entity.isNode) {
+    if (entity.meta && entity.meta.isNode) {
       return `
         <li action="${ACTION.CREATE_EDGE}">Create Edge from <b>"${entity.label}"</b></li>
         <li action="${ACTION.DELETE_NODE}">Delete Node <b>"${entity.label}"</b></li>
@@ -87,7 +87,7 @@ const CM = {
       `;
     }
 
-    if (entity.isEdge) {
+    if (entity.meta && entity.meta.isEdge) {
       return `
         <li action="${ACTION.DELETE_EDGE}">Delete Edge <b>"${entity.label}"</b></li>
         <li action="${ACTION.EDIT}">Edit Edge <b>"${entity.label}"</b></li>

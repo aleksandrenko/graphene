@@ -7,7 +7,7 @@ const geometry = {
    * @param end
    * @returns {[]}
    */
-  middlePoint: (start, end) => [(start.x + end.x) / 2, (start.y + end.y) / 2],
+  middlePoint: (start, end) => [(start.meta.x + end.meta.x) / 2, (start.meta.y + end.meta.y) / 2],
 
   /**
    * @param start
@@ -19,7 +19,7 @@ const geometry = {
   /**
    * @param start
    * @param end
-   * @returns {[]}
+   * @returns {Array}
    */
   quadWay: (start, end) => {
     return geometry.halfWay(geometry.halfWay(start, end), end);

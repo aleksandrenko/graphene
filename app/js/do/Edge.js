@@ -6,24 +6,19 @@ import geometry from '../utils/geometry';
 
 class Edge {
   /**
-   * @param {object} options
-   * @param {number} options.startNodeId
-   * @param {number} options.endNodeId
-   * @param {array} options.middlePointOffset
-   * @param {string} options.label
-   * @param {array} options.properties
-   * @param {string} options.id
-   * @constructor
+   * @param options
    */
-  constructor(options = {}) {
-    this.startNodeId = options.startNodeId;
-    this.endNodeId = options.endNodeId;
-    this.middlePointOffset = options.middlePointOffset || [0, 0];
+  constructor(options) {
+    this.meta = {
+      startNodeId: options.meta.startNodeId,
+      endNodeId: options.meta.endNodeId,
+      middlePointOffset: options.meta.middlePointOffset || [0, 0],
+      id: options.meta.id || createId(),
+      isSelected: options.meta.isSelected || false,
+      isEdge: true
+    };
     this.properties = options.properties || [];
     this.label = (options.label || 'no name').toLowerCase();
-    this.id = options.id || createId();
-    this.isSelected = options.isSelected || false;
-    this.isEdge = true;
   }
 
   get copy() {
@@ -31,15 +26,15 @@ class Edge {
   }
 
   get startNode() {
-    return DataManager.getNode(this.startNodeId);
+    return DataManager.getNode(this.meta.startNodeId);
   }
 
   get endNode() {
-    return DataManager.getNode(this.endNodeId);
+    return DataManager.getNode(this.meta.endNodeId);
   }
 
   get color() {
-    return this.startNode.color;
+    return this.startNode.meta.color;
   }
 
   /**
@@ -50,13 +45,13 @@ class Edge {
   }
 
   get middlePointWithOffset() {
-    if (this.startNodeId === this.endNodeId && this.middlePointOffset[0] === 0 && this.middlePointOffset[1] === 0) {
-      this.middlePointOffset = [-50, 50];
+    if (this.meta.startNodeId === this.meta.endNodeId && this.middlePointOffset[0] === 0 && this.meta.middlePointOffset[1] === 0) {
+      this.meta.middlePointOffset = [-50, 50];
     }
 
     return [
-      this.middlePoint[0] - this.middlePointOffset[0],
-      this.middlePoint[1] - this.middlePointOffset[1]
+      this.middlePoint[0] - this.meta.middlePointOffset[0],
+      this.middlePoint[1] - this.meta.middlePointOffset[1]
     ];
   }
 }

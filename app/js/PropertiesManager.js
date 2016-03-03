@@ -17,11 +17,11 @@ let _saveHandlerFunction = () => null;
 const _getMenuHTML = (entity) => `
   <div class="header">
     <span class="color">
-      <input id="entity-color" value="${entity.color}" type="color" />
+      <input id="entity-color" value="${entity.meta.color}" type="color" />
     </span>
     <span class="label">
       <input id="entity-label" value="${entity.label}" />
-      <small class="type">${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
+      <small class="type">${entity.meta.isNode && 'node' || entity.meta.isEdge && 'edge'}</small>
       <span class="drag-handler"></span>
     </span>
   </div>
@@ -69,7 +69,7 @@ const PM = {
     _entity = entity;
     _entity.properties = Array.from(entity.properties);
 
-    if (entity.isEdge) {
+    if (entity.meta.isEdge) {
       PM.propertiesMenu.classList.add('edge-properties');
     } else {
       PM.propertiesMenu.classList.remove('edge-properties');
@@ -483,7 +483,7 @@ const PM = {
     });
 
     d3.select('#entity-color').on('input', () => {
-      _entity.color = d3.event.target.value;
+      _entity.meta.color = d3.event.target.value;
     });
 
     d3.select('#close-button').on('click', () => {
