@@ -16,10 +16,10 @@ export default (_nodes) => {
 
   const margin = 25;
 
-  const minValX = Math.min.apply(null, nodes.map(node => node.meta.x));
-  const maxValX = Math.max.apply(null, nodes.map(node => node.meta.x));
-  const minValY = Math.min.apply(null, nodes.map(node => node.meta.y));
-  const maxValY = Math.max.apply(null, nodes.map(node => node.meta.y));
+  const minValX = Math.min.apply(null, nodes.map(node => node.x));
+  const maxValX = Math.max.apply(null, nodes.map(node => node.x));
+  const minValY = Math.min.apply(null, nodes.map(node => node.y));
+  const maxValY = Math.max.apply(null, nodes.map(node => node.y));
 
   const moveRight = minValX < 0 ? Math.abs(minValX) + margin : 0;
   const moveLeft = maxValX - editorWidth + margin * 4;
@@ -27,10 +27,10 @@ export default (_nodes) => {
   const moveUp = maxValY - editorHeight + margin;
 
   nodes.map(n => {
-    if (moveRight > 0) { n.meta.x += moveRight; }
-    if (moveLeft > 0) { n.meta.x -= moveLeft; }
-    if (moveDown > 0) { n.meta.y += moveDown; }
-    if (moveUp > 0) { n.meta.y -= moveUp;}
+    if (moveRight > 0) { n.x += moveRight; }
+    if (moveLeft > 0) { n.x -= moveLeft; }
+    if (moveDown > 0) { n.y += moveDown; }
+    if (moveUp > 0) { n.y -= moveUp;}
 
     return n;
   });

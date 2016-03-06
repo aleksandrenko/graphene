@@ -33,7 +33,7 @@ const UI = (parentDomContainer) => {
       if (element.classList.contains('entity')) {
         const id = element.attributes['entity-id'].value;
         const entity = DataManager.getNode(id) || DataManager.getEdge(id);
-        const position = entity.meta.isNode ? [entity.meta.x + 20, entity.meta.y + 15] : [entity.meta.middlePointWithOffset[0] + 10, entity.meta.middlePointWithOffset[1] + 10];
+        const position = entity.isNode ? [entity.x + 20, entity.y + 15] : [entity.middlePointWithOffset[0] + 10, entity.middlePointWithOffset[1] + 10];
 
         PropertiesManager.open(position, entity);
       }
@@ -50,21 +50,16 @@ UI.render = () => {
       return;
     }
 
-    infoPanelHTML += `<div class='col'><h1>${entities.length} ${entities[0].meta.isNode ? 'Nodes' : 'Edges'}</h1>`;
+    infoPanelHTML += `<div class='col'><h1>${entities.length} ${entities[0].isNode ? 'Nodes' : 'Edges'}</h1>`;
     entities.forEach(e => {
-      infoPanelHTML += `
-      <div class="entity" entity-id="${e.meta.id}">
-      <strong>
-      <span class="color" style="background-color: ${e.meta.color}"></span> ${e.label} (${e.properties.length})
-      </strong>
-      `;
+      infoPanelHTML += `<div class="entity" entity-id="${e.id}"><strong><span class="color" style="background-color: ${e.color}"></span> ${e.label} (${e.properties.length})</strong>`;
 
       if (e.properties.length) {
         infoPanelHTML += `<ul>`;
         e.properties.forEach(p => {
           infoPanelHTML += `
                 <li>
-                  <span>${p.key}</span> (${p.type.toLowerCase()}${p.isRequired ? ', required' : ''}${p.defaultValue ? ', with Default Value' : ''}${p.hasLimit ? ', limited' : ''})
+                  <b>${p.key}</b> (${p.type.toLowerCase()}${p.isRequired ? ', required' : ''}${p.defaultValue ? ', with Default Value' : ''}${p.hasLimit ? ', limited' : ''})
                 </li>
               `;
         });
@@ -80,6 +75,6 @@ UI.render = () => {
   _generateColHTML(edges);
 
   UI.infoPanel.innerHTML = infoPanelHTML;
-};
+}
 
 export default UI;

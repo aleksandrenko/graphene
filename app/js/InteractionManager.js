@@ -40,40 +40,40 @@ const _nodeDragBehavior = d3.behavior.drag()
   .origin(node => node)
   .on('dragstart', node => {
     d3.event.sourceEvent.stopPropagation();
-    d3.select(`#${node.meta.id}`).classed('dragging', true);
+    d3.select(`#${node.id}`).classed('dragging', true);
   })
   .on('drag', node => {
-    node.meta.x = d3.event.sourceEvent.x;
-    node.meta.y = d3.event.sourceEvent.y;
+    node.x = d3.event.x;
+    node.y = d3.event.y;
     DataManager.updateNode(node);
   })
   .on('dragend', node => {
-    d3.select(`#${node.meta.id}`).classed('dragging', false);
+    d3.select(`#${node.id}`).classed('dragging', false);
   });
 
 const _edgeDragBehavior = d3.behavior.drag()
   .origin(edge => edge)
   .on('dragstart', edge => {
     d3.event.sourceEvent.stopPropagation();
-    d3.select(`#${edge.meta.id}`).select('text').classed('dragging', true);
+    d3.select(`#${edge.id}`).select('text').classed('dragging', true);
   })
   .on('drag', edge => {
-    edge.meta.middlePointOffset = [
+    edge.middlePointOffset = [
       edge.middlePoint[0] - d3.event.sourceEvent.x,
       edge.middlePoint[1] - d3.event.sourceEvent.y
     ];
     DataManager.updateEdge(edge);
   })
   .on('dragend', edge => {
-    d3.select(`#${edge.meta.id}`).select('text').classed('dragging', false);
+    d3.select(`#${edge.id}`).select('text').classed('dragging', false);
   });
 
 const _updatePosition = (direction) => {
   const allNodes = DataManager.getAllNodes();
 
   let movedNodes = allNodes.map(node => {
-    node.meta.x += direction[0];
-    node.meta.y += direction[1];
+    node.x += direction[0];
+    node.y += direction[1];
     return node;
   });
 
@@ -118,18 +118,14 @@ const IM = {
     // initialize the context menu
     ContextMenu.init(`#${rootDivElement.id}`);
 
-    PropertiesManager.onSave((entityToSave) => {
-      entityToSave.meta.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave);
-    });
+    PropertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     ContextMenu.onAction((action) => {
       switch (action.type) {
         case ACTION.CREATE_NODE:
           const node = new Node({
-            meta: {
-              x: action.position.x,
-              y: action.position.y
-            }
+            x: action.position.x,
+            y: action.position.y
           });
 
           DataManager.addNode(node);
@@ -166,7 +162,7 @@ const IM = {
   bindEvents: (entity) => {
     // need to wait for the entity to enter the dom
     window.setTimeout(() => {
-      const selection = entity.meta.isNode ? d3.select(`#${entity.meta.id}`) : d3.select(`#${entity.meta.id}`).select('text');
+      const selection = entity.isNode ? d3.select(`#${entity.id}`) : d3.select(`#${entity.id}`).select('text');
 
       selection
         .on('dblclick', _entity => {
@@ -174,10 +170,10 @@ const IM = {
           d3.event.preventDefault();
         })
         .on('mousedown', _entity => {
-          DataManager.selectEntity(_entity.meta.id);
+          DataManager.selectEntity(_entity.id);
           d3.event.preventDefault();
         })
-        .call(entity.meta.isNode ? _nodeDragBehavior : _edgeDragBehavior);
+        .call(entity.isNode ? _nodeDragBehavior : _edgeDragBehavior);
     }, 0);
   },
 
@@ -255,13 +251,13 @@ const IM = {
          * @param entity
          */
         const fnSelectAndOpen = (entity) => {
-          DataManager.selectEntity(entity.meta.id);
+          DataManager.selectEntity(entity.id);
 
-          if (entity.meta.isNode) {
-            PropertiesManager.open([entity.meta.x, entity.meta.y], entity);
+          if (entity.isNode) {
+            PropertiesManager.open([entity.x, entity.y], entity);
           }
 
-          if (entity.meta.isEdge) {
+          if (entity.isEdge) {
             PropertiesManager.open(entity.middlePointWithOffset, entity);
           }
         };
@@ -272,11 +268,11 @@ const IM = {
 
         if (focusedElement.classList.contains('path-text')) {
           const edgeElement = focusedElement.parentElement;
-          fnSelectAndOpen(DataManager.getEdge(edgeElement.meta.id));
+          fnSelectAndOpen(DataManager.getEdge(edgeElement.id));
         }
 
         if (focusedElement.classList.contains('node')) {
-          fnSelectAndOpen(DataManager.getNode(focusedElement.meta.id));
+          fnSelectAndOpen(DataManager.getNode(focusedElement.id));
         }
 
         break;
@@ -284,11 +280,11 @@ const IM = {
       case spaceKey:
         if (focusedElement.classList.contains('path-text')) {
           const edgeElement = focusedElement.parentElement;
-          DataManager.selectEntity(edgeElement.meta.id);
+          DataManager.selectEntity(edgeElement.id);
         }
 
         if (focusedElement.classList.contains('node')) {
-          DataManager.selectEntity(focusedElement.meta.id);
+          DataManager.selectEntity(focusedElement.id);
         }
         break;
       case leftKey:
@@ -341,12 +337,10 @@ const IM = {
 
     RenderManager.removeTempLine();
 
-    if (endNode.meta.isNode) {
+    if (endNode.isNode) {
       const newEdge = new Edge({
-        meta: {
-          startNodeId: startNode.meta.id,
-          endNodeId: endNode.meta.id
-        }
+        endNodeId: endNode.id,
+        startNodeId: startNode.id
       });
 
       DataManager.addEdge(newEdge);
