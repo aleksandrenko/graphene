@@ -3,12 +3,12 @@
 export default {
   NONE: '',
   STRING: 'string',
-  NUMBER: 'number',
+  INT: 'int',
+  FLOAT: 'float',
   BOOLEAN: 'boolean',
   PASSWORD: 'password',
   EMAIL: 'email',
   URL: 'url',
-  DATE: 'date',
-  FILE: 'file',
+  DATE: 'datetime',
   LATLNG: 'latlng'
 };

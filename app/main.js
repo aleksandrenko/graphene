@@ -12,6 +12,15 @@ graphEditor.onChange(updateEvent => {
 const dataFromLocalStorage = localStorage.getItem(localStorageItem);
 const dataFromLocalStorageSaves = localStorage.getItem(localStorageItemSaves);
 
+console.log('Data from local storage:');
+console.log(dataFromLocalStorage);
+console.log('');
+console.log('Saves from local storage:');
+console.log(dataFromLocalStorageSaves);
+
+console.log('');
+console.log('');
+
 graphEditor.loadData({
   data: JSON.parse(dataFromLocalStorage),
   saves: JSON.parse(dataFromLocalStorageSaves)

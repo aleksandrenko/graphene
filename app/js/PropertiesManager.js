@@ -279,7 +279,8 @@ const PM = {
         prop.type === PROPERTY_TYPES.EMAIL ||
         prop.type === PROPERTY_TYPES.URL ||
         prop.type === PROPERTY_TYPES.LATLNG ||
-        prop.type === PROPERTY_TYPES.NUMBER) {
+        prop.type === PROPERTY_TYPES.FLOAT ||
+        prop.type === PROPERTY_TYPES.INT) {
 
         const propHasLimitCheckbox = propertyParamsInEdit
           .append('li')
@@ -307,7 +308,7 @@ const PM = {
            * property limit inputs for number
            --------------------------------- */
 
-          if (prop.type === PROPERTY_TYPES.NUMBER) {
+          if (prop.type === PROPERTY_TYPES.INT && prop.type === PROPERTY_TYPES.FLOAT) {
             // if it is of type number
             propertyParamsInEditLimits
               .append('input')
