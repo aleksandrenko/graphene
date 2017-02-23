@@ -61,7 +61,7 @@ export default (parentElement) => {
   });
 
   // close the menu
-  document.querySelector('.menu-overlay').addEventListener('click', (e) => {
+  document.querySelector('.menu-overlay').addEventListener('click', () => {
     document.querySelector('.menu-overlay').classList.remove('opened');
   });
 
@@ -72,6 +72,7 @@ export default (parentElement) => {
     e.preventDefault();
   });
 
+  //TODO: move those behind one listener on .drop-down-menu
   document.querySelector('.menu-save-btn').addEventListener('click', () => {
     Dialog.open(true);
   });
@@ -80,12 +81,12 @@ export default (parentElement) => {
     Dialog.open(false);
   });
 
-  document.querySelector('.menu-undo-btn').addEventListener('click', e => {
+  document.querySelector('.menu-undo-btn').addEventListener('click', () => {
     HistoryManager.undo();
     e.preventDefault();
   });
 
-  document.querySelector('.menu-redo-btn').addEventListener('click', e => {
+  document.querySelector('.menu-redo-btn').addEventListener('click', () => {
     HistoryManager.redo();
     e.preventDefault();
   });
