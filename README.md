@@ -10,4 +10,4 @@
 
 project site: http://aleksandrenko.github.io/grad3ph
 
-(this is a lerning project with solely purpose of testing d3 and some ux ideas)
+(this is a pet/poc project with solely purpose of testing d3 and some ux ideas)
