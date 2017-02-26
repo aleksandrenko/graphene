@@ -63,6 +63,7 @@
   font-weight: bold;
   line-height: 24px;
   width: 150px;
+  text-transform: capitalize;
 }
 
 .property-menu .header .label .type {
@@ -141,6 +142,21 @@
   padding: 6px 15px 6px 10px;
   border-bottom: solid 1px #eee;
   text-transform: capitalize;
+}
+
+.property-menu .main #properties-list li .property input {
+  background: transparent;
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0;
+  height: auto;
+  text-indent: 10px;
 }
 
 .property-menu .main #properties-list li .property .type {

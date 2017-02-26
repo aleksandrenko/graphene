@@ -41,16 +41,16 @@ const _setupPropertyManager = () => {
   if (!_setupPropertyManager.isDone) {
     // create e dom element layer for the properties menu
     const propertiesLayer = createDomElementInContainer(`#${CONST.EDITOR_ID}`,
-      'div',
-      CONST.PROPERTIES_MENU_LAYER_ID,
-      CONST.PROPERTIES_MENU_LAYER_CLASS
+        'div',
+        CONST.PROPERTIES_MENU_LAYER_ID,
+        CONST.PROPERTIES_MENU_LAYER_CLASS
     );
 
     // create a properties menu dom element
     PM.propertiesMenu = createDomElementInContainer(`#${propertiesLayer.id}`,
-      'div',
-      CONST.PROPERTY_MENU_ID,
-      CONST.PROPERTY_MENU_CLASS
+        'div',
+        CONST.PROPERTY_MENU_ID,
+        CONST.PROPERTY_MENU_CLASS
     );
 
     _setupPropertyManager.isDone = true;
@@ -105,28 +105,28 @@ const PM = {
        --------------------------- */
 
       propertyParamsInEdit
-        .append('li')
-        .append('input')
-        .attr({
-          placeholder: 'Key',
-          type: 'text',
-          value: () => prop.key
-        })
-        .on('change', () => {
-          prop.key = d3.event.target.value;
-          _drawPropertyInEdit();
-        });
+          .append('li')
+          .append('input')
+          .attr({
+            placeholder: 'Key',
+            type: 'text',
+            value: () => prop.key
+          })
+          .on('change', () => {
+            prop.key = d3.event.target.value;
+            _drawPropertyInEdit();
+          });
 
       /** -------------------------------
        * property type drop-down/select
        ------------------------------- */
 
       const propertyParamsInEditSelect = propertyParamsInEdit
-        .append('li')
-        .append('select')
-        .attr({
-          id: 'property-types'
-        });
+          .append('li')
+          .append('select')
+          .attr({
+            id: 'property-types'
+          });
 
       propertyParamsInEditSelect.on('input', () => {
         prop.type = d3.event.target.value;
@@ -140,14 +140,14 @@ const PM = {
       });
 
       propertyParamsInEditSelect
-        .selectAll('option')
-        .data(Object.keys(PROPERTY_TYPES))
-        .enter()
-        .append('option')
-        .attr({
-          value: type => type
-        })
-        .text(type => PROPERTY_TYPES[type]);
+          .selectAll('option')
+          .data(Object.keys(PROPERTY_TYPES))
+          .enter()
+          .append('option')
+          .attr({
+            value: type => type
+          })
+          .text(type => PROPERTY_TYPES[type]);
 
       d3.select(`option[value="${prop.type}"]`).attr({
         selected: true
@@ -159,21 +159,21 @@ const PM = {
 
       if (prop.type) {
         const propHasDefaultCheckbox = propertyParamsInEdit
-          .append('li')
-          .append('label')
-          .text('Has Default Value')
-          .append('input')
-          .attr({
-            type: 'checkbox'
-          })
-          .on('change', () => {
-            prop.hasDefaultValue = d3.event.target.checked;
+            .append('li')
+            .append('label')
+            .text('Has Default Value')
+            .append('input')
+            .attr({
+              type: 'checkbox'
+            })
+            .on('change', () => {
+              prop.hasDefaultValue = d3.event.target.checked;
 
-            if (!prop.hasDefaultValue) {
-              prop.defaultValue = '';
-            }
-            _drawPropertyInEdit();
-          });
+              if (!prop.hasDefaultValue) {
+                prop.defaultValue = '';
+              }
+              _drawPropertyInEdit();
+            });
 
         /** -----------------------------------------
          * property default value input/radio button
@@ -188,13 +188,13 @@ const PM = {
             propertyParamsInEditDefaultBoolean.classed('default-bool', true);
 
             const defaultPropertyTruth = propertyParamsInEditDefaultBoolean
-              .append('label')
-              .text('True')
-              .append('input')
-              .attr({
-                type: 'radio',
-                name: 'defaultBool'
-              });
+                .append('label')
+                .text('True')
+                .append('input')
+                .attr({
+                  type: 'radio',
+                  name: 'defaultBool'
+                });
 
             if (prop.defaultValue === true) {
               defaultPropertyTruth.attr({ checked: true });
@@ -206,13 +206,13 @@ const PM = {
             });
 
             const defaultPropertyFalse = propertyParamsInEditDefaultBoolean
-              .append('label')
-              .text('False')
-              .append('input')
-              .attr({
-                type: 'radio',
-                name: 'defaultBool'
-              });
+                .append('label')
+                .text('False')
+                .append('input')
+                .attr({
+                  type: 'radio',
+                  name: 'defaultBool'
+                });
 
             if (prop.defaultValue === false) {
               defaultPropertyFalse.attr({ checked: true });
@@ -228,39 +228,39 @@ const PM = {
 
             if (isDate) {
               dateDefaultValueNowCheckbox = propertyParamsInEdit
-                .append('li')
-                .append('label')
-                .text('Default is "now"')
-                .append('input')
-                .attr({
-                  type: 'checkbox'
-                })
-                .on('change', () => {
-                  if (d3.event.target.checked) {
-                    prop.defaultValue = 'now';
-                  } else {
-                    prop.defaultValue = '';
-                  }
+                  .append('li')
+                  .append('label')
+                  .text('Default is "now"')
+                  .append('input')
+                  .attr({
+                    type: 'checkbox'
+                  })
+                  .on('change', () => {
+                    if (d3.event.target.checked) {
+                      prop.defaultValue = 'now';
+                    } else {
+                      prop.defaultValue = '';
+                    }
 
-                  _drawPropertyInEdit();
-                });
+                    _drawPropertyInEdit();
+                  });
             }
 
             const defaultValueInput = propertyParamsInEdit
-              .append('li')
-              .append('input')
-              .attr({
-                placeholder: 'Default Value',
-                type: isDate ? 'date' : 'text',
-                value: () => prop.defaultValue
-              })
-              .style({
-                display: () => prop.hasDefaultValue ? 'inherit' : 'none'
-              })
-              .on('change', () => {
-                prop.defaultValue = d3.event.target.value;
-                _drawPropertyInEdit();
-              });
+                .append('li')
+                .append('input')
+                .attr({
+                  placeholder: 'Default Value',
+                  type: isDate ? 'date' : 'text',
+                  value: () => prop.defaultValue
+                })
+                .style({
+                  display: () => prop.hasDefaultValue ? 'inherit' : 'none'
+                })
+                .on('change', () => {
+                  prop.defaultValue = d3.event.target.value;
+                  _drawPropertyInEdit();
+                });
 
             if (prop.defaultValue === 'now' && isDate) {
               defaultValueInput.attr('disabled', true);
@@ -275,29 +275,29 @@ const PM = {
        --------------------------- */
 
       if (prop.type === PROPERTY_TYPES.STRING ||
-        prop.type === PROPERTY_TYPES.PASSWORD ||
-        prop.type === PROPERTY_TYPES.EMAIL ||
-        prop.type === PROPERTY_TYPES.URL ||
-        prop.type === PROPERTY_TYPES.LATLNG ||
-        prop.type === PROPERTY_TYPES.FLOAT ||
-        prop.type === PROPERTY_TYPES.INT) {
+          prop.type === PROPERTY_TYPES.PASSWORD ||
+          prop.type === PROPERTY_TYPES.EMAIL ||
+          prop.type === PROPERTY_TYPES.URL ||
+          prop.type === PROPERTY_TYPES.LATLNG ||
+          prop.type === PROPERTY_TYPES.FLOAT ||
+          prop.type === PROPERTY_TYPES.INT) {
 
         const propHasLimitCheckbox = propertyParamsInEdit
-          .append('li')
-          .append('label')
-          .text('Has Limit')
-          .append('input')
-          .attr({
-            type: 'checkbox'
-          })
-          .on('change', () => {
-            prop.hasLimit = d3.event.target.checked;
+            .append('li')
+            .append('label')
+            .text('Has Limit')
+            .append('input')
+            .attr({
+              type: 'checkbox'
+            })
+            .on('change', () => {
+              prop.hasLimit = d3.event.target.checked;
 
-            if (!prop.hasLimit) {
-              prop.limit = [0, 0];
-            }
-            _drawPropertyInEdit();
-          });
+              if (!prop.hasLimit) {
+                prop.limit = [0, 0];
+              }
+              _drawPropertyInEdit();
+            });
 
         if (prop.hasLimit) {
           propHasLimitCheckbox.attr({ checked: true });
@@ -311,28 +311,28 @@ const PM = {
           if (prop.type === PROPERTY_TYPES.INT && prop.type === PROPERTY_TYPES.FLOAT) {
             // if it is of type number
             propertyParamsInEditLimits
-              .append('input')
-              .attr({
-                placeholder: 'Min',
-                type: 'number',
-                value: () => prop.limit[0]
-              })
-              .on('change', () => {
-                prop.limit[0] = d3.event.target.value;
-                _drawPropertyInEdit();
-              });
+                .append('input')
+                .attr({
+                  placeholder: 'Min',
+                  type: 'number',
+                  value: () => prop.limit[0]
+                })
+                .on('change', () => {
+                  prop.limit[0] = d3.event.target.value;
+                  _drawPropertyInEdit();
+                });
 
             propertyParamsInEditLimits
-              .append('input')
-              .attr({
-                placeholder: 'Max',
-                type: 'number',
-                value: () => prop.limit[1]
-              })
-              .on('change', () => {
-                prop.limit[1] = d3.event.target.value;
-                _drawPropertyInEdit();
-              });
+                .append('input')
+                .attr({
+                  placeholder: 'Max',
+                  type: 'number',
+                  value: () => prop.limit[1]
+                })
+                .on('change', () => {
+                  prop.limit[1] = d3.event.target.value;
+                  _drawPropertyInEdit();
+                });
           }
 
           /** ---------------------------------
@@ -340,35 +340,35 @@ const PM = {
            ---------------------------------- */
 
           if (prop.type === PROPERTY_TYPES.STRING ||
-            prop.type === PROPERTY_TYPES.PASSWORD ||
-            prop.type === PROPERTY_TYPES.EMAIL ||
-            prop.type === PROPERTY_TYPES.URL ||
-            prop.type === PROPERTY_TYPES.LATLNG) {
+              prop.type === PROPERTY_TYPES.PASSWORD ||
+              prop.type === PROPERTY_TYPES.EMAIL ||
+              prop.type === PROPERTY_TYPES.URL ||
+              prop.type === PROPERTY_TYPES.LATLNG) {
 
             propertyParamsInEditLimits
-              .append('input')
-              .attr({
-                placeholder: 'Min',
-                type: 'number',
-                min: 0,
-                value: () => prop.limit[0]
-              })
-              .on('change', () => {
-                prop.limit[0] = d3.event.target.value;
-                _drawPropertyInEdit();
-              });
+                .append('input')
+                .attr({
+                  placeholder: 'Min',
+                  type: 'number',
+                  min: 0,
+                  value: () => prop.limit[0]
+                })
+                .on('change', () => {
+                  prop.limit[0] = d3.event.target.value;
+                  _drawPropertyInEdit();
+                });
 
             propertyParamsInEditLimits
-              .append('input')
-              .attr({
-                placeholder: 'Max',
-                type: 'number',
-                value: () => prop.limit[1]
-              })
-              .on('change', () => {
-                prop.limit[1] = d3.event.target.value;
-                _drawPropertyInEdit();
-              });
+                .append('input')
+                .attr({
+                  placeholder: 'Max',
+                  type: 'number',
+                  value: () => prop.limit[1]
+                })
+                .on('change', () => {
+                  prop.limit[1] = d3.event.target.value;
+                  _drawPropertyInEdit();
+                });
           }
         }
       }
@@ -378,17 +378,17 @@ const PM = {
        ------------------------------ */
 
       const propIsRequiredCheckbox = propertyParamsInEdit
-        .append('li')
-        .append('label')
-        .text('Is Required')
-        .append('input')
-        .attr({
-          type: 'checkbox'
-        })
-        .on('change', () => {
-          prop.isRequired = d3.event.target.checked;
-          _drawPropertyInEdit();
-        });
+          .append('li')
+          .append('label')
+          .text('Is Required')
+          .append('input')
+          .attr({
+            type: 'checkbox'
+          })
+          .on('change', () => {
+            prop.isRequired = d3.event.target.checked;
+            _drawPropertyInEdit();
+          });
 
       if (prop.isRequired) {
         propIsRequiredCheckbox.attr({ checked: true });
@@ -401,78 +401,55 @@ const PM = {
      * @private
      */
     const _drawProperties = () => {
-      // clear before render
-      const list = d3.select('#properties-list').html('');
+      const list = document.querySelector('#properties-list');
+      const domFragment = document.createDocumentFragment();
 
-      const properties = list.selectAll('.property').data(_entity.properties, e => e.id);
+      const editProperty = (property) => {
+        console.log('property', property);
+      };
 
-      const property = properties.enter()
-        .append('li')
-        .append('div')
-        .classed('property', true)
-        .text(e => e.key);
+      _entity.properties.forEach((property) => {
+        const li = document.createElement('li');
 
-      property.append('small')
-        .classed('type', true)
-        .text(e => e.type);
+        li.innerHTML = `  
+<div class="property">
+  <input type="text" value="${property.key}" \>
+  <small class="type">${property.type}</small>&nbsp;
+</div>
+<div class="remove-property-button" title="Delete">x</div>
+`;
+        li.onclick = () => { editProperty(property); };
 
-      property.append('div')
-        .classed('remove-property-button', true)
-        .attr('title', 'Delete')
-        .text('✕');
-
-      properties.exit().remove();
-
-      /** -----------------------------------------------------
-       * click on property in list, select a property for edit
-       ------------------------------------------------------ */
-
-      properties.on('click', prop => {
-        const target = d3.event.target;
-
-        if (target.classList.contains('remove-property-button')) {
-          const i = _entity.properties.indexOf(prop);
-          _entity.properties.splice(i, 1);
-
-          // close the edit part of the menu
-          _drawPropertyInEdit.property = null;
-          _drawPropertyInEdit();
-
-          _drawProperties();
-          d3.event.preventDefault();
-          return;
-        }
-
-        _drawPropertyInEdit.property = prop;
-        _drawPropertyInEdit();
+        domFragment.appendChild(li);
       });
+
+      list.appendChild(domFragment);
     };
-    _drawProperties();
 
-    /** --------------------------
-     * drag the property panel
-     --------------------------- */
-
-    let isDraggedByTheHandler = false;
-    let startDragOffset = [0, 0];
-
-    const drag = d3.behavior.drag()
-      .on('dragstart', () => {
-        const event = d3.event.sourceEvent;
-        const target = event.target;
-        isDraggedByTheHandler = target.classList.contains('drag-handler');
-        startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
-      })
-      .on('drag', () => {
-        if (isDraggedByTheHandler) {
-          d3.select(PM.propertiesMenu).style({
-            left: `${d3.event.x - startDragOffset[0]}px`,
-            top: `${d3.event.y - startDragOffset[1]}px`
-          });
-        }
-      });
-
-    d3.select(PM.propertiesMenu).call(drag);
+    // /** --------------------------
+    //  * drag the property panel
+    //  --------------------------- */
+    //
+    // let isDraggedByTheHandler = false;
+    // let startDragOffset = [0, 0];
+    //
+    // const drag = d3.behavior.drag()
+    //     .on('dragstart', () => {
+    //       const event = d3.event.sourceEvent;
+    //       const target = event.target;
+    //       isDraggedByTheHandler = target.classList.contains('drag-handler');
+    //       startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
+    //     })
+    //     .on('drag', () => {
+    //       if (isDraggedByTheHandler) {
+    //         d3.select(PM.propertiesMenu).style({
+    //           left: `${d3.event.x - startDragOffset[0]}px`,
+    //           top: `${d3.event.y - startDragOffset[1]}px`
+    //         });
+    //       }
+    //     });
+    //
+    // d3.select(PM.propertiesMenu).call(drag);
 
     /** --------------------------
      * entity label and color, close and save buttons
