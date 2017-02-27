@@ -227,6 +227,10 @@
   vertical-align: top;
 }
 
+.property-menu .main .property-edit.open-wrapper {
+  display: inline-block;
+}
+
 .property-menu .main .property-edit li {
   padding: 4px 0;
 }
