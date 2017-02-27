@@ -124,17 +124,8 @@ const PM = {
       editWrapper.innerHTML = `
 <ul>
   <li>
-    <select>
-      <option value="null">${PROPERTY_TYPES.NONE}</option>
-      <option value="">${PROPERTY_TYPES.STRING}</option>
-      <option value="">${PROPERTY_TYPES.INT}</option>
-      <option value="">${PROPERTY_TYPES.FLOAT}</option>
-      <option value="">${PROPERTY_TYPES.BOOLEAN}</option>
-      <option value="">${PROPERTY_TYPES.PASSWORD}</option>
-      <option value="">${PROPERTY_TYPES.EMAIL}</option>
-      <option value="">${PROPERTY_TYPES.URL}</option>
-      <option value="">${PROPERTY_TYPES.DATE}</option>
-      <option value="">${PROPERTY_TYPES.LATLNG}</option>
+    <select onchange="">
+      ${ Object.keys(PROPERTY_TYPES).map((type) => `<option value="${PROPERTY_TYPES[type]}">${PROPERTY_TYPES[type]}</option>`) }
     </select>
   </li>
   
@@ -142,9 +133,7 @@ const PM = {
   <li>entity.type: <b>${entity.type}</b></li>
   <li>hasDefaultValue: <b>${property.hasDefaultValue}</b></li>
   <li>hasLimit: <b>${property.hasLimit}</b></li>
-  <li>id: <b>${property.id}</b></li>
   <li>isRequired: <b>${property.isRequired}</b></li>
-  <li>key: <b>${property.key}</b></li>
   <li>limit[0]: <b>${property.limit[0]}</b></li>
   <li>limit[1]: <b>${property.limit[1]}</b></li>
 </ul>
