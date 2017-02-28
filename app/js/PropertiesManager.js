@@ -93,7 +93,7 @@ const PM = {
         li.innerHTML = `
 <div class="property">
   <input type="text" value="${property.key}" \>
-  <small class="type">${property.type}</small>&nbsp;
+  <small class="type">${property.type}${property.isRequired ? '!' : ''}</small>&nbsp;
 </div>
 <div class="remove-property-button" title="Delete">x</div>
 `;
@@ -132,33 +132,34 @@ const PM = {
   
   <li>defaultValue: <input class="defaultValue" value="${property.defaultValue}" /></li>
   <li><label>isRequired: <input class="isRequired" type="checkbox" ${property.isRequired ? 'checked' : ''} /></label></li>
+  ${ [PROPERTY_TYPES.STRING, PROPERTY_TYPES.INT, PROPERTY_TYPES.FLOAT, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD].indexOf(property.type) !== -1 ? `
   <li>min: <input class="limitMin" type="text" value="${property.limit[0]}" /></li>
   <li>max: <input class="limitMin" type="text" value="${property.limit[1]}" /></li>
+  ` : '' }
 </ul>
 `;
 
       d3.select('#property-edit select').on('change', () => {
-        console.log('select change', d3.event.target.value);
         property.type = d3.event.target.value;
+
+        _drawProperties(entity);
+        _drawPropertyInEdit(property);
       });
 
       d3.select('#property-edit .defaultValue').on('input', () => {
-        console.log('defaultValue input', d3.event.target.value);
         property.defaultValue = d3.event.target.value;
       });
 
       d3.select('#property-edit .isRequired').on('click', () => {
-        console.log('isRequired click', d3.event.target.value);
         property.isRequired = d3.event.target.value;
+        _drawProperties(entity);
       });
 
       d3.select('#property-edit .limitMin').on('input', () => {
-        console.log('limitMin input', d3.event.target.value);
         property.limit[0] = d3.event.target.value;
       });
 
       d3.select('#property-edit .limitMin').on('input', () => {
-        console.log('limitMin input', d3.event.target.value);
         property.limit[1] = d3.event.target.value;
       });
     };
