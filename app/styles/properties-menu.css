@@ -231,56 +231,6 @@
   display: inline-block;
 }
 
-.property-menu .main .property-edit li {
-  padding: 4px 0;
-}
-
-.property-menu .main .property-edit input[type="checkbox"] {
-  float: left;
-}
-
-.property-menu .main .property-edit .hbox {
-  display: flex;
-}
-
-.property-menu .main .property-edit .hbox > * {
-  flex: 1;
-}
-
-.property-menu .main .property-edit .default-bool {
-  display: flex;
-}
-
-.property-menu .main.property-edit .default-bool label {
-  margin-right: 3px;
-  flex: 1;
-}
-
-.property-menu .main .property-edit .default-bool label input {
-  float: left;
-  margin-top: 2px;
-  margin-right: 5px;
-}
-
-.property-menu .main .property-edit input[type="text"],
-.property-menu .main .property-edit select {
-  width: 100%;
-  text-transform: capitalize;
-}
-
-.property-menu .main .property-edit .actions {
-  display: flex;
-}
-
-.property-menu .main .property-edit .actions button {
-  flex: 1;
-  margin-right: 3px;
-}
-
-.property-menu .main #properties-list li .property-edit {
-  border-bottom: solid 1px #eee;
-}
-
 /* footer ===================================================================== */
 
 .property-menu .footer {
