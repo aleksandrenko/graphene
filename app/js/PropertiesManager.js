@@ -4,92 +4,65 @@
 import CONST from './enums/CONST';
 import PROPERTY_TYPES from './enums/PROPERTY_TYPES';
 import Property from './do/Property';
-import createDomElementInContainer from './utils/dom';
 
-
-import { h, render, Component } from 'preact';
+import {h, render, Component} from 'preact';
 
 /* example component to start from */
-class Clock extends Component {
+class PropertiesManager extends Component {
   constructor() {
     super();
-    // set initial time:
-    this.state.time = Date.now();
+    this.state.selectedProperty = { id: null };
   }
 
-  componentDidMount() {
-    // update time every second
-    this.timer = setInterval(() => {
-      this.setState({ time: Date.now() });
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    // stop when not renderable
-    clearInterval(this.timer);
+  selectProperty(prop) {
+    this.setState({ selectedProperty: prop });
   }
 
   render(props, state) {
-    let time = new Date(state.time).toLocaleTimeString();
-    return <span>{ time }</span>;
+    const entity = props.entity;
+    const position = { left: props.position[0], top: props.position[1] };
+
+    return <div id={CONST.PROPERTIES_MENU_LAYER_ID} className={CONST.PROPERTIES_MENU_LAYER_CLASS}>
+              <div id={CONST.PROPERTY_MENU_ID} className={CONST.PROPERTY_MENU_CLASS} style={position}>
+                <div className="header">
+                  <span className="color">
+                    <input id="entity-color" value={entity.color} type="color" onChange={this.linkState('color')} />
+                  </span>
+                  <span className="label">
+                    <input id="entity-label" value={entity.label}/>
+                    <small className="type">{entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
+                    <span className="drag-handler" />
+                  </span>
+                </div>
+                <div className="main">
+                  <div className="properties">
+                    <ul id="properties-list">
+                      { entity.properties.map((prop) => <li className={ prop.id === state.selectedProperty.id ? 'selected' : '' } onClick={this.selectProperty.bind(this, prop)}>
+                          <div className="property">
+                            <input type="text" value={prop.key} />
+                            <small className="type">{prop.type}{prop.isRequired ? '!' : ''}</small>&nbsp;
+                          </div>
+                          <div className="remove-property-button" title="Delete">x</div>
+                        </li>)
+                      }
+                    </ul>
+                    <button className="add-button">+ Add property</button>
+                  </div>
+                  { state.selectedProperty.id &&
+                  <div className="property-edit" id="property-edit">
+                    { state.selectedProperty.id }
+                    { state.selectedProperty.key }
+                  </div>
+                  }
+                </div>
+                <div className="footer">
+                  <button id="close-button" onClick={this.props.onClose}>Revert</button>
+                  <button id="save-button" onClick={this.props.onClose}>Close</button>
+                </div>
+              </div>
+            </div>;
   }
 }
-
-// render an instance of Clock into <body>:
-render(<Clock />, document.body);
-
-
-let _entity;
-let _saveHandlerFunction = () => null;
-
-/**
- *
- * @param {Object} entity
- * @returns {string}
- * @private
- */
-const _getMenuHTML = (entity) => `
-  <div class="header">
-    <span class="color">
-      <input id="entity-color" value="${entity.color}" type="color" />
-    </span>
-    <span class="label">
-      <input id="entity-label" value="${entity.label}" />
-      <small class="type">${entity.isNode && 'node' || entity.isEdge && 'edge'}</small>
-      <span class="drag-handler"></span>
-    </span>
-  </div>
-  <div class="main">
-    <div class="properties">
-      <ul id="properties-list"></ul>
-      <button class="add-button">+ Add property</button>
-    </div><div class="property-edit" id="property-edit"></div>
-  </div>
-  <div class="footer">
-    <button id="close-button">Close</button>
-    <button id="save-button">Save</button>
-  </div>
-  `;
-
-const _setupPropertyManager = () => {
-  if (!_setupPropertyManager.isDone) {
-    // create e dom element layer for the properties menu
-    const propertiesLayer = createDomElementInContainer(`#${CONST.EDITOR_ID}`,
-      'div',
-      CONST.PROPERTIES_MENU_LAYER_ID,
-      CONST.PROPERTIES_MENU_LAYER_CLASS
-    );
-
-    // create a properties menu dom element
-    PM.propertiesMenu = createDomElementInContainer(`#${propertiesLayer.id}`,
-      'div',
-      CONST.PROPERTY_MENU_ID,
-      CONST.PROPERTY_MENU_CLASS
-    );
-
-    _setupPropertyManager.isDone = true;
-  }
-};
 
 const PM = {
   /**
@@ -97,57 +70,13 @@ const PM = {
    * @param entity
    */
   open: (position, entity) => {
-    _setupPropertyManager();
+    //copy the properties
+    //entity.properties = Array.from(entity.properties);
 
-    entity.properties = Array.from(entity.properties);
-
-    if (entity.isEdge) {
-      PM.propertiesMenu.classList.add('edge-properties');
-    } else {
-      PM.propertiesMenu.classList.remove('edge-properties');
-    }
-
-    PM.propertiesMenu.classList.add('opened');
-    PM.propertiesMenu.focus();
-    PM.propertiesMenu.style.left = `${position[0]}px`;
-    PM.propertiesMenu.style.top = `${position[1]}px`;
-
-    PM.propertiesMenu.innerHTML = _getMenuHTML(entity);
-
-    /**
-     * @private
-     */
-    const _drawProperties = (entity) => {
-      const list = document.querySelector('#properties-list');
-      const domFragment = document.createDocumentFragment();
-
-      entity.properties.forEach((property) => {
-        const li = document.createElement('li');
-
-        li.innerHTML = `
-<div class="property">
-  <input type="text" value="${property.key}" \>
-  <small class="type">${property.type}${property.isRequired ? '!' : ''}</small>&nbsp;
-</div>
-<div class="remove-property-button" title="Delete">x</div>
-`;
-        li.onclick = (e) => {
-          if (e.target.className === 'remove-property-button') {
-            entity.properties = entity.properties.filter((prop) => prop.id !== property.id);
-            _drawProperties(entity);
-          } else {
-            _drawPropertyInEdit(property);
-          }
-        };
-
-        domFragment.appendChild(li);
-      });
-
-      list.innerHTML = '';
-      list.appendChild(domFragment);
-    };
-
-    _drawProperties(entity);
+    render(
+        <PropertiesManager position={position} entity={entity} onClose={PM.close} />,
+        document.querySelector(`#${CONST.EDITOR_ID}`)
+    );
 
     /**
      * @private
@@ -173,96 +102,100 @@ const PM = {
 </ul>
 `;
 
-      d3.select('#property-edit select').on('change', () => {
-        property.type = d3.event.target.value;
-
-        _drawProperties(entity);
-        _drawPropertyInEdit(property);
-      });
-
-      d3.select('#property-edit .defaultValue').on('input', () => {
-        property.defaultValue = d3.event.target.value;
-      });
-
-      d3.select('#property-edit .isRequired').on('click', () => {
-        property.isRequired = d3.event.target.value;
-        _drawProperties(entity);
-      });
-
-      d3.select('#property-edit .limitMin').on('input', () => {
-        property.limit[0] = d3.event.target.value;
-      });
-
-      d3.select('#property-edit .limitMin').on('input', () => {
-        property.limit[1] = d3.event.target.value;
-      });
+      // d3.select('#property-edit select').on('change', () => {
+      //   property.type = d3.event.target.value;
+      //
+      //   _drawProperties(entity);
+      //   _drawPropertyInEdit(property);
+      // });
+      //
+      // d3.select('#property-edit .defaultValue').on('input', () => {
+      //   property.defaultValue = d3.event.target.value;
+      // });
+      //
+      // d3.select('#property-edit .isRequired').on('click', () => {
+      //   property.isRequired = d3.event.target.value;
+      //   _drawProperties(entity);
+      // });
+      //
+      // d3.select('#property-edit .limitMin').on('input', () => {
+      //   property.limit[0] = d3.event.target.value;
+      // });
+      //
+      // d3.select('#property-edit .limitMin').on('input', () => {
+      //   property.limit[1] = d3.event.target.value;
+      // });
     };
 
     /** --------------------------
      * drag the property panel
      --------------------------- */
 
-    let isDraggedByTheHandler = false;
-    let startDragOffset = [0, 0];
-
-    const drag = d3.behavior.drag()
-      .on('dragstart', () => {
-        const event = d3.event.sourceEvent;
-        const target = event.target;
-        isDraggedByTheHandler = target.classList.contains('drag-handler');
-        startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
-      })
-      .on('drag', () => {
-        if (isDraggedByTheHandler) {
-          d3.select(PM.propertiesMenu).style({
-            left: `${d3.event.x - startDragOffset[0]}px`,
-            top: `${d3.event.y - startDragOffset[1]}px`
-          });
-        }
-      });
-
-    d3.select(PM.propertiesMenu).call(drag);
+    // let isDraggedByTheHandler = false;
+    // let startDragOffset = [0, 0];
+    //
+    // const drag = d3.behavior.drag()
+    //     .on('dragstart', () => {
+    //       const event = d3.event.sourceEvent;
+    //       const target = event.target;
+    //       isDraggedByTheHandler = target.classList.contains('drag-handler');
+    //       startDragOffset = [target.offsetLeft + event.offsetX, target.offsetTop + event.offsetY];
+    //     })
+    //     .on('drag', () => {
+    //       if (isDraggedByTheHandler) {
+    //         d3.select(PM.propertiesMenu).style({
+    //           left: `${d3.event.x - startDragOffset[0]}px`,
+    //           top: `${d3.event.y - startDragOffset[1]}px`
+    //         });
+    //       }
+    //     });
+    //
+    // d3.select(PM.propertiesMenu).call(drag);
 
     /** --------------------------
      * entity label and color, close and save buttons
      --------------------------- */
 
-    d3.select('#entity-label').on('input', () => {
-      // TODO: label validation is needed, no spaces and characters ...
-      _entity.label = d3.event.target.value;
-    });
-
-    d3.select('#entity-color').on('input', () => {
-      _entity.color = d3.event.target.value;
-    });
-
-    d3.select('#close-button').on('click', () => {
-      PM.close();
-    });
-
-    d3.select('#save-button').on('click', () => {
-      _saveHandlerFunction(_entity);
-    });
-
-    // Add new Property with increasing name-number
-    d3.select('.add-button').on('click', () => {
-      _entity.properties.push(new Property());
-      _drawProperties();
-    });
+    // d3.select('#entity-label').on('input', () => {
+    //   // TODO: label validation is needed, no spaces and characters ...
+    //   _entity.label = d3.event.target.value;
+    // });
+    //
+    // d3.select('#entity-color').on('input', () => {
+    //   _entity.color = d3.event.target.value;
+    // });
+    //
+    // d3.select('#close-button').on('click', () => {
+    //   PM.close();
+    // });
+    //
+    // d3.select('#save-button').on('click', () => {
+    //   _saveHandlerFunction(_entity);
+    // });
+    //
+    // // Add new Property with increasing name-number
+    // d3.select('.add-button').on('click', () => {
+    //   _entity.properties.push(new Property());
+    //   _drawProperties();
+    // });
   },
 
   /**
    *
    */
   close: () => {
-    PM.propertiesMenu && PM.propertiesMenu.classList.remove('opened');
+    let pmLayer = document.querySelector(`#${CONST.PROPERTIES_MENU_LAYER_ID}`);
+
+    if (pmLayer) {
+      pmLayer.parentNode.removeChild(pmLayer);
+    }
   },
 
   /**
    * @param fn
    */
   onSave: (fn) => {
-    _saveHandlerFunction = fn;
+
   }
 };
 

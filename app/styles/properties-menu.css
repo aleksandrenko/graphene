@@ -18,10 +18,9 @@
   border-radius: 3px;
   position: absolute;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  pointer-events: none;
   transition: opacity 0.2s;
   overflow: hidden;
+  pointer-events: all;
 }
 
 .property-menu.edge-properties .header .color {
@@ -30,11 +29,6 @@
 
 .property-menu.edge-properties .header .label {
   margin-left: 0;
-}
-
-.property-menu.opened {
-  opacity: 1;
-  pointer-events: all;
 }
 
 /* header ===================================================================== */
@@ -137,6 +131,11 @@
   overflow: hidden;
 }
 
+.property-menu .main #properties-list li.selected,
+.property-menu .main #properties-list li.selected:hover {
+  background-color: #f1f1f1;
+}
+
 .property-menu .main #properties-list li .property {
   cursor: pointer;
   padding: 6px 15px 6px 10px;
@@ -223,7 +222,6 @@
   padding: 10px;
   border-left: solid 1px #ddd;
   width: 180px;
-  display: none;
   vertical-align: top;
 }
 
