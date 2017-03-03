@@ -63,6 +63,10 @@ html, body {
   cursor: pointer;
 }
 
+.graph-editor select {
+  text-transform: capitalize;
+}
+
 .graph-editor input[type="checkbox"],
 .graph-editor input[type="radio"] {
   height: auto;

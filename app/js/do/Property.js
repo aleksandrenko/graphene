@@ -11,7 +11,8 @@ class Property {
     this.key = (options.key || 'New Property').toLowerCase();
     this.type = (options.type || '').toLowerCase();
     this.defaultValue = options.defaultValue || '';
-    this.limit = options.limit || ['', ''];
+    this.limitMin = options.limitMin || '';
+    this.limitMax = options.limitMax || '';
     this.isRequired = options.isRequired || false;
   }
 
