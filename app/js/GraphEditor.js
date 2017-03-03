@@ -1,5 +1,7 @@
 'use strict';
 
+import d3 from 'd3';
+
 import CONST from './enums/CONST';
 
 import createDomElementInContainer from './utils/dom';

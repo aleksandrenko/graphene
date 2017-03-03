@@ -4,6 +4,7 @@ import Edge from './do/Edge';
 import DataManager from './DataManager';
 import InteractionManager from './InteractionManager';
 import geometry from './utils/geometry';
+import d3 from 'd3';
 
 /**
  * Private variables/consts

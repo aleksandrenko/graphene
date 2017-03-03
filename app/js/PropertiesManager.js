@@ -4,6 +4,7 @@
 import CONST from './enums/CONST';
 import PROPERTY_TYPES from './enums/PROPERTY_TYPES';
 import Property from './do/Property';
+import d3 from 'd3';
 
 import {h, render, Component} from 'preact';
 
