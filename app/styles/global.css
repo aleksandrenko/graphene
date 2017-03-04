@@ -43,13 +43,13 @@ html, body {
 .graph-editor input,
 .graph-editor select {
   color: #666;
+  height: 19px;
 }
 
 .graph-editor select,
 .graph-editor button,
 .graph-editor input[type="checkbox"] {
   cursor: pointer;
-  height: 24px;
   font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 

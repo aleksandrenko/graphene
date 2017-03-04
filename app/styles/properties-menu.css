@@ -56,7 +56,7 @@
   font-size: 16px;
   font-weight: bold;
   line-height: 24px;
-  width: 150px;
+  width: 110px;
   text-transform: capitalize;
 }
 
@@ -113,7 +113,7 @@
 }
 
 .property-menu .main .properties {
-  width: 240px;
+  width: 180px;
   display: flex;
   flex-direction: column;
 }
@@ -133,7 +133,46 @@
 
 .property-menu .main #properties-list li.selected,
 .property-menu .main #properties-list li.selected:hover {
-  background-color: #f1f1f1;
+  background-color: #f8f8f8;
+}
+
+.property-menu .main #properties-list li.disabled::after {
+  content: '';
+  display: block;
+  background: #ccc;
+  width: 10px;
+  height: 8px;
+  border-radius: 2px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -3px;
+}
+
+.property-menu .main #properties-list li.disabled::before {
+  content: '';
+  display: block;
+  border: solid 2px #ccc;
+  width: 2px;
+  height: 8px;
+  border-radius: 3px;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  margin-top: -8px
+}
+
+.property-menu .main #properties-list li.disabled,
+.property-menu .main #properties-list li.disabled:hover {
+  pointer-events: none ;
+  background: inherit;
+  opacity: 0.8;
+  text-indent: 10px;
+  color: #ccc;
+}
+
+.property-menu .main #properties-list li.disabled .propertyName {
+  left: 15px;
 }
 
 .property-menu .main #properties-list li .property {
@@ -177,7 +216,7 @@
   border-radius: 3px;
   cursor: pointer;
   line-height: 13px;
-  font-size: 11px;
+  font-size: 10px;
   text-align: center;
   color: #eee;
   transition: all .2s;
@@ -221,11 +260,39 @@
 .property-menu .main .property-edit {
   padding: 10px;
   border-left: solid 1px #ddd;
-  width: 180px;
+  width: 220px;
   vertical-align: top;
 }
 
-/* footer ===================================================================== */
+.property-edit li input {
+  min-width: 0;
+  width: auto;
+}
+
+.property-edit li input[type="checkbox"] {
+  margin-left: -3px;
+}
+
+.property-edit li label {
+  text-transform: capitalize;
+  display: flex;
+  padding-bottom: 8px;
+}
+
+.property-edit li label *:nth-child(2) {
+  flex: 1;
+}
+
+.property-edit li label span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  width: 85px;
+  font-size: 11px;
+}
+
+  /* footer ===================================================================== */
 
 .property-menu .footer {
   background: #f1f1f1;
