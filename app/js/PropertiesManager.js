@@ -21,7 +21,6 @@ class PropertiesManager extends Component {
   }
 
   componentDidMount() {
-
     /** --------------------------
      * drag the property panel
      --------------------------- */
@@ -176,9 +175,9 @@ class PropertiesManager extends Component {
           }
         </div>
         <div className="footer">
-          <button id="save-button" onClick={this.props.onClose}>Close</button>
+          <button id="save-button" onClick={ this.props.onClose.bind(this, this.state.entity) }>Close</button>
         </div>
-      </div>
+      </div>git
     </div>;
   }
 }
@@ -198,15 +197,17 @@ const PM = {
   /**
    *
    */
-  close: () => {
+  close: (entity) => {
     const pmLayer = document.querySelector(`#${CONST.PROPERTIES_MENU_LAYER_ID}`);
 
     if (pmLayer) {
       pmLayer.parentNode.removeChild(pmLayer);
+      PM.close.closeHandler(entity);
     }
   },
 
-  onSave: () => {
+  onClose: (closeHandler) => {
+    PM.close.closeHandler = closeHandler;
   }
 };
 

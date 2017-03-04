@@ -120,7 +120,7 @@ const IM = {
     // initialize the context menu
     ContextMenu.init(`#${rootDivElement.id}`);
 
-    PropertiesManager.onSave((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
+    PropertiesManager.onClose((entityToSave) => entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave));
 
     ContextMenu.onAction((action) => {
       switch (action.type) {
