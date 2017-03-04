@@ -35,6 +35,14 @@ class PropertiesManager extends Component {
     prop.key = e.target.value;
   }
 
+  deleteProperty(prop) {
+    const entity = this.state.entity;
+    const placeInPropertiesArray = entity.properties.indexOf(prop);
+    entity.properties.splice(placeInPropertiesArray, 1);
+
+    this.setState({ entity });
+  }
+
   render(props, state) {
     const entity = state.entity;
     const position = { left: state.position[0], top: state.position[1] };
@@ -55,15 +63,18 @@ class PropertiesManager extends Component {
         <div className="main">
           <div className="properties">
             <ul id="properties-list">
-              { entity.properties.map((prop) => <li
-                  className={ prop.id === state.selectedProperty.id ? 'selected' : '' }
-                  onClick={this.selectProperty.bind(this, prop)}>
+              { entity.properties.map((prop) => <li className={ prop.id === state.selectedProperty.id ? 'selected' : '' }>
                 <div className="property">
-                  <input type="text" value={prop.key} onInput={ (e) => this.changePropertyName(e, prop) }/>
+                  <input
+                      type="text"
+                      value={prop.key}
+                      onInput={ (e) => this.changePropertyName(e, prop) }
+                      onClick={this.selectProperty.bind(this, prop)}
+                  />
                   <small className="type">{prop.type}{prop.isRequired ? '!' : ''}</small>
                   &nbsp;
                 </div>
-                <div className="remove-property-button" title="Delete">x</div>
+                <div className="remove-property-button" title="Delete" onClick={ this.deleteProperty.bind(this, prop) }>x</div>
               </li>)
               }
             </ul>
