@@ -8,7 +8,7 @@ class Property {
    */
   constructor(options = {}) {
     this.id = options.id || createId();
-    this.key = (options.key || 'New Property').toLowerCase();
+    this.key = (options.key || 'new').toLowerCase();
     this.type = (options.type || '').toLowerCase();
     this.defaultValue = options.defaultValue || '';
     this.limitMin = options.limitMin || '';

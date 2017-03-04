@@ -290,25 +290,25 @@ const IM = {
         }
         break;
       case leftKey:
-        if (focusedElementType !== 'INPUT') {
+        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
           _updatePosition([-keyMoveStep, 0]);
           d3.event.preventDefault();
         }
         break;
       case topKey:
-        if (focusedElementType !== 'INPUT') {
+        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
           _updatePosition([0, -keyMoveStep]);
           d3.event.preventDefault();
         }
         break;
       case rightKey:
-        if (focusedElementType !== 'INPUT') {
+        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
           _updatePosition([keyMoveStep, 0]);
           d3.event.preventDefault();
         }
         break;
       case bottomKey:
-        if (focusedElementType !== 'INPUT') {
+        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
           _updatePosition([0, keyMoveStep]);
           d3.event.preventDefault();
         }

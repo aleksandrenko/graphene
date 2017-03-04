@@ -24,7 +24,7 @@ class Node {
     this.x = options.x;
     this.y = options.y;
     this.color = options.color || color();
-    this.label = (options.label || 'no name').toLowerCase();
+    this.label = (options.label || 'new').toLowerCase();
     this.properties = options.properties || [idProperty];
     this.id = options.id || createId();
     this.isSelected = options.isSelected || false;
