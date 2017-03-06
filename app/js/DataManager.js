@@ -109,7 +109,7 @@ const DataManager = {
   /**
    * @returns {boolean}
    */
-  isEntitySelected: () => (!!_nodes.filter(n => n.isSelected).length || !!_edges.filter(e => e.isSelected).length),
+  isEntitySelected: () => (_nodes.some(n => n.isSelected) || _edges.some(e => e.isSelected)),
 
   /**
    * @returns {Object}

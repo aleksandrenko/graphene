@@ -24,6 +24,7 @@ export default (parentElement) => {
           <li class="menu-delete-all-btn">&#10005; Delete all</li>
         </ul>
       </section>
+      <span class="graphql-schema">&#2947</span>
     </menu>`;
 
   $menu.innerHTML = html;
@@ -60,6 +61,81 @@ export default (parentElement) => {
     }
   });
 
+  document.querySelector('.graphql-schema').addEventListener('click', () => {
+    const nodes = DataManager.getAllNodes();
+    const edges = DataManager.getAllEdges();
+
+    const customTypes = `
+# Date scalar description
+scalar Date
+
+# Email scalar description
+scalar Email
+
+# Url scalar description
+scalar Url
+
+# Password scalar description
+scalar Password
+
+input GeoPointInput {
+  lat: Float!
+  lng: Float!
+}
+
+# GeoPoint description
+type GeoPoint {
+  lat: Float!
+  lng: Float!
+}
+
+interface Node {
+  id: ID!
+}
+
+interface Edge {
+  id: ID!
+  node: Node
+}
+interface Connection {
+  nodes: [Node]
+  edges: [Edge]
+  pageInfo: PageInfo
+  totalCount: Int!
+}
+# page info object - an object to hold the paging and cursors information. github like
+type PageInfo {
+  endCursor: String
+  hasNextPage: String
+  hasPreviousPage: String
+  startCursor: String
+}
+`;
+
+    String.prototype.toCamelCase = function() {
+      return this.replace(/\b(\w+)/g, function(m,p){ return p[0].toUpperCase() + p.substr(1).toLowerCase() });
+    };
+
+    const nodeTypes = nodes.map((node) => {
+      const description = ``;
+      const properties = node.properties.map((property) => `
+${property.key}: ${property.type}${property.isRequired ? '!' : ''}`).join('');
+
+    return `
+     ${description}
+     type ${node.label.toCamelCase()} implements Node {
+       ${properties}
+     }
+     `;
+    }).join('\n');
+
+
+    const schema = `${nodeTypes}`;
+
+    console.log('DataManager', nodes, edges);
+    console.log(schema);
+  });
+
   // close the menu
   document.querySelector('.menu-overlay').addEventListener('click', () => {
     document.querySelector('.menu-overlay').classList.remove('opened');
@@ -72,7 +148,6 @@ export default (parentElement) => {
     e.preventDefault();
   });
 
-  //TODO: move those behind one listener on .drop-down-menu
   document.querySelector('.menu-save-btn').addEventListener('click', () => {
     Dialog.open(true);
   });
