@@ -5,9 +5,11 @@ import DataManager from '../DataManager';
 import HistoryManager from '../HistoryManager';
 import SaveManager from '../SaveManager';
 import NotificationManager from '../NotificationManager';
+import PROPERTY_TYPES from '../enums/PROPERTY_TYPES';
 
 import Dialog from './dialog';
 
+const TextTypes = [PROPERTY_TYPES.STRING, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD];
 
 export default (parentElement) => {
   const $menu = createDomElementInContainer(`#${parentElement.id}`, 'div', 'menu-overlay', 'menu-overlay');
@@ -97,12 +99,14 @@ interface Edge {
   id: ID!
   node: Node
 }
+
 interface Connection {
   nodes: [Node]
   edges: [Edge]
   pageInfo: PageInfo
   totalCount: Int!
 }
+
 # page info object - an object to hold the paging and cursors information. github like
 type PageInfo {
   endCursor: String
@@ -112,27 +116,66 @@ type PageInfo {
 }
 `;
 
-    String.prototype.toCamelCase = function() {
-      return this.replace(/\b(\w+)/g, function(m,p){ return p[0].toUpperCase() + p.substr(1).toLowerCase() });
+    String.prototype.toCamelCase = function () {
+      return this.replace(/\b(\w+)/g, function (m,p) { return p[0].toUpperCase() + p.substr(1).toLowerCase(); });
     };
 
-    const nodeTypes = nodes.map((node) => {
+    /**
+     * @param {object} p
+     * @returns {string}
+     * @private
+     */
+    const _getPropertySpec = (p) => {
+      const suffix = TextTypes.indexOf(p.type) !== -1 ? ' length' : '';
+      let propertyDescription = `#${p.type}`;
+
+      if (p.defaultValue) {
+        propertyDescription += `; default: ${p.defaultValue}`;
+      }
+
+      if (p.limitMin) {
+        propertyDescription += `; min${suffix}: ${p.limitMin}`;
+      }
+
+      if (p.limitMax) {
+        propertyDescription += `; max${suffix}: ${p.limitMax}`;
+      }
+
+      const propertySpec = `
+  ${propertyDescription}
+  ${p.key}: ${p.type}${p.isRequired ? '!' : ''}
+`;
+
+      return propertySpec;
+    };
+
+    /**
+     *
+     * @param {object} n
+     * @returns {string}
+     * @private
+     */
+    const _getNodeSpec = (n) => {
       const description = ``;
-      const properties = node.properties.map((property) => `
-${property.key}: ${property.type}${property.isRequired ? '!' : ''}`).join('');
+      const properties = n.properties.map(_getPropertySpec).join('');
 
-    return `
-     ${description}
-     type ${node.label.toCamelCase()} implements Node {
-       ${properties}
-     }
-     `;
-    }).join('\n');
+      const nodeSpec = `
+${description}
+type ${n.label.toCamelCase()} implements Node {
+  ${properties}
+}`;
+      return nodeSpec;
+    };
 
 
-    const schema = `${nodeTypes}`;
 
-    console.log('DataManager', nodes, edges);
+    const nodeTypes = nodes.map(_getNodeSpec).join('\n');
+
+    const schema = `
+${customTypes}
+${nodeTypes}
+`;
+
     console.log(schema);
   });
 
