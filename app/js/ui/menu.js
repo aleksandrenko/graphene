@@ -212,17 +212,58 @@ type ${_getName(e, 'Connection')} implements Connection {
 `;
     };
 
+    const _getNodeMutaion = (n) => {
+      const label = n.label.toCamelCase();
+      const edges = DataManager.getEdgesForStartNode(n.id);
+
+      const edgesConnections = edges.map((e) => {
+        const schema = `${_getName(e, '')}(${e.startNode.label.toCamelCase()}Id: ID!, ${e.endNode.label.toCamelCase()}: ID!):${_getName(e, 'Connection')}`;
+
+        return `
+  add${schema}
+  remove${schema}
+`;
+      });
+
+      return `
+  create${label}(${label}: ${label}Input): ${label}
+  update${label}(${label}: ${label}Input, id: ID!): ${label}
+  delete${label}(id: ID!): ${label}
+  ${edgesConnections.join('')}
+`;
+    };
+
     const nodeTypes = nodes.map(_getNodeSpec).join('\n');
     const edgesType = edges.map(_getEdge).join('\n');
     const connectionsType = edges.map(_getConnection).join('\n');
+    const nodeMutations = nodes.map(_getNodeMutaion).join('\n');
 
-    const schema = `
+    const schemaEntries = nodes.map((n) => `
+  ${n.label}s(id:[ID]): [${n.label.toCamelCase()}]`).join('');
+
+    const generatedGraphlQlSchema = `
+${customTypes}
 ${nodeTypes}
 ${edgesType}
 ${connectionsType}
+
+# the schema allows the following query:
+type Query {
+  nodes(id:[ID]): [Node]
+  ${schemaEntries}
+}
+
+type Mutation {
+  ${nodeMutations}
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
 `;
 
-console.log(schema);
+    console.log(generatedGraphlQlSchema.replace(/\n\n/g, '\n'));
   });
 
   // close the menu
