@@ -313,6 +313,12 @@ const DataManager = {
   getAllEdges: () => _edges.map(e => e.copy),
 
   /**
+   * @param {string} nodeId
+   * @returns {Array} nodes
+   */
+  getEdgesForStartNode: (nodeId) => DataManager.getAllEdges().filter((edge) => edge.startNodeId === nodeId),
+
+  /**
    * @param {function} fn
    */
   onChange: (fn) => _onUpdateCallbackHandler = fn
