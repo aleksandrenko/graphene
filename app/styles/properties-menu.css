@@ -260,7 +260,7 @@
 .property-menu .main .property-edit {
   padding: 10px;
   border-left: solid 1px #ddd;
-  width: 220px;
+  width: 250px;
   vertical-align: top;
 }
 
@@ -276,6 +276,7 @@
 .property-edit li label {
   text-transform: capitalize;
   display: flex;
+  align-items: center;
   padding-bottom: 8px;
 }
 
@@ -288,7 +289,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  width: 85px;
+  width: 95px;
   font-size: 11px;
   line-height: 24px;
 }
