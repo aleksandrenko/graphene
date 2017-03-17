@@ -4,8 +4,6 @@ import PROPERTY_TYPES from '../enums/PROPERTY_TYPES';
 const TextTypes = [PROPERTY_TYPES.STRING, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD];
 
 const generateGraphQLSchema = (nodeToRenderTo) => {
-  console.log('generateGraphQLSchema');
-
   const nodes = DataManager.getAllNodes();
   const edges = DataManager.getAllEdges();
 

@@ -20,6 +20,8 @@ import SaveManager from './SaveManager';
 import RenderManager from './RenderManager';
 import Dialog from './ui/dialog';
 
+import generateGraphQlSchema from './utils/graphql';
+
 /**
  * @param event
  * @private
@@ -67,6 +69,8 @@ class GraphEditor {
      */
     DataManager.onChange(updateEvent => {
       RenderManager.render(updateEvent.data, $$entitiesGroupElement);
+
+      generateGraphQlSchema(document.querySelector('#temp_schema_viewer'));
 
       // fill the info ui
       infoUI.render();
