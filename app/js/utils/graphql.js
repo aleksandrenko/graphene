@@ -71,7 +71,7 @@ type PageInfo {
    */
   const _getPropertySpec = (p) => {
     const suffix = TextTypes.indexOf(p.type) !== -1 ? ' length' : '';
-    let propertyDescription = `#${p.type}`;
+    let propertyDescription = `#${p.description}`;
 
     if (p.defaultValue) {
       propertyDescription += `; default: ${p.defaultValue}`;
@@ -155,7 +155,7 @@ type ${_getName(e, 'Connection')} implements Connection {
 `;
   };
 
-  const _getNodeMutaion = (n) => {
+  const _getNodeMutation = (n) => {
     const label = n.label.toCamelCase();
     const edges = DataManager.getEdgesForStartNode(n.id);
 
@@ -169,9 +169,9 @@ type ${_getName(e, 'Connection')} implements Connection {
     });
 
     return `
-  create${label}(${label}: ${label}Input): ${label}
-  update${label}(${label}: ${label}Input, id: ID!): ${label}
-  delete${label}(id: ID!): ${label}
+  create${label}(${label}:${label}Input): ${label}
+  update${label}(${label}:${label}Input, id: ID!): ${label}
+  delete${label}(id: ID!):${label}
   ${edgesConnections.join('')}
 `;
   };
@@ -179,10 +179,10 @@ type ${_getName(e, 'Connection')} implements Connection {
   const nodeTypes = nodes.map(_getNodeSpec).join('\n');
   const edgesType = edges.map(_getEdge).join('\n');
   const connectionsType = edges.map(_getConnection).join('\n');
-  const nodeMutations = nodes.map(_getNodeMutaion).join('\n');
+  const nodeMutations = nodes.map(_getNodeMutation).join('\n');
 
   const schemaEntries = nodes.map((n) => `
-  ${n.label}s(id:[ID]): [${n.label.toCamelCase()}]`).join('');
+  ${n.label}s(id:[ID]):[${n.label.toCamelCase()}]`).join('');
 
   const generatedGraphlQlSchema = `
 ${customTypes}

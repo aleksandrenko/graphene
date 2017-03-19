@@ -190,6 +190,15 @@ class PropertiesManager extends Component {
               </li>
               }
             </ul>
+            <div className="propertyDescription">
+              <label>
+                <span>Description:</span>
+                <input
+                    value={state.selectedProperty.description}
+                    onInput={ this.linkState('selectedProperty.description') }
+                />
+              </label>
+            </div>
           </div>
           }
         </div>

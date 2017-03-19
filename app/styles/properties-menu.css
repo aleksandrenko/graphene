@@ -258,10 +258,13 @@
 /* edit mode ================================================================== */
 
 .property-menu .main .property-edit {
-  padding: 10px;
   border-left: solid 1px #ddd;
   width: 250px;
   vertical-align: top;
+}
+
+.property-edit ul {
+  padding: 10px;
 }
 
 .property-edit li input {
@@ -290,8 +293,20 @@
   text-overflow: ellipsis;
   vertical-align: middle;
   width: 95px;
-  font-size: 11px;
   line-height: 24px;
+}
+
+.property-edit .propertyDescription {
+  padding: 10px;
+  border-top: solid 1px #ddd;
+}
+
+.property-edit .propertyDescription label span {
+  display: block;
+}
+
+.property-edit .propertyDescription label input {
+  width: 100%;
 }
 
   /* footer ===================================================================== */
