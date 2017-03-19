@@ -8,8 +8,8 @@ const generateGraphQLSchema = (nodeToRenderTo) => {
   const edges = DataManager.getAllEdges();
 
   const customTypes = `
-# Date scalar description
-scalar Date
+# Datetime scalar description
+scalar Datetime
 
 # Email scalar description
 scalar Email
@@ -118,7 +118,7 @@ type ${n.label.toCamelCase()} implements Node {
 
     const nodeInputSpec = `
 #input for ${n.label.toCamelCase()}
-input ${n.label.toCamelCase()} {
+input ${n.label.toCamelCase()}Input {
   ${inputProperties}
 }`;
 
@@ -137,6 +137,7 @@ ${nodeInputSpec}`;
 
     return `
 type ${_getName(e, 'Edge')} implements Edge {
+  node: ${e.endNode.label.toCamelCase()}
   ${properties}
 }`;
   };
@@ -147,7 +148,7 @@ type ${_getName(e, 'Edge')} implements Edge {
     return `
 type ${_getName(e, 'Connection')} implements Connection {
   nodes: [${e.startNode.label.toCamelCase()}]
-  edges: [${e.label.toCamelCase()}${e.endNode.label.toCamelCase()}Edge]
+  edges: [${_getName(e, 'Edge')}]
   pageInfo: PageInfo
   totalCount: Int!
 }

@@ -9,7 +9,7 @@ class Property {
   constructor(options = {}) {
     this.id = options.id || createId();
     this.key = (options.key || 'new').toLowerCase();
-    this.type = (options.type || '').toLowerCase();
+    this.type = (options.type || '');
     this.defaultValue = options.defaultValue || '';
     this.limitMin = options.limitMin || '';
     this.limitMax = options.limitMax || '';

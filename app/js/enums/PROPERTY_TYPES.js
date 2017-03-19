@@ -2,13 +2,14 @@
 
 export default {
   NONE: '',
-  STRING: 'string',
-  INT: 'int',
-  FLOAT: 'float',
-  BOOLEAN: 'boolean',
-  PASSWORD: 'password',
-  EMAIL: 'email',
-  URL: 'url',
-  DATE: 'datetime',
-  LATLNG: 'latlng'
+  STRING: 'String',
+  ID: `ID`,
+  INT: 'Int',
+  FLOAT: 'Float',
+  BOOLEAN: 'Boolean',
+  PASSWORD: 'Password',
+  EMAIL: 'Email',
+  URL: 'URL',
+  DATE: 'Datetime',
+  LATLNG: 'LatLng'
 };
