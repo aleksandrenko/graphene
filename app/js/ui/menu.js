@@ -23,19 +23,26 @@ export default (parentElement) => {
         </ul>
       </section>
       <span class="graphql-schema">&#2947</span>
-      <pre style="
+      <div style="
         position: fixed;
+        width: 400px;
         top: 40px;
         left: 17px;
-        width: 600px;
-        bottom: 17px;
         background: #fff;
         border: solid 1px #ddd;
-        padding: 10px;
-        overflow: auto;
         border-radius: 4px;" 
         id="temp_schema_viewer"
-      ></pre>
+      ></div>
+      <div style="
+        position: fixed;
+        width: 400px;
+        top: 360px;
+        left: 17px;
+        background: #fff;
+        border: solid 1px #ddd;
+        border-radius: 4px;" 
+        id="temp_ide_viewer"
+      ></div>
     </menu>`;
 
   $menu.innerHTML = html;

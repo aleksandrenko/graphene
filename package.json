@@ -20,6 +20,7 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
+    "codemirror": "^5.25.0",
     "d3": "3.5.13",
     "preact": "7.2.0"
   }

@@ -8,7 +8,6 @@ import HistoryManager from './HistoryManager';
 
 import SaveManager from './SaveManager';
 
-import createId from './utils/id';
 import reposition from './utils/reposition';
 
 let _nodes = [];

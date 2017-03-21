@@ -3,7 +3,7 @@ import PROPERTY_TYPES from '../enums/PROPERTY_TYPES';
 
 const TextTypes = [PROPERTY_TYPES.STRING, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD];
 
-const generateGraphQLSchema = (nodeToRenderTo) => {
+const generateGraphQLSchema = () => {
   const nodes = DataManager.getAllNodes();
   const edges = DataManager.getAllEdges();
 
@@ -206,7 +206,7 @@ schema {
 }
 `;
 
-  nodeToRenderTo.innerHTML = (generatedGraphlQlSchema.replace(/\n\n/g, '\n').trim());
+  return generatedGraphlQlSchema.replace(/^\s*\n/gm, '').replace(/}/g, '}\n');
 };
 
 export default generateGraphQLSchema;

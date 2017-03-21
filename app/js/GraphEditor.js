@@ -12,15 +12,19 @@ import helpUI from './ui/help';
 import infoUI from './ui/info';
 import menuUI from './ui/menu';
 
+import codeMirror from 'codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
+
 import NotificationManager from './NotificationManager';
 import InteractionManager from './InteractionManager';
 import DataManager from './DataManager';
 import SaveManager from './SaveManager';
 
 import RenderManager from './RenderManager';
-import Dialog from './ui/dialog';
+// import Dialog from './ui/dialog';
 
-import generateGraphQlSchema from './utils/graphql';
+import getGraphQlSchema from './utils/graphql';
 
 /**
  * @param event
@@ -61,6 +65,23 @@ class GraphEditor {
     /** Create menu ui */
     menuUI(parentDomContainer);
 
+    const codeEditorSchema = codeMirror(document.querySelector('#temp_schema_viewer'), {
+      lineNumbers: true,
+      readOnly: true,
+      undoDepth: 0,
+      mode: 'yaml',
+      lineWrapping: true,
+      value: ''
+    });
+
+    const codeEditorJS = codeMirror(document.querySelector('#temp_ide_viewer'), {
+      lineNumbers: true,
+      lineWrapping: true,
+      mode: 'javascript',
+      value: `// javascript
+var a = 5;`
+    });
+
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
 
@@ -70,7 +91,7 @@ class GraphEditor {
     DataManager.onChange(updateEvent => {
       RenderManager.render(updateEvent.data, $$entitiesGroupElement);
 
-      generateGraphQlSchema(document.querySelector('#temp_schema_viewer'));
+      codeEditorSchema.setValue(getGraphQlSchema());
 
       // fill the info ui
       infoUI.render();
