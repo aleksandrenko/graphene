@@ -13,7 +13,7 @@ import reposition from './utils/reposition';
 let _nodes = [];
 let _edges = [];
 
-let _onUpdateCallbackHandler = () => '';
+let _updateCallbacks = new Set();
 
 /**
  * @param {Object} rawData
@@ -79,7 +79,7 @@ const _dispatchUpdate = (eventType, target, data) => {
   // save the last target to be able to prevent multiple updates of the same kind. example: update
   fn.lastTarget = data;
 
-  _onUpdateCallbackHandler(updateEvent);
+  _updateCallbacks.forEach(callback => callback(updateEvent));
 };
 
 /**
@@ -320,7 +320,7 @@ const DataManager = {
   /**
    * @param {function} fn
    */
-  onChange: (fn) => _onUpdateCallbackHandler = fn
+  onChange: (fn) => _updateCallbacks.add(fn)
 };
 
 export default DataManager;

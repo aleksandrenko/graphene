@@ -15,7 +15,6 @@ import infoUI from './ui/info';
 import MenuComponent from './ui/menu';
 import PanelComponent from './ui/panel';
 
-import codeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/yaml/yaml';
 
@@ -25,8 +24,6 @@ import DataManager from './DataManager';
 import SaveManager from './SaveManager';
 
 import RenderManager from './RenderManager';
-
-import getGraphQlSchema from './utils/graphql';
 
 /**
  * @param event
@@ -69,22 +66,13 @@ class GraphEditor {
 
     render(<PanelComponent />, parentDomContainer);
 
-    const codeEditorSchema = codeMirror(document.querySelector('#graphql-schema'), {
-      lineNumbers: true,
-      readOnly: true,
-      undoDepth: 0,
-      mode: 'yaml',
-      lineWrapping: true,
-      value: ''
-    });
-
-    const codeEditorJS = codeMirror(document.querySelector('#temp_ide_viewer'), {
-      lineNumbers: true,
-      lineWrapping: true,
-      mode: 'javascript',
-      value: `// javascript
-var a = 5;`
-    });
+//     const codeEditorJS = codeMirror(document.querySelector('#temp_ide_viewer'), {
+//       lineNumbers: true,
+//       lineWrapping: true,
+//       mode: 'javascript',
+//       value: `// javascript
+// var a = 5;`
+//     });
 
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
@@ -94,8 +82,6 @@ var a = 5;`
      */
     DataManager.onChange(updateEvent => {
       RenderManager.render(updateEvent.data, $$entitiesGroupElement);
-
-      codeEditorSchema.setValue(getGraphQlSchema());
 
       // fill the info ui
       infoUI.render();

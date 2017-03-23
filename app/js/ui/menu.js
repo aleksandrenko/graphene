@@ -7,6 +7,9 @@ import DataManager from '../DataManager';
 import HistoryManager from '../HistoryManager';
 import NotificationManager from '../NotificationManager';
 
+import codeMirror from 'codemirror';
+import getGraphQlSchema from '../utils/graphql';
+
 import Dialog from './dialog';
 
 
@@ -21,6 +24,19 @@ class MenuPanel extends Component {
   }
 
   componentDidMount() {
+    const codeEditorSchema = codeMirror(document.querySelector('#graphql-schema'), {
+      lineNumbers: true,
+      readOnly: true,
+      undoDepth: 0,
+      mode: 'yaml',
+      lineWrapping: true,
+      value: ''
+    });
+
+    DataManager.onChange(updateEvent => {
+      codeEditorSchema.setValue(getGraphQlSchema());
+    });
+
     d3.select('body').on('keydown.menu', () => {
       const l = 76;
       const s = 83;
