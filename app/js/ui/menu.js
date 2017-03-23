@@ -1,118 +1,124 @@
 'use strict';
+/** @jsx h */
 
-import createDomElementInContainer from '../utils/dom';
+import { h, Component } from 'preact';
+
 import DataManager from '../DataManager';
 import HistoryManager from '../HistoryManager';
 import NotificationManager from '../NotificationManager';
 
 import Dialog from './dialog';
 
-export default (parentElement) => {
-  const $menu = createDomElementInContainer(`#${parentElement.id}`, 'div', 'menu-overlay', 'menu-overlay');
 
-  const html = `
-    <menu class="top-menu" id="top-menu">
-      <span class="toggle-button">&#9776;</span>
-      <section class="drop-down-menu">
-        <ul>
-          <li class="menu-save-btn">&#128190; Save <small>(ctrl+s)</small></li>
-          <li class="menu-load-btn">&#128194; Load <small>(ctrl+l)</small></li>
-          <li class="menu-undo-btn">&#8617; Undo <small>(ctrl+z)</small></li>
-          <li class="menu-redo-btn">&#8618; Redo <small>(ctrl+y)</small></li>
-          <li class="menu-delete-all-btn">&#10005; Delete all</li>
-        </ul>
-      </section>
-      <span class="graphql-schema">&#2947</span>
-      <div style="
-        position: fixed;
-        width: 400px;
-        top: 40px;
-        left: 17px;
-        background: #fff;
-        border: solid 1px #ddd;
-        border-radius: 4px;" 
-        id="temp_schema_viewer"
-      ></div>
-      <div style="
-        position: fixed;
-        width: 400px;
-        top: 360px;
-        left: 17px;
-        background: #fff;
-        border: solid 1px #ddd;
-        border-radius: 4px;" 
-        id="temp_ide_viewer"
-      ></div>
-    </menu>`;
+class MenuPanel extends Component {
+  constructor(props) {
+    super(props);
 
-  $menu.innerHTML = html;
+    this.state = {
+      isMenuOpen: false,
+      isSchemaOpen: false
+    };
+  }
 
-  d3.select('body').on('keydown.menu', () => {
-    const l = 76;
-    const s = 83;
-    const y = 89;
-    const z = 90;
+  componentDidMount() {
+    d3.select('body').on('keydown.menu', () => {
+      const l = 76;
+      const s = 83;
+      const y = 89;
+      const z = 90;
 
-    if (d3.event.ctrlKey || d3.event.metaKey) {
-      switch (d3.event.keyCode) {
-        case s:
-          // open for save - true
-          Dialog.open(true);
-          d3.event.preventDefault();
-          break;
-        case l:
-          // open for save - false
-          Dialog.open(false);
-          d3.event.preventDefault();
-          break;
-        case z:
-          HistoryManager.undo();
-          d3.event.preventDefault();
-          break;
-        case y:
-          HistoryManager.redo();
-          d3.event.preventDefault();
-          break;
-        default:
-          break;
+      if (d3.event.ctrlKey || d3.event.metaKey) {
+        switch (d3.event.keyCode) {
+          case s:
+            this.save();
+            break;
+          case l:
+            this.load();
+            break;
+          case z:
+            this.undo();
+            break;
+          case y:
+            this.redo();
+            break;
+          default:
+            break;
+        }
       }
-    }
-  });
+    });
+  }
 
-  // close the menu
-  document.querySelector('.menu-overlay').addEventListener('click', () => {
-    document.querySelector('.menu-overlay').classList.remove('opened');
-  });
+  toggleMenuOpen() {
+    this.setState({
+      isMenuOpen: !this.state.isMenuOpen,
+      isSchemaOpen: false
+    });
+  }
 
-  // open/close the menu
-  document.querySelector('.toggle-button').addEventListener('click', (e) => {
-    document.querySelector('.menu-overlay').classList.toggle('opened');
-    e.stopPropagation();
-    e.preventDefault();
-  });
+  toggleGraphqlView() {
+    this.setState({
+      isMenuOpen: false,
+      isSchemaOpen: !this.state.isSchemaOpen
+    });
+  }
 
-  document.querySelector('.menu-save-btn').addEventListener('click', () => {
-    Dialog.open(true);
-  });
+  closeAll() {
+    this.setState({
+      isMenuOpen: false,
+      isSchemaOpen: false
+    });
+  }
 
-  document.querySelector('.menu-load-btn').addEventListener('click', () => {
-    Dialog.open(false);
-  });
-
-  document.querySelector('.menu-undo-btn').addEventListener('click', () => {
-    HistoryManager.undo();
-    e.preventDefault();
-  });
-
-  document.querySelector('.menu-redo-btn').addEventListener('click', () => {
-    HistoryManager.redo();
-    e.preventDefault();
-  });
-
-  document.querySelector('.menu-delete-all-btn').addEventListener('click', () => {
+  deleteAll() {
     if (window.confirm('Are you sure you want to delete all nodes and edges?')) {
       DataManager.clear();
       NotificationManager.error('All nodes and edges have been deleted. (Hint: Ctrl+Z to undo)');
     }
-  });
-};
+
+    this.closeAll();
+  }
+
+  save() {
+    Dialog.open(true);
+    this.closeAll();
+  }
+
+  load() {
+    Dialog.open(false);
+    this.closeAll();
+  }
+
+  undo() {
+    HistoryManager.undo();
+    this.closeAll();
+  }
+
+  redo() {
+    HistoryManager.redo();
+    this.closeAll();
+  }
+
+  render(props, state) {
+    return <menu className="top-menu" id="top-menu">
+      <span className={ 'toggle-button' + (state.isMenuOpen ? ' open' : '') } onClick={ this.toggleMenuOpen.bind(this) }>&#9776;</span>
+      <section className={ 'drop-down-menu content' + (state.isMenuOpen ? ' open' : '') }>
+        <ul>
+          <li className="menu-save-btn" onClick={ this.save.bind(this) }>&#128190; Save <small>(ctrl+s)</small></li>
+          <li className="menu-load-btn" onClick={ this.load.bind(this) }>&#128194; Load <small>(ctrl+l)</small></li>
+          <li className="menu-undo-btn" onClick={ this.undo.bind(this) }>&#8617; Undo <small>(ctrl+z)</small></li>
+          <li className="menu-redo-btn" onClick={ this.redo.bind(this) }>&#8618; Redo <small>(ctrl+y)</small></li>
+          <li className="menu-delete-all-btn" onClick={ this.deleteAll.bind(this) }>&#10005; Delete all</li>
+        </ul>
+      </section>
+
+      <span className={ 'toggle-button' + (state.isSchemaOpen ? ' open' : '') } onClick={ this.toggleGraphqlView.bind(this) }>ஃ</span>
+      <section id="graphql-schema" className={ 'graphql-schema content' + (state.isSchemaOpen ? ' open' : '') } />
+
+      { (this.state.isMenuOpen || this.state.isSchemaOpen) &&
+      <overlay className="top-menu-overlay" onClick={ this.closeAll.bind(this) } />
+      }
+    </menu>;
+  }
+}
+
+export default MenuPanel;

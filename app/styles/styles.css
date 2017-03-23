@@ -5,6 +5,7 @@
 @import './overlay-dialog.css';
 @import './help-info-panel.css';
 @import './notifications.css';
+@import "./side-panel.css";
 
 /* ============================================================================ */
 /* Node styles */

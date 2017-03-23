@@ -4,20 +4,16 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  pointer-events: all;
+  z-index: 10;
 }
 
-.menu-overlay {
-  position: absolute;
+.top-menu-overlay {
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  pointer-events: none;
-}
-
-.menu-overlay.opened {
-  pointer-events: all;
+  z-index: -1
 }
 
 .top-menu .toggle-button {
@@ -34,25 +30,19 @@
   user-select: none;
 }
 
-.top-menu .toggle-button:hover,
-.menu-overlay.opened .toggle-button {
+.top-menu .toggle-button.open {
+  opacity: 1;
+  background: #fff;
+}
+
+.top-menu .toggle-button:hover {
   border: solid 1px #d1d1d1;
   opacity: 1;
 }
 
-.menu-overlay.opened .toggle-button {
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), inset 0 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-.menu-overlay.opened .drop-down-menu {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.top-menu .drop-down-menu {
+.top-menu .content {
   opacity: 0;
   transition: all .2s;
-  pointer-events: none;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   position: absolute;
   top: 35px;
@@ -60,6 +50,12 @@
   background: #fff;
   border-radius: 5px;
   overflow: hidden;
+  pointer-events: none;
+}
+
+.top-menu .content.open {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .top-menu .drop-down-menu li {
@@ -83,4 +79,9 @@
   opacity: .5;
   position: absolute;
   right: 10px;
+}
+
+.top-menu .graphql-schema {
+  width: 450px;
+  left: 25px;
 }

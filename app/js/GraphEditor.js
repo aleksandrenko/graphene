@@ -1,6 +1,8 @@
 'use strict';
+/** @jsx h */
 
 import d3 from 'd3';
+import { h, render } from 'preact';
 
 import CONST from './enums/CONST';
 
@@ -10,7 +12,8 @@ import createGroupInSVG from './utils/svgGroup';
 
 import helpUI from './ui/help';
 import infoUI from './ui/info';
-import menuUI from './ui/menu';
+import MenuComponent from './ui/menu';
+import PanelComponent from './ui/panel';
 
 import codeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -22,7 +25,6 @@ import DataManager from './DataManager';
 import SaveManager from './SaveManager';
 
 import RenderManager from './RenderManager';
-// import Dialog from './ui/dialog';
 
 import getGraphQlSchema from './utils/graphql';
 
@@ -63,9 +65,11 @@ class GraphEditor {
     helpUI(parentDomContainer);
 
     /** Create menu ui */
-    menuUI(parentDomContainer);
+    render(<MenuComponent />, parentDomContainer);
 
-    const codeEditorSchema = codeMirror(document.querySelector('#temp_schema_viewer'), {
+    render(<PanelComponent />, parentDomContainer);
+
+    const codeEditorSchema = codeMirror(document.querySelector('#graphql-schema'), {
       lineNumbers: true,
       readOnly: true,
       undoDepth: 0,

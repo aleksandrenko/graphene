@@ -1,4 +1,3 @@
-
 .help,
 .info {
   position: absolute;
@@ -91,9 +90,6 @@
 
 .info-panel {
   right: -29px;
-}
-
-.info-panel {
   width: auto;
 }
 
