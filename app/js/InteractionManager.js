@@ -109,24 +109,12 @@ const IM = {
 
     IM._container = d3Element;
 
-    // user keyboard handling
-    d3.select('body').on('keydown', IM.keydownHandler);
-
     IM._container.call(_zoomAndDragBehaviour);
     IM._container.on('click', IM.svgClickHandler);
     IM._container.on('contextmenu', IM.contextClickHandler);
 
     // initialize the context menu
     ContextMenu.init(`#${rootDivElement.id}`);
-
-    // PropertiesManager.onClose((entityToSave) => {
-    //   if (!entityToSave) {
-    //     return;
-    //   }
-    //
-    //   entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave);
-    // });
-
     ContextMenu.onAction((action) => {
       switch (action.type) {
         case ACTION.CREATE_NODE:
@@ -140,9 +128,6 @@ const IM = {
         case ACTION.DELETE_NODE:
           DataManager.deleteNode(action.target);
           break;
-        // case ACTION.EDIT:
-        //   PropertiesManager.open([action.position.x, action.position.y], action.target);
-        //   break;
         case ACTION.CREATE_EDGE:
           IM.createEdgeMouseMove.startNode = action.target;
           IM.createEdgeMouseDown.startNode = action.target;
@@ -189,7 +174,6 @@ const IM = {
 
     // close the context menu
     ContextMenu.close();
-    // PropertiesManager.close();
 
     const isEdgeText = d3.event.target.classList.contains('path-text');
     const isNode = d3.event.target.nodeName === 'circle';
@@ -208,115 +192,6 @@ const IM = {
   contextClickHandler: () => {
     ContextMenu.open([d3.event.x, d3.event.y], _getTarget(d3.event.target));
     d3.event.preventDefault();
-  },
-
-  keydownHandler: () => {
-    const focusedElement = document.activeElement;
-    const focusedElementType = focusedElement.nodeName; // upppercase
-
-    const backKey = 8;
-    const escKey = 27;
-    const delKey = 46;
-    const spaceKey = 32;
-    const enterKey = 13;
-
-    const infoKey = 192; // '`' button
-
-    const leftKey = 37;
-    const topKey = 38;
-    const rightKey = 39;
-    const bottomKey = 40;
-
-    const keyMoveStep = 10;
-
-    switch (d3.event.keyCode) {
-      case backKey:
-        if (focusedElementType !== 'INPUT') {
-          // prevent returning - history back, when the back button is pressed
-          d3.event.preventDefault();
-        }
-        break;
-      case infoKey:
-        // toggle the info panel `
-        focusedElement.classList.contains(CONST.INFO_ID) ? focusedElement.blur() : document.querySelector(`#${CONST.INFO_ID}`).focus();
-        break;
-      case delKey:
-        // const selectedNode = DataManager.getSelectedNode();
-        break;
-      // case escKey:
-      //   DataManager.deselectAllEntities(true);
-      //   PropertiesManager.close();
-      //   break;
-      // case enterKey: {
-      //   const selectedEntity = DataManager.getSelectedEntity();
-      //
-      //   /**
-      //    * @param entity
-      //    */
-      //   const fnSelectAndOpen = (entity) => {
-      //     DataManager.selectEntity(entity.id);
-      //
-      //     if (entity.isNode) {
-      //       PropertiesManager.open([entity.x, entity.y], entity);
-      //     }
-      //
-      //     if (entity.isEdge) {
-      //       PropertiesManager.open(entity.middlePointWithOffset, entity);
-      //     }
-      //   };
-      //
-      //   if (selectedEntity) {
-      //     fnSelectAndOpen(selectedEntity);
-      //   }
-      //
-      //   if (focusedElement.classList.contains('path-text')) {
-      //     const edgeElement = focusedElement.parentElement;
-      //     fnSelectAndOpen(DataManager.getEdge(edgeElement.id));
-      //   }
-      //
-      //   if (focusedElement.classList.contains('node')) {
-      //     fnSelectAndOpen(DataManager.getNode(focusedElement.id));
-      //   }
-
-        // break;
-      // }
-      case spaceKey:
-        if (focusedElement.classList.contains('path-text')) {
-          const edgeElement = focusedElement.parentElement;
-          DataManager.selectEntity(edgeElement.id);
-        }
-
-        if (focusedElement.classList.contains('node')) {
-          DataManager.selectEntity(focusedElement.id);
-        }
-        break;
-      case leftKey:
-        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
-          _updatePosition([-keyMoveStep, 0]);
-          d3.event.preventDefault();
-        }
-        break;
-      case topKey:
-        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
-          _updatePosition([0, -keyMoveStep]);
-          d3.event.preventDefault();
-        }
-        break;
-      case rightKey:
-        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
-          _updatePosition([keyMoveStep, 0]);
-          d3.event.preventDefault();
-        }
-        break;
-      case bottomKey:
-        if (['INPUT', 'SELECT'].indexOf(focusedElementType) === -1) {
-          _updatePosition([0, keyMoveStep]);
-          d3.event.preventDefault();
-        }
-        break;
-      default:
-        break;
-    }
   },
 
   /**

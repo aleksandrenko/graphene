@@ -2,10 +2,10 @@
 /* Properties menu styles */
 /* ============================================================================ */
 
-/* Properties menu start */
-
 .property-menu {
-
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .property-menu.edge-properties .header .color {
@@ -41,7 +41,6 @@
   font-size: 16px;
   font-weight: bold;
   line-height: 24px;
-  width: 110px;
   text-transform: capitalize;
 }
 
@@ -68,23 +67,50 @@
   margin: -15px;
 }
 
+/* add button */
+
+.property-menu .add-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: transparent;
+  color: #ddd;
+  outline: none;
+  display: block;
+  transition: all 0.2s;
+  box-shadow: none;
+  border: solid 1px transparent;
+}
+
+.property-menu .add-button:hover {
+  background-color: #f1f1f1;
+  color: #666;
+  border: solid 1px #ddd;
+}
+
+/* */
+
+.no-selected {
+  background: #fafafa;
+  padding: 10px 15px;
+  width: 100%;
+}
+
 /* main ======================================================================= */
 
 .property-menu .main {
-  min-height: 25px;
   display: flex;
+  flex: 1;
 }
 
 .property-menu .main .properties {
   display: flex;
   flex-direction: column;
+  flex: 3;
 }
 
 .property-menu .main ul#properties-list {
-  flex: 1;
-  max-height: 40vh;
   overflow: auto;
-  border-bottom: solid 1px #ddd;
 }
 
 .property-menu .main #properties-list li {
@@ -201,31 +227,19 @@
   display: block;
 }
 
-.property-menu .main .add-button {
-  border: none;
-  background-color: transparent;
-  color: #ddd;
-  outline: none;
-  display: block;
-  width: 100%;
-  transition: all 0.2s;
-  height: 31px;
-}
-
-.property-menu .main .add-button:hover {
-  background-color: #f1f1f1;
-  color: #666;
-}
-
 /* edit mode ================================================================== */
 
 .property-menu .main .property-edit {
   border-left: solid 1px #ddd;
   vertical-align: top;
+  flex: 5;
+  display: flex;
+  flex-direction: column;
 }
 
 .property-edit ul {
   padding: 10px;
+  flex: 1;
 }
 
 .property-edit li input {
@@ -253,7 +267,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  width: 95px;
+  width: 65px;
   line-height: 24px;
 }
 

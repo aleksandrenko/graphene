@@ -12,12 +12,15 @@ class SidePanel extends Component {
     super(props);
 
     this.state = {
-      isOpen: false
+      isPropertiesOpen: true,
+      isSchemaOpen: false,
+      isJavascriptOpen: false,
+      selectedEntry: null
     };
   }
 
   componentDidMount() {
-    const editor = codeMirror(document.querySelector('#side-panel-editor'), {
+    const editor = codeMirror(document.querySelector('#side-panel-schema'), {
       lineNumbers: true,
       readOnly: true,
       undoDepth: 0,
@@ -26,30 +29,43 @@ class SidePanel extends Component {
       value: ''
     });
 
-    const schema = codeMirror(document.querySelector('#side-panel-schema'), {
+    const schema = codeMirror(document.querySelector('#side-panel-editor'), {
       lineNumbers: true,
       lineWrapping: true,
       mode: 'javascript',
       value: `// selected node/edge schema`
     });
 
-    DataManager.onChange((data) => {
+    DataManager.onChange(function(data) {
       const selectedEntry = DataManager.getSelectedEntity();
-      const propstElement = document.querySelector('#side-panel-properties');
+      this.setState({ selectedEntry });
+    }.bind(this));
+  }
 
-      propstElement.innerHTML = '';
+  togglePanelProperties() {
+    this.setState({ isPropertiesOpen: !this.state.isPropertiesOpen });
+  }
 
-      render(<PropertiesManager entity={selectedEntry} />, propstElement);
-    });
+  togglePanelSchema() {
+    this.setState({ isSchemaOpen: !this.state.isSchemaOpen });
+  }
+
+  togglePanelJs() {
+    this.setState({ isJavascriptOpen: !this.state.isJavascriptOpen });
   }
 
   render(props, state) {
-    return <section id="side-panel" className="side-panel">
-      <section id="side-panel-properties">
-        Properties
+    return <section id="side-panel" className={{ hasOpen: state.isPropertiesOpen || state.isSchemaOpen || state.isJavascriptOpen }}>
+      <header className={{ open: state.isPropertiesOpen }} onClick={ this.togglePanelProperties.bind(this) }>Properties</header>
+      <section id="side-panel-properties" className={{ open: state.isPropertiesOpen }}>
+        <PropertiesManager entity={ state.selectedEntry } />
       </section>
-      <section id="side-panel-editor" />
-      <section id="side-panel-schema" />
+
+      <header className={{ open: state.isSchemaOpen }} onClick={ this.togglePanelSchema.bind(this) }>Schema</header>
+      <section id="side-panel-schema" className={{ open: state.isSchemaOpen }} />
+
+      <header className={{ open: state.isJavascriptOpen }} onClick={ this.togglePanelJs.bind(this) }>Javascript</header>
+      <section id="side-panel-editor" className={{ open: state.isJavascriptOpen }} />
     </section>;
   }
 }
