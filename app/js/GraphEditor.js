@@ -66,14 +66,6 @@ class GraphEditor {
 
     render(<PanelComponent />, parentDomContainer);
 
-//     const codeEditorJS = codeMirror(document.querySelector('#temp_ide_viewer'), {
-//       lineNumbers: true,
-//       lineWrapping: true,
-//       mode: 'javascript',
-//       value: `// javascript
-// var a = 5;`
-//     });
-
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
 

@@ -2,25 +2,10 @@
 /* Properties menu styles */
 /* ============================================================================ */
 
-.properties-menu-layer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-}
-
 /* Properties menu start */
 
 .property-menu {
-  background: #ffffff;
-  border-radius: 3px;
-  position: absolute;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  transition: opacity 0.2s;
-  overflow: hidden;
-  pointer-events: all;
+
 }
 
 .property-menu.edge-properties .header .color {
@@ -83,28 +68,6 @@
   margin: -15px;
 }
 
-.property-menu .header .drag-handler {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 25px;
-  padding-top: 20px;
-  padding-left: 5px;
-  cursor: move;
-}
-
-.property-menu .header .drag-handler:before,
-.property-menu .header .drag-handler:after {
-  content: '';
-  margin-bottom: 2px;
-  display: block;
-  border-top: dotted 2px #ddd;
-  border-bottom: dotted 2px #ddd;
-  width: 6px;
-  height: 2px;
-}
-
 /* main ======================================================================= */
 
 .property-menu .main {
@@ -113,7 +76,6 @@
 }
 
 .property-menu .main .properties {
-  width: 180px;
   display: flex;
   flex-direction: column;
 }
@@ -259,7 +221,6 @@
 
 .property-menu .main .property-edit {
   border-left: solid 1px #ddd;
-  width: 250px;
   vertical-align: top;
 }
 
@@ -307,37 +268,4 @@
 
 .property-edit .propertyDescription label input {
   width: 100%;
-}
-
-  /* footer ===================================================================== */
-
-.property-menu .footer {
-  background: #f1f1f1;
-  border-top: solid 1px #ddd;
-  padding: 10px;
-  display: flex;
-}
-
-.property-menu .footer #save-button:hover {
-  color: #fff;
-  background: #92b344;
-  border-color: #7f9c3b;
-}
-
-.property-menu .footer #save-button {
-  flex: 2;
-}
-
-.property-menu .footer #close-button:hover {
-  color: #fff;
-  background: #b35136;
-  border-color: #98452e;
-}
-
-.property-menu .footer button {
-  flex: 1;
-}
-
-.property-menu .footer button:first-child {
-  margin-right: 3px;
 }

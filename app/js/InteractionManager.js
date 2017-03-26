@@ -9,7 +9,6 @@ import Node from './do/Node';
 import Edge from './do/Edge';
 
 import ContextMenu from './ContextMenu';
-import PropertiesManager from './PropertiesManager';
 import DataManager from './DataManager';
 import RenderManager from './RenderManager';
 
@@ -120,13 +119,13 @@ const IM = {
     // initialize the context menu
     ContextMenu.init(`#${rootDivElement.id}`);
 
-    PropertiesManager.onClose((entityToSave) => {
-      if (!entityToSave) {
-        return;
-      }
-
-      entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave);
-    });
+    // PropertiesManager.onClose((entityToSave) => {
+    //   if (!entityToSave) {
+    //     return;
+    //   }
+    //
+    //   entityToSave.isNode ? DataManager.updateNode(entityToSave) : DataManager.updateEdge(entityToSave);
+    // });
 
     ContextMenu.onAction((action) => {
       switch (action.type) {
@@ -141,9 +140,9 @@ const IM = {
         case ACTION.DELETE_NODE:
           DataManager.deleteNode(action.target);
           break;
-        case ACTION.EDIT:
-          PropertiesManager.open([action.position.x, action.position.y], action.target);
-          break;
+        // case ACTION.EDIT:
+        //   PropertiesManager.open([action.position.x, action.position.y], action.target);
+        //   break;
         case ACTION.CREATE_EDGE:
           IM.createEdgeMouseMove.startNode = action.target;
           IM.createEdgeMouseDown.startNode = action.target;
@@ -173,10 +172,6 @@ const IM = {
       const selection = entity.isNode ? d3.select(`#${entity.id}`) : d3.select(`#${entity.id}`).select('text');
 
       selection
-        .on('dblclick', _entity => {
-          PropertiesManager.open([d3.event.x, d3.event.y], _entity);
-          d3.event.preventDefault();
-        })
         .on('mousedown', _entity => {
           DataManager.selectEntity(_entity.id);
           d3.event.preventDefault();
@@ -194,7 +189,7 @@ const IM = {
 
     // close the context menu
     ContextMenu.close();
-    PropertiesManager.close();
+    // PropertiesManager.close();
 
     const isEdgeText = d3.event.target.classList.contains('path-text');
     const isNode = d3.event.target.nodeName === 'circle';
@@ -248,43 +243,43 @@ const IM = {
       case delKey:
         // const selectedNode = DataManager.getSelectedNode();
         break;
-      case escKey:
-        DataManager.deselectAllEntities(true);
-        PropertiesManager.close();
-        break;
-      case enterKey: {
-        const selectedEntity = DataManager.getSelectedEntity();
+      // case escKey:
+      //   DataManager.deselectAllEntities(true);
+      //   PropertiesManager.close();
+      //   break;
+      // case enterKey: {
+      //   const selectedEntity = DataManager.getSelectedEntity();
+      //
+      //   /**
+      //    * @param entity
+      //    */
+      //   const fnSelectAndOpen = (entity) => {
+      //     DataManager.selectEntity(entity.id);
+      //
+      //     if (entity.isNode) {
+      //       PropertiesManager.open([entity.x, entity.y], entity);
+      //     }
+      //
+      //     if (entity.isEdge) {
+      //       PropertiesManager.open(entity.middlePointWithOffset, entity);
+      //     }
+      //   };
+      //
+      //   if (selectedEntity) {
+      //     fnSelectAndOpen(selectedEntity);
+      //   }
+      //
+      //   if (focusedElement.classList.contains('path-text')) {
+      //     const edgeElement = focusedElement.parentElement;
+      //     fnSelectAndOpen(DataManager.getEdge(edgeElement.id));
+      //   }
+      //
+      //   if (focusedElement.classList.contains('node')) {
+      //     fnSelectAndOpen(DataManager.getNode(focusedElement.id));
+      //   }
 
-        /**
-         * @param entity
-         */
-        const fnSelectAndOpen = (entity) => {
-          DataManager.selectEntity(entity.id);
-
-          if (entity.isNode) {
-            PropertiesManager.open([entity.x, entity.y], entity);
-          }
-
-          if (entity.isEdge) {
-            PropertiesManager.open(entity.middlePointWithOffset, entity);
-          }
-        };
-
-        if (selectedEntity) {
-          fnSelectAndOpen(selectedEntity);
-        }
-
-        if (focusedElement.classList.contains('path-text')) {
-          const edgeElement = focusedElement.parentElement;
-          fnSelectAndOpen(DataManager.getEdge(edgeElement.id));
-        }
-
-        if (focusedElement.classList.contains('node')) {
-          fnSelectAndOpen(DataManager.getNode(focusedElement.id));
-        }
-
-        break;
-      }
+        // break;
+      // }
       case spaceKey:
         if (focusedElement.classList.contains('path-text')) {
           const edgeElement = focusedElement.parentElement;
