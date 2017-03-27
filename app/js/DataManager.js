@@ -182,6 +182,13 @@ const DataManager = {
     const eventType = isFromHistory ? 'history' : 'load';
 
     _dispatchUpdate(eventType, 'data', data);
+
+    // dispatch selected if any
+    if (DataManager.isEntitySelected()) {
+      const selectedEntity = DataManager.getSelectedEntity();
+      _dispatchUpdate('select', selectedEntity.isNode ? 'node' : 'edge', selectedEntity);
+    }
+
     return DataManager;
   },
 
