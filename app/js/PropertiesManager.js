@@ -12,11 +12,17 @@ class PropertiesManager extends Component {
     super(props);
 
     this.state = {
-      selectedProperty: null
+      selectedProperty: null,
+      entity: props.entity
     };
   }
 
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({ entity: nextProps.entity });
+  }
+
+  componentWillUpdate(props, state) {
+    this.props.onEntityChange(state.entity);
   }
 
   selectProperty(prop) {
@@ -24,7 +30,7 @@ class PropertiesManager extends Component {
   }
 
   addProperty() {
-    const entity = this.props.entity;
+    const entity = this.state.entity;
     entity.properties.push(new Property());
 
     this.setState({ entity });
@@ -35,7 +41,7 @@ class PropertiesManager extends Component {
   }
 
   deleteProperty(prop) {
-    const entity = this.props.entity;
+    const entity = this.state.entity;
     entity.properties = entity.properties.filter((property) => property.id !== prop.id);
 
     if (this.state.selectedProperty.id === prop.id) {
@@ -46,18 +52,18 @@ class PropertiesManager extends Component {
   }
 
   render(props, state) {
-    const entity = props.entity;
+    const entity = state.entity;
     const typesWithLimit = [PROPERTY_TYPES.STRING, PROPERTY_TYPES.INT, PROPERTY_TYPES.FLOAT, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD];
     const textTypes = [PROPERTY_TYPES.STRING, PROPERTY_TYPES.URL, PROPERTY_TYPES.EMAIL, PROPERTY_TYPES.PASSWORD];
 
     if (!entity) {
-      return <div className="no-selected">Select node/edge to edit properties</div>
+      return <div className="no-selected">Select node/edge to edit properties</div>;
     }
 
     return <div id={CONST.PROPERTY_MENU_ID} className={CONST.PROPERTY_MENU_CLASS}>
       <div className="header">
         <span className="color">
-          <input id="entity-color" value={entity.color} type="color" onChange={this.linkState('entity.color')}/>
+          <input id="entity-color" value={entity.color} onInput={ this.linkState('entity.color')} type="color" />
         </span>
         <span className="label">
           <input id="entity-label" value={entity.label} onInput={ this.linkState('entity.label') }/>

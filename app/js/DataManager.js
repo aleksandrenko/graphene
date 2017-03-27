@@ -79,7 +79,7 @@ const _dispatchUpdate = (eventType, target, data) => {
   // save the last target to be able to prevent multiple updates of the same kind. example: update
   fn.lastTarget = data;
 
-  _updateCallbacks.forEach(callback => callback(updateEvent));
+  _updateCallbacks.forEach(callback => callback(updateEvent, eventType));
 };
 
 /**

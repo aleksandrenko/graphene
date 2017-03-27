@@ -36,9 +36,15 @@ class SidePanel extends Component {
       value: `// selected node/edge schema`
     });
 
-    DataManager.onChange(function(data) {
-      const selectedEntry = DataManager.getSelectedEntity();
-      this.setState({ selectedEntry });
+    DataManager.onChange(function(data, eventType) {
+      if (eventType === 'select') {
+        const selectedEntry = DataManager.getSelectedEntity();
+        this.setState({ selectedEntry });
+      }
+
+      if (eventType === 'deselect') {
+        this.setState({ selectedEntry: null });
+      }
     }.bind(this));
   }
 
@@ -54,11 +60,25 @@ class SidePanel extends Component {
     this.setState({ isJavascriptOpen: !this.state.isJavascriptOpen });
   }
 
+  onEntityChange(entity) {
+    if (!entity) {
+      return false;
+    }
+
+    if (entity.isNode) {
+      DataManager.updateNode(entity);
+    }
+
+    if (entity.isEdge) {
+      DataManager.updateEdge(entity);
+    }
+  }
+
   render(props, state) {
     return <section id="side-panel" className={{ hasOpen: state.isPropertiesOpen || state.isSchemaOpen || state.isJavascriptOpen }}>
       <header className={{ open: state.isPropertiesOpen }} onClick={ this.togglePanelProperties.bind(this) }>Properties</header>
       <section id="side-panel-properties" className={{ open: state.isPropertiesOpen }}>
-        <PropertiesManager entity={ state.selectedEntry } />
+        <PropertiesManager entity={ state.selectedEntry } onEntityChange={ this.onEntityChange } />
       </section>
 
       <header className={{ open: state.isSchemaOpen }} onClick={ this.togglePanelSchema.bind(this) }>Schema</header>
