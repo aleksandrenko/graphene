@@ -45,9 +45,10 @@ class PropertiesManager extends Component {
 
   deleteProperty(prop) {
     const entity = this.state.entity;
+    const selectedProperty = this.state.selectedProperty;
     entity.properties = entity.properties.filter((property) => property.id !== prop.id);
 
-    if (this.state.selectedProperty.id === prop.id) {
+    if (selectedProperty && selectedProperty.id === prop.id) {
       this.setState({ selectedProperty: null });
     }
 
