@@ -18,7 +18,10 @@ class PropertiesManager extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ entity: nextProps.entity });
+    this.setState({
+      entity: nextProps.entity,
+      selectedProperty: null
+    });
   }
 
   componentWillUpdate(props, state) {
