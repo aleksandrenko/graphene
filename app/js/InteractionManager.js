@@ -157,6 +157,9 @@ const IM = {
       const selection = entity.isNode ? d3.select(`#${entity.id}`) : d3.select(`#${entity.id}`).select('text');
 
       selection
+        .on('dblclick', entity => {
+          DataManager.dispatchUpdate('dblclick', entity.type, entity);
+        })
         .on('mousedown', _entity => {
           DataManager.selectEntity(_entity.id);
           d3.event.preventDefault();

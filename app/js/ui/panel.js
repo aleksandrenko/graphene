@@ -45,6 +45,11 @@ class SidePanel extends Component {
       if (eventType === 'deselect') {
         this.setState({ selectedEntry: null });
       }
+
+      if (eventType === 'dblclick') {
+        const selectedEntry = DataManager.getSelectedEntity();
+        this.setState({ selectedEntry, isPropertiesOpen: true });
+      }
     }.bind(this));
   }
 

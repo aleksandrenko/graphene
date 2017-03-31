@@ -105,6 +105,8 @@ SaveManager.onChange(data => {
  ==================================================================================================================== */
 const DataManager = {
 
+  dispatchUpdate: _dispatchUpdate,
+
   /**
    * @returns {boolean}
    */
