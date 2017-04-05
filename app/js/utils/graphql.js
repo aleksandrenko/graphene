@@ -209,4 +209,9 @@ schema {
   return generatedGraphlQlSchema.replace(/^\s*\n/gm, '').replace(/}/g, '}\n');
 };
 
-export default generateGraphQLSchema;
+export default {
+  fullSchema: generateGraphQLSchema,
+    nodeSchema: () => {},
+    edgeSchema: () => {}
+}
+;
