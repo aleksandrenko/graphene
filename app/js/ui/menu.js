@@ -8,7 +8,7 @@ import HistoryManager from '../HistoryManager';
 import NotificationManager from '../NotificationManager';
 
 import codeMirror from 'codemirror';
-import getGraphQlSchema from '../utils/graphql';
+import graphql from '../utils/graphql';
 
 import Dialog from './dialog';
 
@@ -34,7 +34,7 @@ class MenuPanel extends Component {
     });
 
     DataManager.onChange(updateEvent => {
-      codeEditorSchema.setValue(getGraphQlSchema());
+      codeEditorSchema.setValue(graphql.getFullSchema());
     });
 
     d3.select('body').on('keydown.menu', () => {

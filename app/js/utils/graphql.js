@@ -210,8 +210,8 @@ schema {
 };
 
 export default {
-  fullSchema: generateGraphQLSchema,
-    nodeSchema: () => {},
-    edgeSchema: () => {}
+  getFullSchema: generateGraphQLSchema,
+  getNodeSchema: () => {},
+  getEdgeSchema: () => {}
 }
 ;
