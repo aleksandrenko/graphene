@@ -209,9 +209,32 @@ schema {
   return generatedGraphlQlSchema.replace(/^\s*\n/gm, '').replace(/}/g, '}\n');
 };
 
+const generateFullJavaScript = () => {
+  // const edges = DataManager.getAllEdges();
+
+  const generateNodesJavaScript = () => {
+    const nodes = DataManager.getAllNodes();
+
+    const generateNodeJavascript = (node) => {
+      return 'node\n';
+    };
+
+    return nodes.map(generateNodeJavascript).join('\n');
+  };
+
+  return generateNodesJavaScript();
+};
+
+setTimeout(function() {
+  console.log('generateFullJavaScript "', generateFullJavaScript(), '"');
+}, 10);
+
 export default {
   getFullSchema: generateGraphQLSchema,
+  getFullJavaScript: generateFullJavaScript,
   getNodeSchema: () => {},
-  getEdgeSchema: () => {}
+  getEdgeSchema: () => {},
+  getNodeJavaScript: () => {},
+  getEdgeJavaScript: () => {}
 }
 ;
