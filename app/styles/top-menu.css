@@ -82,6 +82,18 @@
 }
 
 .top-menu .graphql-schema {
-  width: 450px;
-  left: 25px;
+  left: 35px;
+  top: 45px;
+  right: 10px;
+  bottom: 10px;
+  position: fixed;
+  display: flex;
+}
+
+.top-menu .graphql-schema > section {
+  flex: 1;
+}
+
+.top-menu .graphql-schema > section .CodeMirror {
+  height: 100%;
 }

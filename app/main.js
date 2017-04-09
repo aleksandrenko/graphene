@@ -1,5 +1,15 @@
 import GraphEditor from './js/GraphEditor';
 
+/**
+ * Global string method
+ * @returns {string}
+ */
+String.prototype.toCamelCase = function () {
+  return this.replace(/\b(\w+)/g, function (m, p) {
+    return p[0].toUpperCase() + p.substr(1).toLowerCase();
+  });
+};
+
 const localStorageItem = 'nma.grad3ph';
 const localStorageItemSaves = 'nma.grad3ph.saves';
 const graphEditor = new GraphEditor('body');

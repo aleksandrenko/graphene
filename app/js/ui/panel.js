@@ -41,10 +41,10 @@ class SidePanel extends Component {
       const selectedEntry = DataManager.getSelectedEntity();
 
       if (eventType === 'select') {
-        this.setState({selectedEntry});
+        this.setState({ selectedEntry });
 
         if (selectedEntry.isNode) {
-          const nodeJS = graphql.getNodeJavaScript(selectedEntry);
+          const nodeJS = graphql.getNodeJavascript(selectedEntry);
           const nodeSchema = graphql.getNodeSchema(selectedEntry);
           editor.setValue(nodeJS);
           schema.setValue(nodeSchema);
@@ -52,37 +52,45 @@ class SidePanel extends Component {
       }
 
       if (eventType === 'update') {
+        let jsToSet, schemaToSet;
+
         if (selectedEntry.isNode) {
-          const nodeJS = graphql.getNodeJavaScript(selectedEntry);
-          const nodeSchema = graphql.getNodeSchema(selectedEntry);
-          editor.setValue(nodeJS);
-          schema.setValue(nodeSchema);
+          jsToSet = graphql.getNodeJavascript(selectedEntry);
+          schemaToSet = graphql.getNodeSchema(selectedEntry);
         }
+
+        if (selectedEntry.isEdge) {
+          jsToSet = graphql.getEdgeJavascript(selectedEntry);
+          schemaToSet = graphql.getEdgeSchema(selectedEntry);
+        }
+
+        editor.setValue(jsToSet);
+        schema.setValue(schemaToSet);
       }
 
       if (eventType === 'deselect') {
-        this.setState({selectedEntry: null});
+        this.setState({ selectedEntry: null });
         editor.setValue('');
         schema.setValue('');
       }
 
       if (eventType === 'dblclick') {
         const selectedEntry = DataManager.getSelectedEntity();
-        this.setState({selectedEntry, isPropertiesOpen: true});
+        this.setState({ selectedEntry, isPropertiesOpen: true });
       }
     }.bind(this));
   }
 
   togglePanelProperties() {
-    this.setState({isPropertiesOpen: !this.state.isPropertiesOpen});
+    this.setState({ isPropertiesOpen: !this.state.isPropertiesOpen });
   }
 
   togglePanelSchema() {
-    this.setState({isSchemaOpen: !this.state.isSchemaOpen});
+    this.setState({ isSchemaOpen: !this.state.isSchemaOpen });
   }
 
   togglePanelJs() {
-    this.setState({isJavascriptOpen: !this.state.isJavascriptOpen});
+    this.setState({ isJavascriptOpen: !this.state.isJavascriptOpen });
   }
 
   onEntityChange(entity) {
@@ -101,20 +109,20 @@ class SidePanel extends Component {
 
   render(props, state) {
     return <section id="side-panel"
-                    className={{hasOpen: state.isPropertiesOpen || state.isSchemaOpen || state.isJavascriptOpen}}>
-      <header className={{open: state.isPropertiesOpen}} onClick={ this.togglePanelProperties.bind(this) }>
+                    className={{ hasOpen: state.isPropertiesOpen || state.isSchemaOpen || state.isJavascriptOpen }}>
+      <header className={{ open: state.isPropertiesOpen }} onClick={ this.togglePanelProperties.bind(this) }>
         Properties
       </header>
-      <section id="side-panel-properties" className={{open: state.isPropertiesOpen}}>
+      <section id="side-panel-properties" className={{ open: state.isPropertiesOpen }}>
         <PropertiesManager entity={ state.selectedEntry } onEntityChange={ this.onEntityChange }/>
       </section>
 
-      <header className={{open: state.isSchemaOpen}} onClick={ this.togglePanelSchema.bind(this) }>Schema</header>
-      <section id="side-panel-schema" className={{open: state.isSchemaOpen}}/>
+      <header className={{ open: state.isSchemaOpen }} onClick={ this.togglePanelSchema.bind(this) }>Schema</header>
+      <section id="side-panel-schema" className={{ open: state.isSchemaOpen }}/>
 
-      <header className={{open: state.isJavascriptOpen}} onClick={ this.togglePanelJs.bind(this) }>Javascript
+      <header className={{ open: state.isJavascriptOpen }} onClick={ this.togglePanelJs.bind(this) }>Javascript
       </header>
-      <section id="side-panel-editor" className={{open: state.isJavascriptOpen}}/>
+      <section id="side-panel-editor" className={{ open: state.isJavascriptOpen }}/>
     </section>;
   }
 }

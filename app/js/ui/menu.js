@@ -8,7 +8,7 @@ import HistoryManager from '../HistoryManager';
 import NotificationManager from '../NotificationManager';
 
 import codeMirror from 'codemirror';
-import graphql from '../utils/graphql';
+import graphql from '../utils/graphql/index';
 
 import Dialog from './dialog';
 
@@ -33,8 +33,18 @@ class MenuPanel extends Component {
       value: ''
     });
 
-    DataManager.onChange(updateEvent => {
+    const codeEditorJS = codeMirror(document.querySelector('#jshandlers-schema'), {
+      lineNumbers: true,
+      readOnly: true,
+      undoDepth: 0,
+      mode: 'javascript',
+      lineWrapping: true,
+      value: ''
+    });
+
+    DataManager.onChange(() => {
       codeEditorSchema.setValue(graphql.getFullSchema());
+      codeEditorJS.setValue(graphql.getFullJavascript());
     });
 
     d3.select('body').on('keydown.menu', () => {
@@ -128,7 +138,10 @@ class MenuPanel extends Component {
       </section>
 
       <span className={ 'toggle-button' + (state.isSchemaOpen ? ' open' : '') } onClick={ this.toggleGraphqlView.bind(this) }>ஃ</span>
-      <section id="graphql-schema" className={ 'graphql-schema content' + (state.isSchemaOpen ? ' open' : '') } />
+      <section className={ 'graphql-schema content' + (state.isSchemaOpen ? ' open' : '') }>
+        <section id="graphql-schema" />
+        <section id="jshandlers-schema" />
+      </section>
 
       { (this.state.isMenuOpen || this.state.isSchemaOpen) &&
       <overlay className="top-menu-overlay" onClick={ this.closeAll.bind(this) } />
