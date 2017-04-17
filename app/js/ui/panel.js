@@ -44,7 +44,7 @@ class SidePanel extends Component {
         this.setState({ selectedEntry });
 
         if (selectedEntry.isNode) {
-          const nodeJS = graphql.getNodeJavascript(selectedEntry);
+          const nodeJS = graphql.getNodeResolver(selectedEntry);
           const nodeSchema = graphql.getNodeSchema(selectedEntry);
           editor.setValue(nodeJS);
           schema.setValue(nodeSchema);
@@ -55,12 +55,12 @@ class SidePanel extends Component {
         let jsToSet, schemaToSet;
 
         if (selectedEntry.isNode) {
-          jsToSet = graphql.getNodeJavascript(selectedEntry);
+          jsToSet = graphql.getNodeResolver(selectedEntry);
           schemaToSet = graphql.getNodeSchema(selectedEntry);
         }
 
         if (selectedEntry.isEdge) {
-          jsToSet = graphql.getEdgeJavascript(selectedEntry);
+          jsToSet = graphql.getEdgeResolver(selectedEntry);
           schemaToSet = graphql.getEdgeSchema(selectedEntry);
         }
 

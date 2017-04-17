@@ -1,7 +1,7 @@
 'use strict';
 
-import DataManager from '../../../../DataManager';
-import customTypes from '../../customTypes';
+import DataManager from '../../DataManager';
+import customTypes from './shared/customTypes';
 
 /**
  *
