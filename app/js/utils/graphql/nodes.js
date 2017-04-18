@@ -64,9 +64,73 @@ ${nodeInputSpec}
 `;
 };
 
+/**
+ *
+ * @param node
+ * @returns {string}
+ */
 const getNodeResolver = (node) => {
-  return ``;
+
+  const properties = {
+    all: node.properties.map(prop => prop.key),
+    system: node.properties.filter(prop => prop.isSystem).map(property => property.key),
+    userDefined: node.properties.filter(prop => !prop.isSystem).map(property => property.key)
+  };
+
+  const label = node.label.toCamelCase();
+
+  const edges = DataManager.getEdgesForStartNode(node.id);
+  const connections = edges.map(edge => {
+    const edgeLabel = edge.label.toCamelCase();
+
+    return `
+add${edgeLabel}([Node]) {
+  //add connection depending on the node (type)
+}
+
+update${edgeLabel}([Node]) {
+  //update connection depending on the node (type)
+}
+
+delete${edgeLabel}([Node]) {
+  //delete connection depending on the node (type)
+}
+`;
+  }).join('');
+
+
+  return `
+class ${label} {
+  constructor(${properties.system.join(',')}, {${properties.userDefined.join(',')}}) {
+    ${properties.all.map(prop => `this.${prop} = ${prop};`).join('\n    ')}
+  }
+}
+
+get${label}({id}) {
+  // get and return ${label} by id
+  return new ${label}(id, fakeDatabase[id]);
+},
+
+create${label}({input}) {
+  // create ${label} from input
+  var id = Math.random();
+  return new ${label}(id, input);
+},
+
+update${label}({id, input}) {
+  // update ${label} with id
+  return new ${label}(id, input);
+}
+
+delete${label}({id}) {
+  // find and return ${label} by id
+  return {};
+}
+
+${connections}
+`;
 };
+
 
 export default {
   schema: {
