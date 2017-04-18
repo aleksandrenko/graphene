@@ -2,6 +2,7 @@
 
 import DataManager from '../../DataManager';
 import customTypes from './shared/customTypes';
+import nodeSchemes from './nodes';
 
 /**
  *
@@ -9,7 +10,7 @@ import customTypes from './shared/customTypes';
  */
 const getAllResolvers = () => {
   const nodes = DataManager.getAllNodes();
-  const nodesHandlers = nodes.map(getNodeJavascript).join('\n');
+  const nodesHandlers = nodes.map(nodeSchemes.resolvers.getNodeResolver).join('\n');
 
   return `
     ${customTypes.javascript}
@@ -17,6 +18,5 @@ const getAllResolvers = () => {
   `;
 };
 
-export default {
-  getAllResolvers
-};
+export default getAllResolvers;
+

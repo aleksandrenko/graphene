@@ -8,7 +8,7 @@ import HistoryManager from '../HistoryManager';
 import NotificationManager from '../NotificationManager';
 
 import codeMirror from 'codemirror';
-// import graphql from '../utils/graphql/index';
+import graphql from '../utils/graphql/index';
 
 import Dialog from './dialog';
 
@@ -24,28 +24,28 @@ class MenuPanel extends Component {
   }
 
   componentDidMount() {
-    // const codeEditorSchema = codeMirror(document.querySelector('#graphql-schema'), {
-    //   lineNumbers: true,
-    //   readOnly: true,
-    //   undoDepth: 0,
-    //   mode: 'yaml',
-    //   lineWrapping: true,
-    //   value: ''
-    // });
-    //
-    // const codeEditorJS = codeMirror(document.querySelector('#jshandlers-schema'), {
-    //   lineNumbers: true,
-    //   readOnly: true,
-    //   undoDepth: 0,
-    //   mode: 'javascript',
-    //   lineWrapping: true,
-    //   value: ''
-    // });
-    //
-    // DataManager.onChange(() => {
-    //   codeEditorSchema.setValue(graphql.getFullSchema());
-    //   codeEditorJS.setValue(graphql.getFullJavascript());
-    // });
+    const codeEditorSchema = codeMirror(document.querySelector('#graphql-schema'), {
+      lineNumbers: true,
+      readOnly: true,
+      undoDepth: 0,
+      mode: 'yaml',
+      lineWrapping: true,
+      value: ''
+    });
+
+    const codeEditorJS = codeMirror(document.querySelector('#jshandlers-schema'), {
+      lineNumbers: true,
+      readOnly: true,
+      undoDepth: 0,
+      mode: 'javascript',
+      lineWrapping: true,
+      value: ''
+    });
+
+    DataManager.onChange(() => {
+      codeEditorSchema.setValue(graphql.getFullSchema());
+      codeEditorJS.setValue(graphql.getAllResolvers());
+    });
 
     d3.select('body').on('keydown.menu', () => {
       const l = 76;

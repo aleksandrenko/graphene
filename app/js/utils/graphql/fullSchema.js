@@ -4,7 +4,6 @@ import customTypes from './shared/customTypes';
 
 import nodeSchema from './nodes';
 import edgeSchema from './edges';
-import connection from './connections';
 
 /**
  *
@@ -14,9 +13,9 @@ const getFullSchema = () => {
   const nodes = DataManager.getAllNodes();
   const edges = DataManager.getAllEdges();
 
-  const nodesSchema = nodes.map(node => nodeSchema.schema.nodeSchema(node)).join('\n');
-  const edgesSchema = edges.map(edgeSchema.schema).join('\n');
-  const nodeMutations = nodes.map(nodesSchema.schema.nodeMutation).join('\n');
+  const nodesSchema = nodes.map(node => nodeSchema.schema.getNodeSchema(node)).join('\n');
+  const edgesSchema = edges.map(edgeSchema.schema.getEdgeSchema).join('\n');
+  const nodeMutations = nodes.map(nodeSchema.schema.getNodeMutation).join('\n');
 
   const schemaEntries = nodes.map((n) => `${n.label}s(id:[ID]): [${n.label.toCamelCase()}]`).join('\n  ');
 
