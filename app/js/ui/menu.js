@@ -42,10 +42,12 @@ class MenuPanel extends Component {
       value: ''
     });
 
-    DataManager.onChange(() => {
-      codeEditorSchema.setValue(graphql.getFullSchema());
-      codeEditorJS.setValue(graphql.getAllResolvers());
-    });
+    DataManager.onChange(function () {
+      if (this.state.isSchemaOpen) {
+        codeEditorSchema.setValue(graphql.getFullSchema());
+        codeEditorJS.setValue(graphql.getAllResolvers());
+      }
+    }.bind(this));
 
     d3.select('body').on('keydown.menu', () => {
       const l = 76;

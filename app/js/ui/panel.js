@@ -13,7 +13,7 @@ class SidePanel extends Component {
     super(props);
 
     this.state = {
-      isPropertiesOpen: true,
+      isPropertiesOpen: false,
       isSchemaOpen: false,
       isJavascriptOpen: false,
       selectedEntry: null
@@ -63,9 +63,9 @@ class SidePanel extends Component {
           jsToSet = graphql.getEdgeResolver(selectedEntry);
           schemaToSet = graphql.getEdgeSchema(selectedEntry);
         }
-
-        editor.setValue(jsToSet);
-        schema.setValue(schemaToSet);
+        
+        this.state.isJavascriptOpen && editor.setValue(jsToSet);
+        this.state.isSchemaOpen && schema.setValue(schemaToSet);
       }
 
       if (eventType === 'deselect') {
