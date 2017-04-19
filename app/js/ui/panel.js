@@ -63,9 +63,9 @@ class SidePanel extends Component {
           jsToSet = graphql.getEdgeResolver(selectedEntry);
           schemaToSet = graphql.getEdgeSchema(selectedEntry);
         }
-        
-        this.state.isJavascriptOpen && editor.setValue(jsToSet);
-        this.state.isSchemaOpen && schema.setValue(schemaToSet);
+
+        editor.setValue(jsToSet);
+        schema.setValue(schemaToSet);
       }
 
       if (eventType === 'deselect') {
