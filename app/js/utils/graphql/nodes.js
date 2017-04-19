@@ -82,18 +82,41 @@ const getNodeResolver = (node) => {
   const edges = DataManager.getEdgesForStartNode(node.id);
   const connections = edges.map(edge => {
     const edgeLabel = edge.label.toCamelCase();
+    const startNodeLabel = edge.startNode.label.toCamelCase();
+    const endNodeLabel = edge.endNode.label.toCamelCase();
+    const connectionName = `${startNodeLabel}${edgeLabel}${endNodeLabel}`;
 
     return `
-add${edgeLabel}([Node]) {
+add${connectionName}(${startNodeLabel}Id, ${endNodeLabel}Id) {
   //add connection depending on the node (type)
+  // return connection
+  return {
+    nodes: []
+    edges: []
+    pageInfo: {
+      endCursor: ''
+      hasNextPage: ''
+      hasPreviousPage: ''
+      startCursor: ''
+    }
+    totalCount: 0
+  }
 }
 
-update${edgeLabel}([Node]) {
-  //update connection depending on the node (type)
-}
-
-delete${edgeLabel}([Node]) {
-  //delete connection depending on the node (type)
+delete${connectionName}((${startNodeLabel}Id, ${endNodeLabel}Id)) {
+  //delete connection depending on ${startNodeLabel}Id, ${endNodeLabel}Id
+  // return connection
+  return {
+    nodes: []
+    edges: []
+    pageInfo: {
+      endCursor: ''
+      hasNextPage: ''
+      hasPreviousPage: ''
+      startCursor: ''
+    }
+    totalCount: 0
+  }
 }
 `;
   }).join('');
@@ -108,7 +131,7 @@ class ${label} {
 
 get${label}({id}) {
   // get and return ${label} by id
-  return new ${label}(id, fakeDatabase[id]);
+  return new ${label}(id, {});
 },
 
 create${label}({input}) {

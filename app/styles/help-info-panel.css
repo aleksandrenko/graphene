@@ -160,19 +160,3 @@
 .info-panel .col .entity:hover {
   background: #eee;
 }
-
-.keyboard-button {
-  display: inline-block;
-  background: #eee;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-  padding: 1px 3px;
-  min-width: 40px;
-  text-align: center;
-  font-size: 10px;
-  margin: 3px 0;
-}
-
-.keyboard-button.big-text {
-  font-weight: bold;
-  font-size: 14px;
-}
