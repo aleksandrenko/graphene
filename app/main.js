@@ -1,5 +1,8 @@
 import GraphEditor from './js/GraphEditor';
 
+import './styles/styles.css';
+import '../node_modules/codemirror/lib/codemirror.css';
+
 /**
  * Global string method
  * @returns {string}
