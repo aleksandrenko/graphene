@@ -21,6 +21,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s;
+  z-index: 1;
 }
 
 .dialog {
@@ -141,4 +142,24 @@
   padding: 0 10px;
   line-height: 1;
   white-space: normal;
+}
+
+.dialog.intro .body {
+  padding: 0;
+  width: 853px;
+  max-width: none;
+  min-height: 480px;
+  display: block;
+}
+
+.dialog.intro::before {
+  content: '';
+  display: block;
+  position: fixed;
+  z-index: -1;
+  background: rgba(0,0,0,0.6);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

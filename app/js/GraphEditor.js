@@ -14,6 +14,7 @@ import helpUI from './ui/help';
 import infoUI from './ui/info';
 import MenuComponent from './ui/menu';
 import PanelComponent from './ui/panel';
+import IntroComponent from './ui/intro';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/yaml/yaml';
@@ -64,7 +65,10 @@ class GraphEditor {
     /** Create menu ui */
     render(<MenuComponent />, parentDomContainer);
 
+    render(<IntroComponent />, parentDomContainer);
+
     render(<PanelComponent />, parentDomContainer);
+
 
     // initialize the Interaction manager
     InteractionManager.init(this.svg, parentDomContainer);
